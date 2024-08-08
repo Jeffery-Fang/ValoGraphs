@@ -100,7 +100,7 @@ export async function createManyMatchStat(packagedData: any): Promise<MatchStat[
     }
 }
 
-function createDummyMatchStat(): MatchStat {
+export function createDummyMatchStat(): MatchStat {
     const dummy: MatchStat = new MatchStat(
         createDummyPlayer(),
         'dummy_match_id',

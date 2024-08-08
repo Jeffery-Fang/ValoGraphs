@@ -9,60 +9,75 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import express from 'express';
 import 'dotenv/config';
-import { matchStat } from '../models/classes.js';
+import { createManyMatchStat } from '../services/matchStatServices.js';
+import { getIdFromNameTag } from '../services/playerServices.js';
 const userUrlRoot = process.env.USER_URL_ROOT;
 const apiKey = process.env.API_KEY;
 const router = express.Router();
 router.get('/:name', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        if (req.params.name == undefined || req.query.tag == undefined || req.query.mode == undefined || req.query.size == undefined) {
-            throw "invalid input";
+        if (req.params.name == undefined ||
+            req.query.tag == undefined ||
+            req.query.mode == undefined ||
+            req.query.size == undefined) {
+            throw 'invalid input';
         }
         let name = req.params.name;
         let tag = req.query.tag;
-        let mode = (["unrated", "competitive", "teamdeathmatch"].includes(req.query.mode)) ? req.query.mode : "competitive";
-        let size = (Number(req.query.size) < 10 && Number(req.query.size) > 0) ? Number(req.query.size) : 5;
-        let url = userUrlRoot + "/" + name + "/" + tag + "?mode=" + mode + "&size=" + size;
+        let mode = ['unrated', 'competitive', 'teamdeathmatch'].includes(req.query.mode)
+            ? req.query.mode
+            : 'competitive';
+        let size = Number(req.query.size) <= 10 && Number(req.query.size) > 0 ? Number(req.query.size) : 5;
+        let url = (userUrlRoot + '/' + name + '/' + tag + '?mode=' + mode + '&size=' + size);
         let options = {
             method: 'GET',
             headers: {
-                'Authorization': apiKey
-            }
+                Authorization: apiKey,
+            },
         };
-        console.log(url);
         const response = yield (yield fetch(url, options)).json();
+        let data = [];
+        //console.log(url);
         if (response == undefined) {
-            throw "no response from henrikdev API";
+            throw 'no response from henrikdev API';
         }
         if (Object.keys(response).includes('errors')) {
             throw response.errors;
         }
-        const out = [];
-        for (let match of response["data"]) {
-            for (let playerData of match["players"]) {
+        //console.log(response["data"].length, size);
+        for (let match of response['data']) {
+            for (let playerData of match['players']) {
                 let won = false;
                 let numRounds = 0;
-                for (let team of match["teams"]) {
-                    if (playerData["team_id"] == team["team_id"]) {
-                        won = team["won"];
+                for (let team of match['teams']) {
+                    if (playerData['team_id'] == team['team_id']) {
+                        won = team['won'];
                     }
                 }
-                for (let round of match["rounds"]) {
-                    if (round["result"] != "Surrendered") {
+                for (let round of match['rounds']) {
+                    if (round['result'] != 'Surrendered') {
                         numRounds += 1;
                     }
                 }
-                let player = new matchStat(playerData, match["metadata"]["match_id"], match["metadata"]["map"]["name"], match["metadata"]["queue"]["name"], won, numRounds, new Date(match["metadata"]["started_at"]));
-                // out.push([
-                //     playerData.name,
-                //     player
-                // ]);
-                if (playerData.name == name) {
-                    out.push(player);
-                }
+                data.push({
+                    playerData: playerData,
+                    match_id: match['metadata']['match_id'],
+                    map: match['metadata']['map']['name'],
+                    mode: match['metadata']['queue']['name'],
+                    won: won,
+                    numRounds: numRounds,
+                    date: new Date(match['metadata']['started_at']),
+                });
             }
         }
-        //out.sort((a: matchStat, b: matchStat): number => b.date.getTime() - a.date.getTime());
+        //await createManyPlayer(Object.values(players));
+        const stats = yield createManyMatchStat(data);
+        const puuid = yield getIdFromNameTag(name, tag);
+        //console.log(name, tag, puuid);
+        const out = stats.filter((stat) => {
+            return stat.player.id == puuid;
+        });
+        //console.log(out);
         res.status(200).send(out);
     }
     catch (err) {
