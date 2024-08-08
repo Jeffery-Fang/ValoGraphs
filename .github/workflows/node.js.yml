@@ -10,7 +10,8 @@ on:
         branches: ['main']
 
 jobs:
-    build:
+    build-and-test-backend:
+        name: Build and test server
         runs-on: ubuntu-latest
 
         strategy:
@@ -26,7 +27,15 @@ jobs:
                   node-version: ${{ matrix.node-version }}
                   cache: 'npm'
                   cache-dependency-path: Server/package-lock.json
-            - run: cd Server
-            - run: npm ci
-            - run: npm run build --if-present
-            - run: npm test
+
+            - name: Install dependencies
+              working-directory: ./Server
+              run: npm ci
+
+            - name: Build src
+              working-directory: ./Server
+              run: npm run build --if-present
+            
+            - name: Run tests
+              working-directory: ./Server
+              run: npm test
