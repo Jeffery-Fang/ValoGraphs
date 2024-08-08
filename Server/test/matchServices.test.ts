@@ -1,7 +1,7 @@
-import { MatchStat } from '../src/entities/MatchStat'
+import { MatchStat } from '../src/entities/MatchStat.js'
 import { createDummyMatchStat, createManyMatchStat, createOneMatchStat } from '../src/services/matchStatServices.js'
 import { AppDataSource } from '../src/data-source.js'
-import { createDummyPlayer } from '../src/services/playerServices'
+import { createDummyPlayer } from '../src/services/playerServices.js'
 
 jest.mock('../src/data-source.js', () => ({
     AppDataSource: {

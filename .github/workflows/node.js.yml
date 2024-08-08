@@ -11,7 +11,7 @@ on:
 
 jobs:
     build-and-test-backend:
-        name: Build and test server
+        name: Build and Test Backend
         runs-on: ubuntu-latest
 
         strategy:
@@ -26,7 +26,6 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: 'npm'
-                  cache-dependency-path: Server/package-lock.json
 
             - name: Install dependencies
               working-directory: ./Server
