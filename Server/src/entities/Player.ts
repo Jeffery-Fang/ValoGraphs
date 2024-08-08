@@ -1,35 +1,35 @@
-import {Entity, Column, PrimaryColumn, OneToMany} from 'typeorm';
-import { MatchStat } from './MatchStat.js';
+import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm'
+import { MatchStat } from './MatchStat.js'
 
 @Entity()
-export class Player{
+export class Player {
     @PrimaryColumn({
-        type: "varchar",
+        type: 'varchar',
         length: 36,
-        nullable: false
+        nullable: false,
     })
-    id: string;
+    id: string
 
     @Column({
-        type: "varchar",
+        type: 'varchar',
         length: 36,
-        nullable: false
+        nullable: false,
     })
-    name: string;
+    name: string
 
     @Column({
-        type: "varchar",
+        type: 'varchar',
         length: 10,
-        nullable: false
+        nullable: false,
     })
-    tag: string;
+    tag: string
 
-    @OneToMany(() => MatchStat, (match) => match.player)
-    matches!: MatchStat[];
+    @OneToMany(() => MatchStat, (match: MatchStat) => match.player)
+    matches!: MatchStat[]
 
-    constructor(playerID: string, name: string, tag: string){
-        this.id = playerID;
-        this.name = name;
-        this.tag = tag;
+    constructor(playerID: string, name: string, tag: string) {
+        this.id = playerID
+        this.name = name
+        this.tag = tag
     }
 }

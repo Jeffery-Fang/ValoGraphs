@@ -1,8 +1,8 @@
-import express, {Application} from 'express';
-import {default as userRouter} from './controllers/usersRouter.js';
+import express, { Application } from 'express'
+import { default as userRouter } from './controllers/usersRouter.js'
 
-const app: Application = express();
+const app: Application = express()
 
-app.use('/users', userRouter);
+app.use('/users', userRouter)
 
-export default app;
+export default app
