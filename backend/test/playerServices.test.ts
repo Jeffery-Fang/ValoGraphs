@@ -141,7 +141,7 @@ describe('testing getIdFromNameTag()', (): void => {
         expect(response).toBe('8918b04d-9034-5838-b3ed-dd7ae3efe5e5')
     })
 
-    test("should return dummy player_id if the player doesn'\t exist", async (): Promise<void> => {
+    test("should return dummy player_id if the player doesn't exist", async (): Promise<void> => {
         const response: string = await getIdFromNameTag('Elsa Kanzaki', 'COLD')
 
         expect(response).toBe('dummy_player_id')
