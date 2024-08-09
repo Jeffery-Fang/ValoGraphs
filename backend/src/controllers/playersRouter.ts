@@ -4,7 +4,7 @@ import { MatchStat } from '../entities/MatchStat.js'
 import { createManyMatchStat } from '../services/matchStatServices.js'
 import { getIdFromNameTag } from '../services/playerServices.js'
 
-const userUrlRoot: string = <string>process.env.USER_URL_ROOT
+const playerUrlRoot: string = <string>process.env.USER_URL_ROOT
 const apiKey: string = <string>process.env.API_KEY
 const router: Router = express.Router()
 
@@ -25,7 +25,7 @@ router.get('/:name', async (req: Request, res: Response): Promise<void> => {
             ? <string>req.query.mode
             : 'competitive'
         let size: number = Number(req.query.size) <= 10 && Number(req.query.size) > 0 ? Number(req.query.size) : 5
-        let url: string = (userUrlRoot + '/' + name + '/' + tag + '?mode=' + mode + '&size=' + size) as string
+        let url: string = (playerUrlRoot + '/' + name + '/' + tag + '?mode=' + mode + '&size=' + size) as string
         let options: RequestInit = {
             method: 'GET',
             headers: {

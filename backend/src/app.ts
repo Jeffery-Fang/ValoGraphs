@@ -1,8 +1,8 @@
 import express, { Application } from 'express'
-import { default as userRouter } from './controllers/usersRouter.js'
+import { default as playerRouter } from './controllers/playersRouter.js'
 
 const app: Application = express()
 
-app.use('/users', userRouter)
+app.use('/players', playerRouter)
 
 export default app
