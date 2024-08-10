@@ -27,7 +27,6 @@ describe('testing createOnePlayer()', (): void => {
         const mockRepository = {
             save: jest.fn().mockResolvedValue(true),
         }
-
         ;(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepository)
     })
 

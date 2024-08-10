@@ -4,6 +4,9 @@ import 'dotenv/config'
 import { MatchStat } from './entities/MatchStat.js'
 import { Player } from './entities/Player.js'
 
+/**
+ * Configure DataSource to connect to the database
+ */
 export const AppDataSource: DataSource = new DataSource({
     type: 'postgres',
     host: process.env.DB_HOST,

@@ -2,14 +2,12 @@ import { default as request } from 'supertest'
 import http from 'http'
 import 'dotenv/config'
 import app from '../src/app.js'
-import { MatchStat } from '../src/entities/MatchStat.js'
 import { createManyMatchStat, getPlayersFromMatchId } from '../src/services/matchStatServices.js'
 import { getIdFromNameTag } from '../src/services/playerServices'
 
 let server: http.Server
 const playerUrlRoot: string = <string>process.env.USER_URL_ROOT
 const apiKey: string = <string>process.env.API_KEY
-
 const mockFetch = jest.fn()
 global.fetch = mockFetch
 
@@ -68,7 +66,6 @@ describe('testing GET /players', (): void => {
                 },
             },
         ]
-
         mockFetch.mockResolvedValue({
             json: jest.fn().mockResolvedValue(mockApiResponse),
         })
@@ -95,14 +92,14 @@ describe('testing GET /players', (): void => {
         expect(response.body).toStrictEqual(mockStats)
     })
 
-    test('should return status 400 if require parameters are missing', async () => {
+    test('should return status 400 if require parameters are missing', async (): Promise<void> => {
         const response = await request(app).get('/players/Hexennacht')
 
         expect(response.status).toBe(400)
         expect(response.body).toEqual({ error: 'invalid input' })
     })
 
-    test('should return status 400 if the external API returns errors', async () => {
+    test('should return status 400 if the external API returns errors', async (): Promise<void> => {
         mockFetch.mockResolvedValue({
             json: jest.fn().mockResolvedValue({
                 errors: 'Some API error',

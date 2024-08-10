@@ -8,9 +8,14 @@ const playerUrlRoot: string = <string>process.env.USER_URL_ROOT
 const apiKey: string = <string>process.env.API_KEY
 const router: Router = express.Router()
 
+/**
+ * Route that given a player name, player tag, gamemode and size(number of results to return)
+ * retrives that number of matches of the specified gamemode for the specified player from the
+ * henrikDev API and saves them to a database before returning those results
+ */
 router.get('/:name', async (req: Request, res: Response): Promise<void> => {
     try {
-        if (req.query.tag == undefined || req.query.mode == undefined || req.query.size == undefined) {
+        if (req.query.tag === undefined || req.query.mode === undefined || req.query.size === undefined) {
             throw 'invalid input'
         }
 
@@ -27,27 +32,23 @@ router.get('/:name', async (req: Request, res: Response): Promise<void> => {
                 Authorization: apiKey,
             },
         }
-        const response = await (await fetch(url, options)).json()
+        const apiResponse = await (await fetch(url, options)).json()
         let data = []
 
-        //console.log(url);
-
-        if (response == undefined) {
+        if (apiResponse === undefined) {
             throw 'no response from henrikdev API'
         }
-        if (Object.keys(response).includes('errors')) {
-            throw response.errors
+        if (Object.keys(apiResponse).includes('errors')) {
+            throw apiResponse.errors
         }
 
-        //console.log(response["data"].length, size);
-
-        for (let match of response['data']) {
+        for (let match of apiResponse['data']) {
             for (let playerData of match['players']) {
                 let won: boolean = false
                 let numRounds: number = 0
 
                 for (let team of match['teams']) {
-                    if (playerData['team_id'] == team['team_id']) {
+                    if (playerData['team_id'] === team['team_id']) {
                         won = team['won']
                     }
                 }
@@ -70,18 +71,14 @@ router.get('/:name', async (req: Request, res: Response): Promise<void> => {
             }
         }
 
-        //await createManyPlayer(Object.values(players));
-
         const stats: MatchStat[] = await createManyMatchStat(data)
         const puuid: string = await getIdFromNameTag(name, tag)
 
-        //console.log(name, tag, puuid);
-        const out = stats.filter((stat: MatchStat): boolean => {
-            return stat.player.id == puuid
+        const response: MatchStat[] = stats.filter((stat: MatchStat): boolean => {
+            return stat.player.id === puuid
         })
 
-        //console.log(out);
-        res.status(200).send(out)
+        res.status(200).send(response)
     } catch (err) {
         res.status(400).json({ error: err })
     }

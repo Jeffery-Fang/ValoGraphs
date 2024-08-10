@@ -1,3 +1,4 @@
+import { AppDataSource } from '../src/data-source.js'
 import { MatchStat } from '../src/entities/MatchStat.js'
 import {
     createDummyMatchStat,
@@ -5,7 +6,6 @@ import {
     createOneMatchStat,
     getPlayersFromMatchId,
 } from '../src/services/matchStatServices.js'
-import { AppDataSource } from '../src/data-source.js'
 import { createDummyPlayer } from '../src/services/playerServices.js'
 
 jest.mock('../src/data-source.js', () => ({
@@ -62,7 +62,7 @@ describe('testing createOneMatchStat()', (): void => {
         ;(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepository)
     })
 
-    test('should return a Match Stat object with specified values if successful', async (): Promise<void> => {
+    test('should return a MatchStat object with specified values if successful', async (): Promise<void> => {
         const response: MatchStat = await createOneMatchStat(
             testData.playerData,
             testData.match_id,
@@ -79,14 +79,13 @@ describe('testing createOneMatchStat()', (): void => {
         expect(response).toBeInstanceOf(MatchStat)
     })
 
-    test('should return a Match Stat object with dummy values if there is an error', async (): Promise<void> => {
+    test('should return a MatchStat object with dummy values if there is an error', async (): Promise<void> => {
         const mockRepository = {
             save: jest.fn().mockImplementationOnce(() => {
                 throw new Error('Error saving MatchStat to the database')
             }),
         }
         ;(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepository)
-
         const response: MatchStat = await createOneMatchStat(
             testData.playerData,
             testData.match_id,
@@ -131,7 +130,6 @@ describe('testing createManyMatchStat()', (): void => {
             }),
         }
         ;(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepository)
-
         const testArray = [testData, testData]
         const response: MatchStat[] = await createManyMatchStat(testArray)
 

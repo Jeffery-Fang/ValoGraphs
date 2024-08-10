@@ -7,8 +7,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { MatchStat } from '../entities/MatchStat.js';
 import { AppDataSource } from '../data-source.js';
+import { MatchStat } from '../entities/MatchStat.js';
 import { Player } from '../entities/Player.js';
 import { createDummyPlayer } from './playerServices.js';
 export function createOneMatchStat(playerData, match_id, map, mode, won, numRounds, date) {
@@ -50,6 +50,26 @@ export function createManyMatchStat(packagedData) {
         }
         catch (err) {
             console.log('Error creating a MatchStat', err);
+            return [createDummyMatchStat()];
+        }
+    });
+}
+export function getPlayersFromMatchId(match_id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const matchStatRepository = AppDataSource.getRepository(MatchStat);
+            const players = (yield matchStatRepository.find({
+                relations: {
+                    player: true,
+                },
+                where: {
+                    match_id: match_id,
+                },
+            })) || [];
+            return players;
+        }
+        catch (err) {
+            console.log('Error getting MatchStats', err);
             return [createDummyMatchStat()];
         }
     });

@@ -40,9 +40,11 @@ export function getIdFromNameTag(playerName, playerTag) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const playerRepository = AppDataSource.getRepository(Player);
-            const player = (yield playerRepository.findOneBy({
-                name: playerName,
-                tag: playerTag,
+            const player = (yield playerRepository.findOne({
+                where: {
+                    name: playerName,
+                    tag: playerTag,
+                },
             })) || createDummyPlayer();
             return player.id;
         }

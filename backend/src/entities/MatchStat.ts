@@ -13,6 +13,7 @@ export class MatchStat {
     @PrimaryColumn({
         type: 'varchar',
         length: 36,
+        nullable: false,
     })
     player_id!: string
 

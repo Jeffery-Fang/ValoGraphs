@@ -40,6 +40,7 @@ __decorate([
     PrimaryColumn({
         type: 'varchar',
         length: 36,
+        nullable: false,
     }),
     __metadata("design:type", String)
 ], MatchStat.prototype, "player_id", void 0);

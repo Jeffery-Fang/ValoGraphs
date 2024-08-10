@@ -27,8 +27,8 @@ export class Player {
     @OneToMany(() => MatchStat, (match: MatchStat) => match.player)
     matches!: MatchStat[]
 
-    constructor(playerID: string, name: string, tag: string) {
-        this.id = playerID
+    constructor(id: string, name: string, tag: string) {
+        this.id = id
         this.name = name
         this.tag = tag
     }

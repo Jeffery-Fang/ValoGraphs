@@ -10,8 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
 import { MatchStat } from './MatchStat.js';
 let Player = class Player {
-    constructor(playerID, name, tag) {
-        this.id = playerID;
+    constructor(id, name, tag) {
+        this.id = id;
         this.name = name;
         this.tag = tag;
     }

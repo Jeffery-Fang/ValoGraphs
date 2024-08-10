@@ -5,11 +5,15 @@ import { getPlayersFromMatchId } from '../services/matchStatServices.js'
 
 const router: Router = express.Router()
 
+/**
+ * Route that given a match_id will return a list of MatchStats associated with
+ * that match
+ */
 router.get('/:match_id', async (req: Request, res: Response): Promise<void> => {
     try {
         const response: MatchStat[] = await getPlayersFromMatchId(req.params.match_id)
 
-        if (response == undefined) {
+        if (response === undefined) {
             throw 'Error retrieving match stats from the database'
         }
 
