@@ -124,7 +124,7 @@ describe('testing createManyPlayer()', (): void => {
 describe('testing getIdFromNameTag()', (): void => {
     beforeEach((): void => {
         const mockRepository = {
-            findOneBy: jest.fn().mockImplementation(() => {
+            findOne: jest.fn().mockImplementation(() => {
                 throw new Error('Error getting finding player in the database')
             }),
         }
@@ -133,7 +133,7 @@ describe('testing getIdFromNameTag()', (): void => {
 
     test('should return correct player_id if the player exists', async (): Promise<void> => {
         const mockRepository = {
-            findOneBy: jest.fn().mockResolvedValueOnce({ id: '8918b04d-9034-5838-b3ed-dd7ae3efe5e5' }),
+            findOne: jest.fn().mockResolvedValueOnce({ id: '8918b04d-9034-5838-b3ed-dd7ae3efe5e5' }),
         }
         ;(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepository)
         const response: string = await getIdFromNameTag('Hexennacht', 'NA1')
@@ -147,9 +147,9 @@ describe('testing getIdFromNameTag()', (): void => {
         expect(response).toBe('dummy_player_id')
     })
 
-    test('should return dummy player_id if the player there is a database error', async (): Promise<void> => {
+    test('should return dummy player_id if there is a database error', async (): Promise<void> => {
         const mockRepository = {
-            findOneBy: jest.fn().mockResolvedValueOnce(null),
+            findOne: jest.fn().mockResolvedValueOnce(null),
         }
         ;(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepository)
         const response: string = await getIdFromNameTag('Elsa Kanzaki', 'COLD')

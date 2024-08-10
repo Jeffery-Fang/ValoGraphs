@@ -1,5 +1,10 @@
 import { MatchStat } from '../src/entities/MatchStat.js'
-import { createDummyMatchStat, createManyMatchStat, createOneMatchStat } from '../src/services/matchStatServices.js'
+import {
+    createDummyMatchStat,
+    createManyMatchStat,
+    createOneMatchStat,
+    getPlayersFromMatchId,
+} from '../src/services/matchStatServices.js'
 import { AppDataSource } from '../src/data-source.js'
 import { createDummyPlayer } from '../src/services/playerServices.js'
 
@@ -107,7 +112,7 @@ describe('testing createManyMatchStat()', (): void => {
         ;(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepository)
     })
 
-    test('should return a array of MatchStat objects with specified values if successful', async (): Promise<void> => {
+    test('should return an array of MatchStat objects with specified values if successful', async (): Promise<void> => {
         const testArray = [testData, testData]
         const response: MatchStat[] = await createManyMatchStat(testArray)
 
@@ -119,7 +124,7 @@ describe('testing createManyMatchStat()', (): void => {
         }
     })
 
-    test('should return a array of MatchStat with a dummy MatchStat if there is an error', async (): Promise<void> => {
+    test('should return an array of MatchStat with a dummy MatchStat if there is an error', async (): Promise<void> => {
         const mockRepository = {
             save: jest.fn().mockImplementationOnce(() => {
                 throw new Error('Error saving MatchStat to the database')
@@ -135,5 +140,58 @@ describe('testing createManyMatchStat()', (): void => {
         expect(response[0].player.name).toBe(createDummyPlayer().name)
         expect(response[0].player.tag).toBe(createDummyPlayer().tag)
         expect(response[0]).toBeInstanceOf(MatchStat)
+    })
+})
+
+describe('testing getPlayersFromMatchId()', (): void => {
+    test('should call find with the input match_id', async (): Promise<void> => {
+        const mockRepository = {
+            find: jest.fn(),
+        }
+        ;(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepository)
+        const match_id: string = 'a9a6fb43-3094-4568-9180-046116d39eab'
+        const response: MatchStat[] = await getPlayersFromMatchId(match_id)
+
+        expect(mockRepository.find).toHaveBeenCalledWith({
+            relations: {
+                player: true,
+            },
+            where: {
+                match_id: match_id,
+            },
+        })
+    })
+
+    test('should return an empty array if find returns null', async (): Promise<void> => {
+        const mockRepository = {
+            find: jest.fn().mockResolvedValue(undefined),
+        }
+        ;(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepository)
+        const match_id: string = 'a9a6fb43-3094-4568-9180-046116d39eab'
+        const response: MatchStat[] = await getPlayersFromMatchId(match_id)
+
+        expect(mockRepository.find).toHaveBeenCalledWith({
+            relations: {
+                player: true,
+            },
+            where: {
+                match_id: match_id,
+            },
+        })
+        expect(response).toStrictEqual([])
+    })
+
+    test('should return an array with a single MatchStat with dummy values if there was a database error', async (): Promise<void> => {
+        const mockRepository = {
+            find: jest.fn().mockImplementation(() => {
+                throw new Error('Database error')
+            }),
+        }
+        ;(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepository)
+        const match_id: string = 'a9a6fb43-3094-4568-9180-046116d39eab'
+        const response: MatchStat[] = await getPlayersFromMatchId(match_id)
+
+        expect(response.length).toBe(1)
+        expect(response[0].player.id).toStrictEqual(createDummyMatchStat().player.id)
     })
 })

@@ -100,6 +100,26 @@ export async function createManyMatchStat(packagedData: any): Promise<MatchStat[
     }
 }
 
+export async function getPlayersFromMatchId(match_id: string): Promise<MatchStat[]> {
+    try {
+        const matchStatRepository = AppDataSource.getRepository(MatchStat)
+        const players =
+            (await matchStatRepository.find({
+                relations: {
+                    player: true,
+                },
+                where: {
+                    match_id: match_id,
+                },
+            })) || []
+
+        return players
+    } catch (err) {
+        console.log('Error getting MatchStats', err)
+        return [createDummyMatchStat()]
+    }
+}
+
 export function createDummyMatchStat(): MatchStat {
     const dummy: MatchStat = new MatchStat(
         createDummyPlayer(),

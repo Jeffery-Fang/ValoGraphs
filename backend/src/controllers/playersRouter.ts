@@ -10,12 +10,7 @@ const router: Router = express.Router()
 
 router.get('/:name', async (req: Request, res: Response): Promise<void> => {
     try {
-        if (
-            req.params.name == undefined ||
-            req.query.tag == undefined ||
-            req.query.mode == undefined ||
-            req.query.size == undefined
-        ) {
+        if (req.query.tag == undefined || req.query.mode == undefined || req.query.size == undefined) {
             throw 'invalid input'
         }
 

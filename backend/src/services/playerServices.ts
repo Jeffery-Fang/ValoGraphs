@@ -31,9 +31,11 @@ export async function getIdFromNameTag(playerName: string, playerTag: string): P
     try {
         const playerRepository = AppDataSource.getRepository(Player)
         const player: Player =
-            (await playerRepository.findOneBy({
-                name: playerName,
-                tag: playerTag,
+            (await playerRepository.findOne({
+                where: {
+                    name: playerName,
+                    tag: playerTag,
+                },
             })) || createDummyPlayer()
 
         return player.id
