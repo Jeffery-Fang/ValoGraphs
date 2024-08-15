@@ -11,7 +11,7 @@ const router = createBrowserRouter([
         element: <GraphPage />,
     },
     {
-        path: '/profile',
+        path: '/profile/:name/:tag',
         element: <ProfilePage />,
     },
 ])

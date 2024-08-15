@@ -34,6 +34,10 @@ const testData = {
         },
         agent: {
             name: 'Cypher',
+            id: '569fdd95-4d10-43ab-ca70-79becc718b46',
+        },
+        customization: {
+            card: '7cf06550-432c-8840-f9c7-a6b71ee8521a',
         },
         team_id: 'Blue',
     },

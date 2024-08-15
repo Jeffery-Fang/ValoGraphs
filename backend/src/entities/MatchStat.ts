@@ -76,6 +76,13 @@ export class MatchStat {
 
     @Column({
         type: 'varchar',
+        length: 36,
+        nullable: false,
+    })
+    agent_id: string
+
+    @Column({
+        type: 'varchar',
         length: 30,
         nullable: false,
     })
@@ -107,6 +114,13 @@ export class MatchStat {
     })
     date: Date
 
+    @Column({
+        type: 'varchar',
+        length: 36,
+        nullable: false,
+    })
+    card_id: string
+
     constructor(
         player: Player,
         matchID: string,
@@ -122,7 +136,9 @@ export class MatchStat {
         mode: string,
         won: boolean,
         side: string,
-        date: Date
+        date: Date,
+        agent_id: string,
+        card_id: string
     ) {
         this.player = player
         this.match_id = matchID
@@ -139,5 +155,7 @@ export class MatchStat {
         this.won = won
         this.side = side
         this.date = date
+        this.agent_id = agent_id
+        this.card_id = card_id
     }
 }

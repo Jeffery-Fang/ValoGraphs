@@ -73,7 +73,6 @@ router.get('/:name', async (req: Request, res: Response): Promise<void> => {
 
         const stats: MatchStat[] = await createManyMatchStat(data)
         const puuid: string = await getIdFromNameTag(name, tag)
-
         const response: MatchStat[] = stats.filter((stat: MatchStat): boolean => {
             return stat.player.id === puuid
         })

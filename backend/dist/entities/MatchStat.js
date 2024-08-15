@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Player } from './Player.js';
 let MatchStat = class MatchStat {
-    constructor(player, matchID, ACS, kills, deaths, assists, DD, ADR, HS, agent, map, mode, won, side, date) {
+    constructor(player, matchID, ACS, kills, deaths, assists, DD, ADR, HS, agent, map, mode, won, side, date, agent_id, card_id) {
         this.player = player;
         this.match_id = matchID;
         this.acs = ACS;
@@ -26,6 +26,8 @@ let MatchStat = class MatchStat {
         this.won = won;
         this.side = side;
         this.date = date;
+        this.agent_id = agent_id;
+        this.card_id = card_id;
     }
 };
 __decorate([
@@ -113,6 +115,14 @@ __decorate([
 __decorate([
     Column({
         type: 'varchar',
+        length: 36,
+        nullable: false,
+    }),
+    __metadata("design:type", String)
+], MatchStat.prototype, "agent_id", void 0);
+__decorate([
+    Column({
+        type: 'varchar',
         length: 30,
         nullable: false,
     }),
@@ -148,8 +158,16 @@ __decorate([
     }),
     __metadata("design:type", Date)
 ], MatchStat.prototype, "date", void 0);
+__decorate([
+    Column({
+        type: 'varchar',
+        length: 36,
+        nullable: false,
+    }),
+    __metadata("design:type", String)
+], MatchStat.prototype, "card_id", void 0);
 MatchStat = __decorate([
     Entity(),
-    __metadata("design:paramtypes", [Player, String, Number, Number, Number, Number, Number, Number, Number, String, String, String, Boolean, String, Date])
+    __metadata("design:paramtypes", [Player, String, Number, Number, Number, Number, Number, Number, Number, String, String, String, Boolean, String, Date, String, String])
 ], MatchStat);
 export { MatchStat };

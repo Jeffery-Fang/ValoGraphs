@@ -1,7 +1,12 @@
+import { useParams } from 'react-router-dom'
+
 function App() {
+    const { name, tag } = useParams()
+
     return (
         <>
-            <div>Profile Page</div>
+            <div>{name}</div>
+            <div>{tag}</div>
         </>
     )
 }

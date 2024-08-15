@@ -51,7 +51,9 @@ export async function createOneMatchStat(
             mode,
             won,
             playerData['team_id'],
-            date
+            date,
+            playerData['agent']['id'],
+            playerData['customization']['card']
         )
         const matchStatRepository = AppDataSource.getRepository(MatchStat)
         await matchStatRepository.save(matchStat)
@@ -100,7 +102,9 @@ export async function createManyMatchStat(packagedData: any): Promise<MatchStat[
                 data.mode,
                 data.won,
                 data.playerData['team_id'],
-                data.date
+                data.date,
+                data.playerData['agent']['id'],
+                data.playerData['customization']['card']
             )
             stats.push(matchStat)
         }
@@ -163,7 +167,9 @@ export function createDummyMatchStat(): MatchStat {
         'dummy_mode',
         false,
         'red',
-        new Date()
+        new Date(),
+        'dummy_agent_id',
+        'dummy_card_id'
     )
 
     return dummy
