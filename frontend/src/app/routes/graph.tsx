@@ -46,12 +46,13 @@ function App() {
         let temp: string[]
         let input: HTMLInputElement = document.getElementById('profileSearchInput') as HTMLInputElement
 
-        if (input) {
+        console.log(input)
+        if (input && input.value.includes('#')) {
             temp = input.value.split('#')
+            window.open(`/profile/${temp[0]}/${temp[1]}`, '_blank')
         } else {
-            temp = []
+            alert('Invalid Input')
         }
-        window.open(`/profile/${temp[0]}/${temp[1]}`, '_blank')
     }
 
     async function handleAdd(): Promise<void> {
