@@ -1,5 +1,5 @@
 import { Container, Navbar, Offcanvas, Nav, NavDropdown, Form, Button } from 'react-bootstrap'
-
+import { TbBrandValorant } from 'react-icons/tb'
 interface HeaderProps {
     handlerMap: { [option: string]: any }
     gameModes: string[]
@@ -63,8 +63,11 @@ export default function Header({ handlerMap, gameModes }: HeaderProps) {
                     <div>
                         <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${false}`} />
                     </div>
-                    <Navbar.Brand className="mx-auto font-monospace p-0">
-                        <h1>ValoGraphs</h1>
+                    <Navbar.Brand className="mx-auto">
+                        <Container fluid className="d-flex">
+                            <TbBrandValorant size={45} />
+                            <h1 className="font-monospace ps-2">ValoGraphs</h1>
+                        </Container>
                     </Navbar.Brand>
                     <div>
                         <Navbar.Toggle className="invisible" />

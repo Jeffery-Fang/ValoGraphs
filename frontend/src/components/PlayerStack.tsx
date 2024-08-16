@@ -41,6 +41,8 @@ export default function PlayerStack({ playerMap, handleAdd, handleToggle, handle
                             width: '100%',
                             border: 'none',
                             outline: 'none',
+                            fontFamily: 'Courier New, monospace',
+                            fontSize: '16px',
                         }}
                         id="newPlayerInput"
                         onKeyDown={(e) => {

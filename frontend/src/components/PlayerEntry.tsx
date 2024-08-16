@@ -1,24 +1,12 @@
 import { CloseButton, Stack } from 'react-bootstrap'
 import { FaEyeSlash, FaRegEye } from 'react-icons/fa'
+import { stringToColour } from '../utils/commonFunctions'
 
 interface PlayerEntryProps {
     handleToggle: () => void
     handleDelete: () => void
     visible: boolean
     nameAndTag: string
-}
-
-const stringToColour = (str: string) => {
-    let hash = 0
-    str.split('').forEach((char) => {
-        hash = char.charCodeAt(0) + ((hash << 5) - hash)
-    })
-    let colour = '#'
-    for (let i = 0; i < 3; i++) {
-        const value = (hash >> (i * 8)) & 0xff
-        colour += value.toString(16).padStart(2, '0')
-    }
-    return colour
 }
 
 export default function PlayerEntry({ handleToggle, handleDelete, visible, nameAndTag }: PlayerEntryProps) {
@@ -41,7 +29,15 @@ export default function PlayerEntry({ handleToggle, handleDelete, visible, nameA
                     ></FaEyeSlash>
                 )}
                 <div className="vr"></div>
-                <div style={{ color: stringToColour(nameAndTag) }}>{nameAndTag}</div>
+                <div
+                    style={{
+                        color: stringToColour(nameAndTag),
+                        fontFamily: 'Courier New, monospace',
+                        fontSize: '16px',
+                    }}
+                >
+                    {nameAndTag}
+                </div>
                 <CloseButton
                     className="ms-auto"
                     onClick={() => {

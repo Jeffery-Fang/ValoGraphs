@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { default as Header } from '../../components/Header'
 import { default as PlayerStack } from '../../components/PlayerStack'
 import { default as GraphContainer } from '../../components/GraphContainer'
+import { retrieveData } from '../../utils/commonFunctions'
 
 const gameModes: string[] = ['unrated', 'competitive', 'team deathmatch']
 
@@ -15,16 +16,8 @@ function App() {
             let newPlayerMap = { ...playerMap }
 
             for (let player of Object.keys(playerMap)) {
-                let temp: string[] = player.split('#')
-                let url: string =
-                    import.meta.env.VITE_API_URL +
-                    temp[0] +
-                    '?tag=' +
-                    temp[1] +
-                    '&mode=' +
-                    mode.replace(' ', '') +
-                    '&size=10'
-                let response: any = await fetch(url, { method: 'GET' })
+                let response: any = await retrieveData(player, mode)
+
                 if (response.status === 200) {
                     let data = await response.json()
                     newPlayerMap[player].data = data
@@ -32,14 +25,10 @@ function App() {
                     alert('Error retrieving data')
                 }
             }
-            console.log(newPlayerMap)
+
             updatePlayerMap(newPlayerMap)
             updateCurrentMode(mode)
         }
-    }
-
-    async function handleExportGraphs(): Promise<void> {
-        console.log('exporting graphs')
     }
 
     function handleProfileSearch(): void {
@@ -62,16 +51,7 @@ function App() {
             if (Object.keys(playerMap).includes(input.value)) {
                 alert('Player is already graphed')
             } else {
-                let temp: string[] = input.value.split('#')
-                let url: string =
-                    import.meta.env.VITE_API_URL +
-                    temp[0] +
-                    '?tag=' +
-                    temp[1] +
-                    '&mode=' +
-                    currentMode.replace(' ', '') +
-                    '&size=10'
-                let response: any = await fetch(url, { method: 'GET' })
+                let response: any = await retrieveData(input.value, currentMode)
                 if (response.status === 200) {
                     let data = await response.json()
                     let newPlayerMap = { ...playerMap }
@@ -108,7 +88,6 @@ function App() {
         'Back to Homepage': '/',
         'View Profile Page': handleProfileSearch,
         'Change Game Mode': handleChangeMode,
-        'Export Graphs': handleExportGraphs,
         'View GitHub Repository': import.meta.env.VITE_GITHUB_LINK,
     }
 

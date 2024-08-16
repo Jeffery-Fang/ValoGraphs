@@ -1,21 +1,10 @@
 import { Container, Stack } from 'react-bootstrap'
 import { default as Graph } from './Graph'
 import { Legend } from 'recharts'
+import { stringToColour } from '../utils/commonFunctions'
 
 interface GraphContainerProps {
     playerMap: { [playerName: string]: any }
-}
-const stringToColour = (str: string) => {
-    let hash = 0
-    str.split('').forEach((char) => {
-        hash = char.charCodeAt(0) + ((hash << 5) - hash)
-    })
-    let colour = '#'
-    for (let i = 0; i < 3; i++) {
-        const value = (hash >> (i * 8)) & 0xff
-        colour += value.toString(16).padStart(2, '0')
-    }
-    return colour
 }
 
 export default function GraphContainer({ playerMap }: GraphContainerProps) {
@@ -63,7 +52,7 @@ export default function GraphContainer({ playerMap }: GraphContainerProps) {
         <>
             <Container fluid className="border-start border-dark h-100 d-flex flex-wrap">
                 <Legend></Legend>
-                <Stack className="p-3 w-50">
+                <Stack className="p-0 pt-3 w-50" gap={1}>
                     <Graph
                         players={players}
                         data={hsData}
@@ -78,7 +67,7 @@ export default function GraphContainer({ playerMap }: GraphContainerProps) {
                         title="Kills, Deaths and Assists"
                     ></Graph>
                 </Stack>
-                <Stack className="p-3 w-50">
+                <Stack className="p-0 pt-3 w-50" gap={1}>
                     <Graph
                         players={players}
                         data={adrData}

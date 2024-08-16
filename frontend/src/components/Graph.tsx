@@ -13,12 +13,12 @@ export default function Graph({ players, data, unit, title }: GraphProps) {
         <>
             <Container
                 fluid
-                className="d-flex flex-wrap p-0 pt-3 pb-3"
-                style={{ height: '30%', fontFamily: 'monospace' }}
+                className="d-flex flex-wrap p-3"
+                style={{ height: '30%', fontFamily: 'Courier New, monospace' }}
             >
-                <div className="w-100 text-center">{title}</div>
+                <div className="w-100 text-center ps-5">{title}</div>
                 <ResponsiveContainer>
-                    <LineChart title={title} data={data} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
+                    <LineChart title={title} data={data} margin={{ top: 20, right: 0, bottom: 0, left: 0 }}>
                         {Object.keys(players).map((playerName: string) => {
                             return (
                                 <Line
@@ -26,30 +26,40 @@ export default function Graph({ players, data, unit, title }: GraphProps) {
                                     type="monotone"
                                     dataKey={playerName}
                                     stroke={players[playerName]}
+                                    strokeWidth={2}
                                     key={playerName}
                                 />
                             )
                         })}
                         <CartesianGrid strokeDasharray="3 3" stroke="grey" />
                         <XAxis
-                            dataKey="dummy"
                             stroke="black"
-                            style={{ fontSize: '10px', fontFamily: 'monospace', fill: 'rgba(0, 0, 0, 1)' }}
+                            height={45}
+                            style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', fill: 'rgba(0, 0, 0, 1)' }}
                         >
                             <Label
                                 position={'center'}
-                                style={{ fontSize: '12px', fontFamily: 'monospace', fill: 'rgba(0, 0, 0, 1)' }}
+                                style={{
+                                    fontSize: '11px',
+                                    fontFamily: 'Courier New, monospace',
+                                    fill: 'rgba(0, 0, 0, 1)',
+                                }}
                             >
-                                {'Recent Matchs'}
+                                {'Recent Matchs (matches ago)'}
                             </Label>
                         </XAxis>
                         <YAxis
                             stroke="black"
-                            style={{ fontSize: '10px', fontFamily: 'monospace', fill: 'rgba(0, 0, 0, 1)' }}
+                            width={70}
+                            style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', fill: 'rgba(0, 0, 0, 1)' }}
                         >
                             <Label
                                 angle={-90}
-                                style={{ fontSize: '12px', fontFamily: 'monospace', fill: 'rgba(0, 0, 0, 1)' }}
+                                style={{
+                                    fontSize: '11px',
+                                    fontFamily: 'Courier New, monospace',
+                                    fill: 'rgba(0, 0, 0, 1)',
+                                }}
                             >
                                 {unit}
                             </Label>
@@ -64,7 +74,10 @@ export default function Graph({ players, data, unit, title }: GraphProps) {
                                     color: '#E0E0E0',
                                     margin: '0px',
                                     textAlign: 'left',
-                                    fontSize: '10px',
+                                    fontSize: '12px',
+                                }}
+                                labelStyle={{
+                                    display: 'none',
                                 }}
                             ></Tooltip>
                         ) : (
