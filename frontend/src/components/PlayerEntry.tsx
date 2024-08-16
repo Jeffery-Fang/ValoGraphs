@@ -8,10 +8,23 @@ interface PlayerEntryProps {
     nameAndTag: string
 }
 
+const stringToColour = (str: string) => {
+    let hash = 0
+    str.split('').forEach((char) => {
+        hash = char.charCodeAt(0) + ((hash << 5) - hash)
+    })
+    let colour = '#'
+    for (let i = 0; i < 3; i++) {
+        const value = (hash >> (i * 8)) & 0xff
+        colour += value.toString(16).padStart(2, '0')
+    }
+    return colour
+}
+
 export default function PlayerEntry({ handleToggle, handleDelete, visible, nameAndTag }: PlayerEntryProps) {
     return (
         <>
-            <Stack direction="horizontal" className="p-2 border-bottom border-end border-dark" gap={2}>
+            <Stack direction="horizontal" className="p-2 border-bottom border-dark" gap={2}>
                 {visible ? (
                     <FaRegEye
                         className="float-start"
@@ -28,7 +41,7 @@ export default function PlayerEntry({ handleToggle, handleDelete, visible, nameA
                     ></FaEyeSlash>
                 )}
                 <div className="vr"></div>
-                <div>{nameAndTag}</div>
+                <div style={{ color: stringToColour(nameAndTag) }}>{nameAndTag}</div>
                 <CloseButton
                     className="ms-auto"
                     onClick={() => {

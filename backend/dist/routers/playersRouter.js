@@ -39,6 +39,7 @@ router.get('/:name', (req, res) => __awaiter(void 0, void 0, void 0, function* (
         };
         const apiResponse = yield (yield fetch(url, options)).json();
         let data = [];
+        console.log(url, apiResponse);
         if (apiResponse === undefined) {
             throw 'no response from henrikdev API';
         }

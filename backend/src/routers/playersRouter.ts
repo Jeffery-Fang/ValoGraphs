@@ -32,8 +32,11 @@ router.get('/:name', async (req: Request, res: Response): Promise<void> => {
                 Authorization: apiKey,
             },
         }
+
         const apiResponse = await (await fetch(url, options)).json()
         let data = []
+
+        console.log(url, apiResponse)
 
         if (apiResponse === undefined) {
             throw 'no response from henrikdev API'

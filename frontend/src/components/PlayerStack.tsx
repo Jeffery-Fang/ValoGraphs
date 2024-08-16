@@ -3,20 +3,13 @@ import { FaPlus } from 'react-icons/fa'
 import PlayerEntry from './PlayerEntry'
 
 interface PlayerStackProps {
-    visiblePlayers: string[]
-    allPlayers: string[]
+    playerMap: { [playerName: string]: any }
     handleAdd: () => void
-    handleToggle: (i: number) => void
-    handleDelete: (i: number) => void
+    handleToggle: (name: string) => void
+    handleDelete: (name: string) => void
 }
 
-export default function PlayerStackProps({
-    visiblePlayers,
-    allPlayers,
-    handleAdd,
-    handleToggle,
-    handleDelete,
-}: PlayerStackProps) {
+export default function PlayerStack({ playerMap, handleAdd, handleToggle, handleDelete }: PlayerStackProps) {
     return (
         <>
             <Stack
@@ -27,22 +20,23 @@ export default function PlayerStackProps({
                     overflowX: 'hidden',
                 }}
             >
-                {allPlayers.map((player: string, index: number) => {
+                {Object.keys(playerMap).map((player: string) => {
                     return (
                         <PlayerEntry
                             nameAndTag={player}
-                            handleToggle={() => handleToggle(index)}
-                            handleDelete={() => handleDelete(index)}
-                            visible={visiblePlayers.includes(player)}
-                            key={index}
+                            handleToggle={() => handleToggle(player)}
+                            handleDelete={() => handleDelete(player)}
+                            visible={playerMap[player].visible}
+                            key={player}
                         ></PlayerEntry>
                     )
                 })}
-                <Stack direction="horizontal" className="p-2 border-bottom border-end border-dark" gap={2}>
+                <Stack direction="horizontal" className="p-2 border-bottom border-dark" gap={2}>
                     <FaPlus className="invisible"></FaPlus>
                     <div className="vr"></div>
                     <input
                         spellCheck="false"
+                        autoComplete="off"
                         style={{
                             width: '100%',
                             border: 'none',

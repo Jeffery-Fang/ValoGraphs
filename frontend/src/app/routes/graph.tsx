@@ -1,38 +1,45 @@
-import { Container } from 'react-bootstrap'
+import { Container, Stack } from 'react-bootstrap'
 import { useState } from 'react'
 import { default as Header } from '../../components/Header'
 import { default as PlayerStack } from '../../components/PlayerStack'
+import { default as GraphContainer } from '../../components/GraphContainer'
 
-const gameModes: string[] = ['Unrated', 'Competitive', 'Team Deathmatch']
-const allPlayers: string[] = [
-    'Hexennacht#NA1',
-    'Elsa Kanzaki#COLD',
-    'Ratman123#Rat',
-    'Gamerlord69#NA1',
-    'SEN Sinatraa#Rich',
-    'EAtTHICAsS#7070',
-]
-
-const visiblePlayers: string[] = [
-    'Hexennacht#NA1',
-    'Elsa Kanzaki#COLD',
-    'Ratman123#Rat',
-    'Gamerlord69#NA1',
-    'SEN Sinatraa#Rich',
-    'EAtTHICAsS#7070',
-]
+const gameModes: string[] = ['unrated', 'competitive', 'team deathmatch']
 
 function App() {
-    const [mode, updateMode] = useState('Unrated')
-    const [players, updatePlayers] = useState(allPlayers)
-    const [filteredPlayers, updatedFilteredPlayers] = useState(visiblePlayers)
+    const [currentMode, updateCurrentMode] = useState('unrated')
+    const [playerMap, updatePlayerMap] = useState<{ [playerName: string]: any }>({})
 
-    function handleChangeMode(mode: string): void {
-        updateMode(mode)
+    async function handleChangeMode(mode: string): Promise<void> {
+        if (currentMode != mode) {
+            let newPlayerMap = { ...playerMap }
+
+            for (let player of Object.keys(playerMap)) {
+                let temp: string[] = player.split('#')
+                let url: string =
+                    import.meta.env.VITE_API_URL +
+                    temp[0] +
+                    '?tag=' +
+                    temp[1] +
+                    '&mode=' +
+                    mode.replace(' ', '') +
+                    '&size=10'
+                let response: any = await fetch(url, { method: 'GET' })
+                if (response.status === 200) {
+                    let data = await response.json()
+                    newPlayerMap[player].data = data
+                } else {
+                    alert('Error retrieving data')
+                }
+            }
+            console.log(newPlayerMap)
+            updatePlayerMap(newPlayerMap)
+            updateCurrentMode(mode)
+        }
     }
 
-    function handleExportGraphs(): void {
-        console.log('Exporting Graphs')
+    async function handleExportGraphs(): Promise<void> {
+        console.log('exporting graphs')
     }
 
     function handleProfileSearch(): void {
@@ -44,51 +51,56 @@ function App() {
         } else {
             temp = []
         }
-
         window.open(`/profile/${temp[0]}/${temp[1]}`, '_blank')
     }
 
-    function handleAdd(): void {
+    async function handleAdd(): Promise<void> {
         let input: HTMLInputElement = document.getElementById('newPlayerInput') as HTMLInputElement
 
         if (input && input.value.includes('#')) {
-            let newPlayers = [...players]
-            newPlayers.push(input.value)
-            updatePlayers(newPlayers)
+            if (Object.keys(playerMap).includes(input.value)) {
+                alert('Player is already graphed')
+            } else {
+                let temp: string[] = input.value.split('#')
+                let url: string =
+                    import.meta.env.VITE_API_URL +
+                    temp[0] +
+                    '?tag=' +
+                    temp[1] +
+                    '&mode=' +
+                    currentMode.replace(' ', '') +
+                    '&size=10'
+                let response: any = await fetch(url, { method: 'GET' })
+                if (response.status === 200) {
+                    let data = await response.json()
+                    let newPlayerMap = { ...playerMap }
+                    newPlayerMap[input.value] = { visible: true, data: data }
+                    input.value = ''
 
-            let newFilteredPlayers = [...filteredPlayers]
-            newFilteredPlayers.push(input.value)
-            updatedFilteredPlayers(newFilteredPlayers)
-
-            input.value = ''
+                    updatePlayerMap(newPlayerMap)
+                } else {
+                    alert('Error retrieving data')
+                }
+            }
         } else {
             alert('Invalid Input')
         }
     }
 
-    function handleToggle(i: number): void {
-        let newFilteredPlayers = [...filteredPlayers]
+    function handleToggle(name: string): void {
+        let newPlayerMap = { ...playerMap }
 
-        if (filteredPlayers.includes(players[i])) {
-            newFilteredPlayers.splice(filteredPlayers.indexOf(players[i]), 1)
-        } else {
-            newFilteredPlayers.push(players[i])
+        if (Object.keys(newPlayerMap).includes(name)) {
+            newPlayerMap[name].visible = !newPlayerMap[name].visible
         }
-
-        updatedFilteredPlayers(newFilteredPlayers)
+        updatePlayerMap(newPlayerMap)
     }
 
-    function handleDelete(i: number): void {
-        let newPlayers = [...players]
-        let newFilteredPlayers = [...filteredPlayers]
+    function handleDelete(name: string): void {
+        let newPlayerMap = { ...playerMap }
 
-        if (filteredPlayers.includes(players[i])) {
-            newFilteredPlayers.splice(filteredPlayers.indexOf(players[i]), 1)
-        }
-
-        newPlayers.splice(i, 1)
-        updatePlayers(newPlayers)
-        updatedFilteredPlayers(newFilteredPlayers)
+        delete newPlayerMap[name]
+        updatePlayerMap(newPlayerMap)
     }
 
     const handlerMap: { [id: string]: any } = {
@@ -103,13 +115,15 @@ function App() {
         <>
             <Container fluid className="p-0" style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
                 <Header handlerMap={handlerMap} gameModes={gameModes}></Header>
-                <PlayerStack
-                    visiblePlayers={filteredPlayers}
-                    allPlayers={players}
-                    handleAdd={handleAdd}
-                    handleDelete={handleDelete}
-                    handleToggle={handleToggle}
-                ></PlayerStack>
+                <Stack direction="horizontal" className="h-100 pe-4">
+                    <PlayerStack
+                        playerMap={playerMap}
+                        handleAdd={handleAdd}
+                        handleDelete={handleDelete}
+                        handleToggle={handleToggle}
+                    ></PlayerStack>
+                    <GraphContainer playerMap={playerMap}></GraphContainer>
+                </Stack>
             </Container>
         </>
     )

@@ -1,7 +1,7 @@
 import { Container, Navbar, Offcanvas, Nav, NavDropdown, Form, Button } from 'react-bootstrap'
 
 interface HeaderProps {
-    handlerMap: { [id: string]: any }
+    handlerMap: { [option: string]: any }
     gameModes: string[]
 }
 
