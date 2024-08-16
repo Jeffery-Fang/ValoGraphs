@@ -16,14 +16,16 @@ AppDataSource.initialize()
         console.log('Error connecting to the database', err)
     })
 
-process.on('SIGINT', (): void => {
-    AppDataSource.destroy()
-        .then((): void => {
-            console.log('Database connection closed')
-            process.exit(0)
-        })
-        .catch((err): void => {
-            console.log('Error closing connection to database', err)
-            process.exit(1)
-        })
-})
+// process.on('SIGINT', (): void => {
+//     AppDataSource.destroy()
+//         .then((): void => {
+//             console.log('Database connection closed')
+//             process.exit(0)
+//         })
+//         .catch((err): void => {
+//             console.log('Error closing connection to database', err)
+//             process.exit(1)
+//         })
+// })
+
+module.exports = app
