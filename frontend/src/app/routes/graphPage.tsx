@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { default as Header } from '../../components/Header'
 import { default as PlayerStack } from '../../components/PlayerStack'
 import { default as GraphContainer } from '../../components/GraphContainer'
-import { retrieveData } from '../../utils/commonFunctions'
+import { retrieveData, handleProfileSearch } from '../../utils/commonFunctions'
 
 const gameModes: string[] = ['unrated', 'competitive', 'team deathmatch']
 
@@ -28,19 +28,6 @@ function App() {
 
             updatePlayerMap(newPlayerMap)
             updateCurrentMode(mode)
-        }
-    }
-
-    function handleProfileSearch(): void {
-        let temp: string[]
-        let input: HTMLInputElement = document.getElementById('profileSearchInput') as HTMLInputElement
-
-        console.log(input)
-        if (input && input.value.includes('#')) {
-            temp = input.value.split('#')
-            window.open(`/profile/${temp[0]}/${temp[1]}`, '_blank')
-        } else {
-            alert('Invalid Input')
         }
     }
 

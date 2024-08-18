@@ -23,3 +23,15 @@ export async function retrieveData(nameAndTag: string, mode: string): Promise<an
 
     return response
 }
+
+export function handleProfileSearch(): void {
+    let temp: string[]
+    let input: HTMLInputElement = document.getElementById('profileSearchInput') as HTMLInputElement
+
+    if (input && input.value.includes('#')) {
+        temp = input.value.split('#')
+        window.open(`/profile/${temp[0]}/${temp[1]}`, '_blank')
+    } else {
+        alert('Invalid Input')
+    }
+}

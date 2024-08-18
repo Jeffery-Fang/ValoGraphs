@@ -17,6 +17,12 @@ export default function Header({ handlerMap, gameModes }: HeaderProps) {
                             className="me-2"
                             aria-label="Search"
                             id="profileSearchInput"
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault()
+                                    handlerMap[text]()
+                                }
+                            }}
                         />
                         <Button variant="outline-success" onClick={handlerMap[text]}>
                             Search
@@ -63,7 +69,7 @@ export default function Header({ handlerMap, gameModes }: HeaderProps) {
                     <div>
                         <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${false}`} />
                     </div>
-                    <Navbar.Brand className="mx-auto">
+                    <Navbar.Brand>
                         <Container fluid className="d-flex">
                             <TbBrandValorant size={45} />
                             <h1 className="font-monospace ps-2">ValoGraphs</h1>
