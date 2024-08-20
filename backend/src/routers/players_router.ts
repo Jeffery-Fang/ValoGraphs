@@ -1,8 +1,8 @@
 import express, { Request, Response, Router } from 'express'
 import 'dotenv/config'
 import { MatchStat } from '../entities/MatchStat.js'
-import { createManyMatchStat } from '../services/matchStatServices.js'
-import { getIdFromNameTag } from '../services/playerServices.js'
+import { createManyMatchStat } from '../services/match_stat_services.js'
+import { getIdFromNameTag } from '../services/player_services.js'
 
 const playerUrlRoot: string = <string>process.env.USER_URL_ROOT
 const apiKey: string = <string>process.env.API_KEY

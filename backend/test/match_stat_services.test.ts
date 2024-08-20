@@ -5,8 +5,8 @@ import {
     createManyMatchStat,
     createOneMatchStat,
     getPlayersFromMatchId,
-} from '../src/services/matchStatServices.js'
-import { createDummyPlayer } from '../src/services/playerServices.js'
+} from '../src/services/match_stat_services.js'
+import { createDummyPlayer } from '../src/services/player_services.js'
 
 jest.mock('../src/data-source.js', () => ({
     AppDataSource: {

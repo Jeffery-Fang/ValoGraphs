@@ -1,8 +1,8 @@
-import { Container, Stack } from 'react-bootstrap'
+import { Stack } from 'react-bootstrap'
 import { useState } from 'react'
-import { default as Header } from '../../components/Header'
-import { default as PlayerStack } from '../../components/PlayerStack'
-import { default as GraphContainer } from '../../components/GraphContainer'
+import Header from '../../components/Header'
+import PlayerStack from '../../components/PlayerStack'
+import GraphContainer from '../../components/GraphContainer'
 import { retrieveData, handleProfileSearch } from '../../utils/commonFunctions'
 
 const gameModes: string[] = ['unrated', 'competitive', 'team deathmatch']
@@ -16,13 +16,13 @@ function App() {
             let newPlayerMap = { ...playerMap }
 
             for (let player of Object.keys(playerMap)) {
-                let response: any = await retrieveData(player, mode)
+                let response = await retrieveData(player, mode)
 
                 if (response.status === 200) {
                     let data = await response.json()
                     newPlayerMap[player].data = data
                 } else {
-                    alert('Error retrieving data')
+                    alert('Error retrieving data for ' + player)
                 }
             }
 
@@ -39,6 +39,7 @@ function App() {
                 alert('Player is already graphed')
             } else {
                 let response: any = await retrieveData(input.value, currentMode)
+
                 if (response.status === 200) {
                     let data = await response.json()
                     let newPlayerMap = { ...playerMap }
@@ -47,7 +48,7 @@ function App() {
 
                     updatePlayerMap(newPlayerMap)
                 } else {
-                    alert('Error retrieving data')
+                    alert('Error retrieving data for ' + input.value)
                 }
             }
         } else {
@@ -80,9 +81,15 @@ function App() {
 
     return (
         <>
-            <Container fluid className="p-0" style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+            <Stack
+                className="vh-100 vw-100 d-flex"
+                style={{
+                    overflowY: 'hidden',
+                    overflowX: 'hidden',
+                }}
+            >
                 <Header handlerMap={handlerMap} gameModes={gameModes}></Header>
-                <Stack direction="horizontal" className="h-100 pe-4">
+                <Stack direction="horizontal" className="w-100 h-100 bg-dark flex-fill">
                     <PlayerStack
                         playerMap={playerMap}
                         handleAdd={handleAdd}
@@ -91,7 +98,7 @@ function App() {
                     ></PlayerStack>
                     <GraphContainer playerMap={playerMap}></GraphContainer>
                 </Stack>
-            </Container>
+            </Stack>
         </>
     )
 }

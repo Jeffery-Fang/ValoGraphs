@@ -2,8 +2,8 @@ import { default as request } from 'supertest'
 import http from 'http'
 import 'dotenv/config'
 import app from '../src/app.js'
-import { createManyMatchStat, getPlayersFromMatchId } from '../src/services/matchStatServices.js'
-import { getIdFromNameTag } from '../src/services/playerServices'
+import { createManyMatchStat, getPlayersFromMatchId } from '../src/services/match_stat_services.js'
+import { getIdFromNameTag } from '../src/services/player_services'
 
 let server: http.Server
 const playerUrlRoot: string = <string>process.env.USER_URL_ROOT
@@ -11,8 +11,8 @@ const apiKey: string = <string>process.env.API_KEY
 const mockFetch = jest.fn()
 global.fetch = mockFetch
 
-jest.mock('../src/services/matchStatServices')
-jest.mock('../src/services/playerServices')
+jest.mock('../src/services/match_stat_services')
+jest.mock('../src/services/player_services')
 
 beforeAll((done): void => {
     server = app.listen(3000, (): void => {

@@ -12,23 +12,23 @@ interface PlayerEntryProps {
 export default function PlayerEntry({ handleToggle, handleDelete, visible, nameAndTag }: PlayerEntryProps) {
     return (
         <>
-            <Stack direction="horizontal" className="p-2 border-bottom border-dark" gap={2}>
+            <Stack direction="horizontal" className="p-2 border-bottom border-secondary border-2" gap={2}>
                 {visible ? (
                     <FaRegEye
-                        className="float-start"
+                        className="float-start text-secondary"
                         onClick={() => {
                             handleToggle()
                         }}
                     ></FaRegEye>
                 ) : (
                     <FaEyeSlash
-                        className="float-start"
+                        className="float-start text-secondary"
                         onClick={() => {
                             handleToggle()
                         }}
                     ></FaEyeSlash>
                 )}
-                <div className="vr"></div>
+                <div className="vr text-light"></div>
                 <div
                     style={{
                         color: stringToColour(nameAndTag),
@@ -40,6 +40,7 @@ export default function PlayerEntry({ handleToggle, handleDelete, visible, nameA
                 </div>
                 <CloseButton
                     className="ms-auto"
+                    variant="secondary"
                     onClick={() => {
                         handleDelete()
                     }}

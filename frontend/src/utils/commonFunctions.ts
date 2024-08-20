@@ -1,11 +1,10 @@
 export function stringToColour(str: string): string {
     let hash: number = 0
+    let colour: string = '#'
 
     str.split('').forEach((char: string): void => {
         hash = char.charCodeAt(0) + ((hash << 5) - hash)
     })
-
-    let colour: string = '#'
 
     for (let i: number = 0; i < 3; i++) {
         const value: number = (hash >> (i * 8)) & 0xff
@@ -34,4 +33,10 @@ export function handleProfileSearch(): void {
     } else {
         alert('Invalid Input')
     }
+}
+
+export function calculateDateDiff(date1: Date, date2: Date): number {
+    const oneDay: number = 24 * 60 * 60 * 1000
+
+    return Math.round(Math.abs(((new Date(date1) as any) - (new Date(date2) as any)) / oneDay))
 }

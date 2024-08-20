@@ -13,9 +13,10 @@ export default function PlayerStack({ playerMap, handleAdd, handleToggle, handle
     return (
         <>
             <Stack
+                className="bg-dark border-top border-secondary border-2"
                 style={{
                     height: '100%',
-                    width: '20%',
+                    minWidth: '20%',
                     overflowY: 'auto',
                     overflowX: 'hidden',
                 }}
@@ -31,10 +32,11 @@ export default function PlayerStack({ playerMap, handleAdd, handleToggle, handle
                         ></PlayerEntry>
                     )
                 })}
-                <Stack direction="horizontal" className="p-2 border-bottom border-dark" gap={2}>
+                <Stack direction="horizontal" className="p-2 border-bottom border-secondary border-2" gap={2}>
                     <FaPlus className="invisible"></FaPlus>
-                    <div className="vr"></div>
+                    <div className="vr text-light"></div>
                     <input
+                        className="bg-dark"
                         spellCheck="false"
                         autoComplete="off"
                         style={{
@@ -43,6 +45,7 @@ export default function PlayerStack({ playerMap, handleAdd, handleToggle, handle
                             outline: 'none',
                             fontFamily: 'Courier New, monospace',
                             fontSize: '16px',
+                            color: 'white',
                         }}
                         id="newPlayerInput"
                         onKeyDown={(e) => {

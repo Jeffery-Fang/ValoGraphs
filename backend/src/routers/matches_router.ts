@@ -1,7 +1,7 @@
 import express, { Request, Response, Router } from 'express'
 import 'dotenv/config'
 import { MatchStat } from '../entities/MatchStat.js'
-import { getPlayersFromMatchId } from '../services/matchStatServices.js'
+import { getPlayersFromMatchId } from '../services/match_stat_services.js'
 
 const router: Router = express.Router()
 

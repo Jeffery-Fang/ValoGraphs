@@ -4,7 +4,7 @@ import {
     createManyPlayer,
     createOnePlayer,
     getIdFromNameTag,
-} from '../src/services/playerServices.js'
+} from '../src/services/player_services.js'
 import { AppDataSource } from '../src/data-source.js'
 
 jest.mock('../src/data-source.js', () => ({

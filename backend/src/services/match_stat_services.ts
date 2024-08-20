@@ -1,7 +1,7 @@
 import { AppDataSource } from '../data-source.js'
 import { MatchStat } from '../entities/MatchStat.js'
 import { Player } from '../entities/Player.js'
-import { createDummyPlayer } from './playerServices.js'
+import { createDummyPlayer } from './player_services.js'
 
 /**
  * Creates a single MatchStat object in the database with the associated data

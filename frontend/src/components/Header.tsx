@@ -1,5 +1,6 @@
 import { Container, Navbar, Offcanvas, Nav, NavDropdown, Form, Button } from 'react-bootstrap'
-import { TbBrandValorant } from 'react-icons/tb'
+import { SiValorant } from 'react-icons/si'
+
 interface HeaderProps {
     handlerMap: { [option: string]: any }
     gameModes: string[]
@@ -24,7 +25,7 @@ export default function Header({ handlerMap, gameModes }: HeaderProps) {
                                 }
                             }}
                         />
-                        <Button variant="outline-success" onClick={handlerMap[text]}>
+                        <Button variant="outline-danger" onClick={handlerMap[text]}>
                             Search
                         </Button>
                     </Form>
@@ -64,15 +65,23 @@ export default function Header({ handlerMap, gameModes }: HeaderProps) {
 
     return (
         <>
-            <Navbar className="p-0" expand={false} variant="dark" bg="dark">
+            <Navbar className="p-0" expand={false} variant="dark" bg="black">
                 <Container fluid className="p-2">
                     <div>
                         <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${false}`} />
                     </div>
-                    <Navbar.Brand>
-                        <Container fluid className="d-flex">
-                            <TbBrandValorant size={45} />
-                            <h1 className="font-monospace ps-2">ValoGraphs</h1>
+                    <Navbar.Brand className="my-auto mx-auto">
+                        <Container
+                            fluid
+                            className="d-flex"
+                            style={{
+                                fontFamily: 'Courier New, monospace',
+                                color: 'white',
+                                fontSize: '15px',
+                            }}
+                        >
+                            <SiValorant size={45} style={{ fill: '#FF4655' }} />
+                            <h1 className="ps-2">ValoGraphs</h1>
                         </Container>
                     </Navbar.Brand>
                     <div>
@@ -80,6 +89,13 @@ export default function Header({ handlerMap, gameModes }: HeaderProps) {
                     </div>
                 </Container>
                 <Navbar.Offcanvas
+                    className="border-0"
+                    style={{
+                        width: '20%',
+                        fontFamily: 'Courier New, monospace',
+                        color: 'white',
+                        fontSize: '16px',
+                    }}
                     id={`offcanvasNavbar-expand-${false}`}
                     aria-labelledby={`offcanvasNavbarLabel-expand-${false}`}
                     placement="start"

@@ -24,7 +24,7 @@ export default function ProfileColumn({ nameAndTag, imageMap, averageStats, matc
     return (
         <>
             <Stack
-                className="h-100 w-25 border-start border-end border-dark border-3 bg-dark text-center"
+                className="h-100 w-100 bg-dark text-center border border-secondary border-2 d-flex"
                 style={{
                     fontFamily: 'Courier New, monospace',
                     color: 'white',
@@ -32,15 +32,15 @@ export default function ProfileColumn({ nameAndTag, imageMap, averageStats, matc
                 }}
                 gap={3}
             >
-                <Stack className="mh-25">
-                    <div className="p-3 h3 border-top border-bottom border-secondary border-2">{nameAndTag}</div>
+                <Stack className="flex-fill">
+                    <div className="p-3 h3 border-bottom border-secondary border-2">{nameAndTag}</div>
                     <Image rounded className="w-100 h-55 mx-auto m-3" src={imageMap['card']}></Image>
                     <div>
                         Last {mode === 'team deathmatch' ? 'team deathmatch played' : mode + ' match played'} :{' '}
                         {matchDates && matchDates.length > 0 ? matchDates[matchDates.length - 1].date : 'N/A'}
                     </div>
                 </Stack>
-                <Stack className="mh-25 d-flex" gap={2}>
+                <Stack className="flex-fill" gap={3}>
                     <div
                         className="border-top border-bottom border-secondary border-2 p-2 text-capitalize"
                         style={{
@@ -49,7 +49,7 @@ export default function ProfileColumn({ nameAndTag, imageMap, averageStats, matc
                     >
                         average {' ' + mode + ' '} statistics
                     </div>
-                    <Stack className="pe-4" direction="horizontal" style={{ height: '75%' }}>
+                    <Stack className="pe-4" direction="horizontal">
                         <Stack>
                             <ResponsiveContainer>
                                 <RadarChart data={averageStats} margin={{ right: 20, left: 20 }}>
@@ -61,23 +61,23 @@ export default function ProfileColumn({ nameAndTag, imageMap, averageStats, matc
                         </Stack>
                         <Stack className="my-auto text-start" gap={2}>
                             {averageStats.map((pair: { [statName: string]: string | number }) => {
-                                return <div>{pair.statName + ':' + pair.value}</div>
+                                return <div>{pair.statName + ': ' + pair.value}</div>
                             })}
                         </Stack>
                     </Stack>
                 </Stack>
-                <Stack className="mh-25" gap={4}>
+                <Stack className="flex-fill">
                     <div
-                        className="border-top border-bottom border-secondary border-2 p-2"
+                        className="border-top border-bottom border-secondary border-2 p-2 mb-3"
                         style={{
                             fontSize: '17px',
                         }}
                     >
                         Recent Games Played
                     </div>
-                    <Container fluid className="h-75 p-0 pt-2">
+                    <Container fluid className="h-75 p-0">
                         <ResponsiveContainer>
-                            <BarChart data={matchDates} margin={{ right: 30, left: 0 }}>
+                            <BarChart data={matchDates} margin={{ top: 10, right: 30, left: 0 }}>
                                 <Bar type="monotone" dataKey="games played" stroke="#FF0000"></Bar>
                                 <XAxis
                                     dataKey="date"

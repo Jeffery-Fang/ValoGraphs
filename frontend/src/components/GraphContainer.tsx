@@ -1,6 +1,5 @@
-import { Container, Stack } from 'react-bootstrap'
-import { default as Graph } from './Graph'
-import { Legend } from 'recharts'
+import { Stack } from 'react-bootstrap'
+import Graph from './Graph'
 import { stringToColour } from '../utils/commonFunctions'
 
 interface GraphContainerProps {
@@ -14,14 +13,14 @@ export default function GraphContainer({ playerMap }: GraphContainerProps) {
     let adrData: { [playerName: string]: number }[] = []
     let acsData: { [playerName: string]: number }[] = []
     let ddData: { [playerName: string]: number }[] = []
-    let players: { [playerName: string]: string } = {}
+    let playersColors: { [playerName: string]: string } = {}
 
     for (let player of Object.keys(playerMap)) {
         if (!playerMap[player].visible) {
             continue
         }
 
-        players[player] = stringToColour(player)
+        playersColors[player] = stringToColour(player)
         for (let i: number = 0; i < playerMap[player].data.length; i++) {
             if (i >= hsData.length) {
                 hsData.push({ matchNum: i + 1 })
@@ -50,44 +49,62 @@ export default function GraphContainer({ playerMap }: GraphContainerProps) {
 
     return (
         <>
-            <Container fluid className="border-start border-dark h-100 d-flex flex-wrap">
-                <Legend></Legend>
-                <Stack className="p-0 pt-3 w-50" gap={1}>
-                    <Graph
-                        players={players}
-                        data={hsData}
-                        unit="Headshot Percentage (%)"
-                        title="Headshot Percentage"
-                    ></Graph>
-                    <Graph players={players} data={kdData} unit="Kills per Death" title="Kill Death Ratio"></Graph>
-                    <Graph
-                        players={players}
-                        data={kdaData}
-                        unit="Kills and Assists per Death"
-                        title="Kills, Deaths and Assists"
-                    ></Graph>
+            <Stack className="border-start border-secondary border-2 mh-100 w-100 p-0 d-flex">
+                <Stack direction="horizontal" className="w-100 flex-fill">
+                    <div className="w-50 h-100">
+                        <Graph
+                            players={playersColors}
+                            data={hsData}
+                            unit="Headshot Percentage (%)"
+                            title="Headshot Percentage"
+                        ></Graph>
+                    </div>
+                    <div className="w-50 h-100">
+                        <Graph
+                            players={playersColors}
+                            data={kdData}
+                            unit="Kills per Death"
+                            title="Kill Death Ratio"
+                        ></Graph>
+                    </div>
                 </Stack>
-                <Stack className="p-0 pt-3 w-50" gap={1}>
-                    <Graph
-                        players={players}
-                        data={adrData}
-                        unit="Average Damage per Round"
-                        title="Average Damage per Round"
-                    ></Graph>
-                    <Graph
-                        players={players}
-                        data={acsData}
-                        unit="Average Contribution Score"
-                        title="Average Contribution Score"
-                    ></Graph>
-                    <Graph
-                        players={players}
-                        data={ddData}
-                        unit="Damage Difference per Round"
-                        title="Difference between damage dealt and received per round"
-                    ></Graph>
+                <Stack direction="horizontal" className="w-100 flex-fill">
+                    <div className="w-50 h-100">
+                        <Graph
+                            players={playersColors}
+                            data={kdaData}
+                            unit="Kills and Assists per Death"
+                            title="Kills, Deaths and Assists"
+                        ></Graph>
+                    </div>
+                    <div className="w-50 h-100">
+                        <Graph
+                            players={playersColors}
+                            data={adrData}
+                            unit="Average Damage per Round"
+                            title="Average Damage per Round"
+                        ></Graph>
+                    </div>
                 </Stack>
-            </Container>
+                <Stack direction="horizontal" className="w-100 flex-fill">
+                    <div className="w-50 h-100">
+                        <Graph
+                            players={playersColors}
+                            data={acsData}
+                            unit="Average Contribution Score"
+                            title="Average Contribution Score"
+                        ></Graph>
+                    </div>
+                    <div className="w-50 h-100">
+                        <Graph
+                            players={playersColors}
+                            data={ddData}
+                            unit="Damage Difference per Round"
+                            title="Difference between damage dealt and received per round"
+                        ></Graph>
+                    </div>
+                </Stack>
+            </Stack>
         </>
     )
 }
