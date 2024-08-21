@@ -32,18 +32,12 @@ jobs:
               working-directory: ./frontend
               run: npm ci
 
-            - name: 'Create .env file'
-              working-directory: ./frontend
-              run: |
-                  touch .env
-                  echo VITE_GITHUB_LINK = 'https://github.com/Jeffery-Fang/ValoGraphs'
-                  echo VITE_API_URL = 'https://api.valographs.com/players/'
-                  ls ./src
-                  cat .env
-
             - name: Build src
               id: build
               working-directory: ./frontend
+              env:
+                  VITE_GITHUB_LINK: https://github.com/Jeffery-Fang/ValoGraphs
+                  VITE_API_URL: https://api.valographs.com/players/
               run: npm run build --if-present
 
             - name: Configure AWS Credentials
