@@ -40,7 +40,7 @@ export default function PlayerEntry({ handleToggle, handleDelete, visible, nameA
                 </div>
                 <CloseButton
                     className="ms-auto"
-                    variant="secondary"
+                    variant="white"
                     onClick={() => {
                         handleDelete()
                     }}

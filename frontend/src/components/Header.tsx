@@ -14,6 +14,7 @@ export default function Header({ handlerMap, gameModes }: HeaderProps) {
                     <Form className="d-flex pt-0 px-2">
                         <Form.Control
                             type="search"
+                            spellCheck="false"
                             placeholder="Playername #Tag"
                             className="me-2"
                             aria-label="Search"

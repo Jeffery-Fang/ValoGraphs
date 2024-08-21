@@ -16,6 +16,8 @@ export default function MatchHistory({ data, imageMap, handleFilter, filter }: M
                     <Form>
                         <Form.Control
                             type="search"
+                            spellCheck="false"
+                            autoComplete="off"
                             placeholder="Filter by agent or map name"
                             className="bg-dark border-secondary"
                             aria-label="Search"

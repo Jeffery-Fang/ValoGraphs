@@ -1,6 +1,6 @@
 import express from 'express';
-import { default as playersRouter } from './routers/playersRouter.js';
-import { default as matchesRouter } from './routers/matchesRouter.js';
+import { default as playersRouter } from './routers/players_router.js';
+import { default as matchesRouter } from './routers/matches_router.js';
 const app = express();
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -10,4 +10,7 @@ app.use(function (req, res, next) {
 });
 app.use('/players', playersRouter);
 app.use('/matches', matchesRouter);
+app.use('/', function (req, res, next) {
+    res.status(200).send('No resources on /');
+});
 export default app;

@@ -1,8 +1,8 @@
 import { createRoot } from 'react-dom/client'
 import { StrictMode } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { default as GraphPage } from './app/routes/graphPage.tsx'
-import { default as ProfilePage } from './app/routes/profilePage.tsx'
+import GraphPage from './app/routes/graphPage.tsx'
+import ProfilePage from './app/routes/profilePage.tsx'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 const router = createBrowserRouter([

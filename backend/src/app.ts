@@ -13,5 +13,8 @@ app.use(function (req, res, next) {
 
 app.use('/players', playersRouter)
 app.use('/matches', matchesRouter)
+app.use('/', function (req, res, next) {
+    res.status(200).send('No resources on / try /players and /matches')
+})
 
 export default app
