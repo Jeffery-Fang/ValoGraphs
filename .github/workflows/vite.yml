@@ -32,6 +32,13 @@ jobs:
               working-directory: ./frontend
               run: npm ci
 
+            - name: 'Create env file'
+              run: |
+                  touch .env
+                  echo VITE_GITHUB_LINK = 'https://github.com/Jeffery-Fang/ValoGraphs'
+                  echo VITE_API_URL = 'https://api.valographs.com/players/'
+                  cat .env
+
             - name: Build src
               id: build
               working-directory: ./frontend
