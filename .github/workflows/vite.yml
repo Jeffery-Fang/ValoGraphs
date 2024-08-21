@@ -52,4 +52,4 @@ jobs:
             - name: Invalidate old files in CDN
               if: steps.build.outcome == 'success'
               working-directory: ./frontend
-              run: aws cloudfront --region ca-central-1 create-invalidation --distribution-id E3HWFTOJ0FPTAE --paths "/*""
+              run: aws cloudfront --region ca-central-1 create-invalidation --distribution-id E3HWFTOJ0FPTAE --paths "/*"
