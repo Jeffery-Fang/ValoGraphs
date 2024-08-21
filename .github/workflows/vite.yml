@@ -1,7 +1,7 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
-name: Vite CD
+name: Frontend CI/CD
 
 on:
     push:
@@ -11,7 +11,7 @@ on:
 
 jobs:
     build-and-deploy-frontend:
-        name: Build and Deploy Frontedn
+        name: Build and Deploy Frontend
         runs-on: ubuntu-latest
 
         strategy:
@@ -35,3 +35,18 @@ jobs:
             - name: Build src
               working-directory: ./frontend
               run: npm run build --if-present
+
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v1
+              with:
+                  aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+                  aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+                  aws-region: ca-central-1
+
+            - name: Deploy to AWS S3
+              working-directory: ./frontend
+              run: aws s3 sync ./dist/. s3://my-vg-frontend/
+
+            - name: Invalidate old files in CDN
+              working-directory: ./frontend
+              run: aws cloudfront --region ca-central-1 create-invalidation --distribution-id E3HWFTOJ0FPTAE --paths /*
