@@ -38,7 +38,7 @@ jobs:
                   touch .env
                   echo VITE_GITHUB_LINK = 'https://github.com/Jeffery-Fang/ValoGraphs'
                   echo VITE_API_URL = 'https://api.valographs.com/players/'
-                  ls 
+                  ls ./src
                   cat .env
 
             - name: Build src
