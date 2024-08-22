@@ -96,6 +96,18 @@ export class MatchStat {
     mode: string
 
     @Column({
+        type: 'int',
+        nullable: false,
+    })
+    rounds_blue_won: number
+
+    @Column({
+        type: 'int',
+        nullable: false,
+    })
+    rounds_red_won: number
+
+    @Column({
         type: 'boolean',
         nullable: false,
     })
@@ -134,6 +146,8 @@ export class MatchStat {
         agent: string,
         map: string,
         mode: string,
+        round_blue_won: number,
+        rounds_red_won: number,
         won: boolean,
         side: string,
         date: Date,
@@ -153,6 +167,8 @@ export class MatchStat {
         this.map = map
         this.mode = mode
         this.won = won
+        this.rounds_blue_won = round_blue_won
+        this.rounds_red_won = rounds_red_won
         this.side = side
         this.date = date
         this.agent_id = agent_id

@@ -1,6 +1,6 @@
-import { DataSource } from 'typeorm'
-import 'reflect-metadata'
 import 'dotenv/config'
+import 'reflect-metadata'
+import { DataSource } from 'typeorm'
 import { MatchStat } from './entities/MatchStat.js'
 import { Player } from './entities/Player.js'
 

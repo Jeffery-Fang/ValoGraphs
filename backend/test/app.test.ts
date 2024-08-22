@@ -1,18 +1,40 @@
-import { default as request } from 'supertest'
-import http from 'http'
 import 'dotenv/config'
+import http from 'http'
+import { default as request } from 'supertest'
 import app from '../src/app.js'
-import { createManyMatchStat, getPlayersFromMatchId } from '../src/services/match_stat_services.js'
-import { getIdFromNameTag } from '../src/services/player_services'
+import { retrieveDataForPlayer } from '../src/services/val_api_service.js'
+import { createManyMatchStat } from '../src/services/match_stat_service.js'
+import { saveManyMatchStat } from '../src/services/data_access_service.js'
+import { getMatchStatsFromMatchId } from '../src/services/data_access_service.js'
 
 let server: http.Server
-const playerUrlRoot: string = <string>process.env.USER_URL_ROOT
-const apiKey: string = <string>process.env.API_KEY
-const mockFetch = jest.fn()
-global.fetch = mockFetch
+const mockMatchStat = {
+    player: {
+        id: '8918b04d-9034-5838-b3ed-dd7ae3efe5e5',
+        name: 'Hexennacht',
+        tag: 'NA1',
+    },
+    match_id: 'e5467da1-f1d3-4a49-bebc-f790b0f34959',
+    acs: 166.06,
+    kills: 10,
+    deaths: 12,
+    assists: 3,
+    dd: -42.35,
+    adr: 110.24,
+    hs: 37,
+    agent: 'Jett',
+    map: 'Icebox',
+    mode: 'Unrated',
+    won: true,
+    side: 'Blue',
+    date: '2024-08-11T21:20:01.025Z',
+    agent_id: 'add6443a-41bd-e414-f6ad-e58d267f4e95',
+    card_id: 'bb6ae873-43ec-efb4-3ea6-93ac00a82d4e',
+}
 
-jest.mock('../src/services/match_stat_services')
-jest.mock('../src/services/player_services')
+jest.mock('../src/services/val_api_service.js')
+jest.mock('../src/services/match_stat_service.js')
+jest.mock('../src/services/data_access_service.js')
 
 beforeAll((done): void => {
     server = app.listen(3000, (): void => {
@@ -28,124 +50,120 @@ afterAll((done): void => {
 
 describe('testing GET /players', (): void => {
     beforeEach((): void => {
-        const mockApiResponse = {
-            data: [
-                {
-                    metadata: {
-                        match_id: 'a9a6fb43-3094-4568-9180-046116d39eab',
-                        map: {
-                            name: 'Pearl',
-                        },
-                        queue: {
-                            name: 'Unrated',
-                        },
-                    },
-                    players: [
-                        {
-                            team_id: 'blue',
-                        },
-                    ],
-                    teams: [
-                        {
-                            team_id: 'blue',
-                            won: true,
-                        },
-                    ],
-                    rounds: [
-                        {
-                            result: 'Defuse',
-                        },
-                    ],
-                },
-            ],
-        }
-        const mockStats = [
-            {
-                player: {
-                    id: 'a9a6fb43-3094-4568-9180-046116d39eab',
-                },
-            },
-        ]
-        mockFetch.mockResolvedValue({
-            json: jest.fn().mockResolvedValue(mockApiResponse),
+        ;(retrieveDataForPlayer as jest.Mock).mockResolvedValue({
+            searched_player_id: mockMatchStat.player.id,
+            match_data: {},
         })
-        ;(createManyMatchStat as jest.Mock).mockResolvedValue(mockStats)
-        ;(getIdFromNameTag as jest.Mock).mockResolvedValue('a9a6fb43-3094-4568-9180-046116d39eab')
+        ;(createManyMatchStat as jest.Mock).mockReturnValue([mockMatchStat, mockMatchStat])
+        ;(saveManyMatchStat as jest.Mock).mockResolvedValue(undefined)
     })
 
-    test('should return status 200 and a list of MatchStat objects if successful', async (): Promise<void> => {
-        const response = await request(app).get('/players/Hexennacht?tag=NA1&mode=unrated&size=5')
-        const mockStats = [
-            {
-                player: {
-                    id: 'a9a6fb43-3094-4568-9180-046116d39eab',
-                },
-            },
-        ]
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
+
+    test('should return status 200 with a valid input', async (): Promise<void> => {
+        const name = 'Hexennacht'
+        const tag = 'NA1'
+        const mode = 'unrated'
+        const size = 10
+        const url = '/players/' + name + '?tag=' + tag + '&mode=' + mode + '&size=' + size
+        const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
-        expect(mockFetch).toHaveBeenCalledWith(playerUrlRoot + '/Hexennacht/NA1?mode=unrated&size=5', {
-            headers: { Authorization: apiKey },
-            method: 'GET',
-        })
-        expect(response).toBeDefined()
-        expect(response.body).toStrictEqual(mockStats)
+        expect(retrieveDataForPlayer).toHaveBeenCalledWith(name, tag, mode, size)
+        expect(retrieveDataForPlayer).toHaveBeenCalledTimes(1)
+        expect(createManyMatchStat).toHaveBeenCalledWith({})
+        expect(createManyMatchStat).toHaveBeenCalledTimes(1)
+        expect(saveManyMatchStat).toHaveBeenCalledWith([mockMatchStat, mockMatchStat])
+        expect(saveManyMatchStat).toHaveBeenCalledTimes(1)
     })
 
-    test('should return status 400 if require parameters are missing', async (): Promise<void> => {
-        const response = await request(app).get('/players/Hexennacht')
+    test('should return status 400 with an invalid input', async (): Promise<void> => {
+        const name = 'Hexennacht'
+        const tag = 'NA1'
+        const mode = 'unrated'
+        const size = 10
+        const url = '/players/' + name + '&mode=' + mode + '&size=' + size
+        const response = await request(app).get(url)
 
         expect(response.status).toBe(400)
-        expect(response.body).toEqual({ error: 'invalid input' })
+        expect(retrieveDataForPlayer).toHaveBeenCalledTimes(0)
+        expect(createManyMatchStat).toHaveBeenCalledTimes(0)
+        expect(saveManyMatchStat).toHaveBeenCalledTimes(0)
     })
 
-    test('should return status 400 if the external API returns errors', async (): Promise<void> => {
-        mockFetch.mockResolvedValue({
-            json: jest.fn().mockResolvedValue({
-                errors: 'Some API error',
-            }),
-        })
-        const response = await request(app).get('/players/Hexennacht?tag=NA1&mode=unrated&size=5')
+    test('should return status 200 with an out of bounds mode', async (): Promise<void> => {
+        const name = 'Hexennacht'
+        const tag = 'NA1'
+        const mode = 'spike rush'
+        const size = 10
+        const url = '/players/' + name + '?tag=' + tag + '&mode=' + mode + '&size=' + size
+        const response = await request(app).get(url)
 
-        expect(response.status).toBe(400)
-        expect(mockFetch).toHaveBeenCalledWith(playerUrlRoot + '/Hexennacht/NA1?mode=unrated&size=5', {
-            headers: { Authorization: apiKey },
-            method: 'GET',
-        })
-        expect(response.body).toEqual({ error: 'Some API error' })
+        expect(response.status).toBe(200)
+        expect(retrieveDataForPlayer).toHaveBeenCalledWith(name, tag, 'competitive', size)
+        expect(retrieveDataForPlayer).toHaveBeenCalledTimes(1)
+        expect(createManyMatchStat).toHaveBeenCalledWith({})
+        expect(createManyMatchStat).toHaveBeenCalledTimes(1)
+        expect(saveManyMatchStat).toHaveBeenCalledWith([mockMatchStat, mockMatchStat])
+        expect(saveManyMatchStat).toHaveBeenCalledTimes(1)
     })
 
-    test('should return status 400 if no response from the external API', async () => {
-        mockFetch.mockResolvedValue({ json: jest.fn().mockResolvedValue(undefined) })
-        const response = await request(app).get('/players/Hexennacht?tag=NA1&mode=unrated&size=5')
+    test('should return status 200 with an out of bounds size', async (): Promise<void> => {
+        const name = 'Hexennacht'
+        const tag = 'NA1'
+        const mode = 'unrated'
+        const size = 15
+        const url = '/players/' + name + '?tag=' + tag + '&mode=' + mode + '&size=' + size
+        const response = await request(app).get(url)
 
-        expect(response.status).toBe(400)
-        expect(response.body).toEqual({ error: 'no response from henrikdev API' })
+        expect(response.status).toBe(200)
+        expect(retrieveDataForPlayer).toHaveBeenCalledWith(name, tag, mode, 5)
+        expect(retrieveDataForPlayer).toHaveBeenCalledTimes(1)
+        expect(createManyMatchStat).toHaveBeenCalledWith({})
+        expect(createManyMatchStat).toHaveBeenCalledTimes(1)
+        expect(saveManyMatchStat).toHaveBeenCalledWith([mockMatchStat, mockMatchStat])
+        expect(saveManyMatchStat).toHaveBeenCalledTimes(1)
     })
 })
 
 describe('testing GET /matches', (): void => {
-    test('should return status 200 and a list of MatchStat objects if successful', async (): Promise<void> => {
-        const mockMatchStats = [
-            {
-                match_id: 'a9a6fb43-3094-4568-9180-046116d39eab',
-            },
-            {
-                match_id: 'a9a6fb43-3094-4568-9180-046116d39eab',
-            },
-        ]
-        ;(getPlayersFromMatchId as jest.Mock).mockResolvedValue(mockMatchStats)
-        const response = await request(app).get('/matches/a9a6fb43-3094-4568-9180-046116d39eab')
+    beforeEach((): void => {
+        ;(getMatchStatsFromMatchId as jest.Mock).mockResolvedValue([])
+    })
+
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
+
+    test('should return status 200 with a valid input', async (): Promise<void> => {
+        const match_id = 'e5467da1-f1d3-4a49-bebc-f790b0f34959'
+        const url = '/matches/' + match_id
+        const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
-        expect(response).toBeDefined()
+        expect(getMatchStatsFromMatchId).toHaveBeenCalledWith(match_id)
+        expect(getMatchStatsFromMatchId).toHaveBeenCalledTimes(1)
     })
 
     test('should return status 400 if there is a database error', async (): Promise<void> => {
-        ;(getPlayersFromMatchId as jest.Mock).mockResolvedValue(undefined)
-        const response = await request(app).get('/matches/a9a6fb43-3094-4568-9180-046116d39eab')
+        const match_id = 'e5467da1-f1d3-4a49-bebc-f790b0f34959'
+        const url = '/matches/' + match_id
+
+        ;(getMatchStatsFromMatchId as jest.Mock).mockRejectedValueOnce('database error')
+        const response = await request(app).get(url)
 
         expect(response.status).toBe(400)
-        expect(Object.keys(response.body)).toContain('error')
+        expect(response.body).toEqual({ error: 'database error' })
+    })
+})
+
+describe('testing GET /', (): void => {
+    test('should return status 200 with a valid input', async (): Promise<void> => {
+        const response = await request(app).get('/')
+
+        expect(response.status).toBe(200)
+        expect(response.body).toBeDefined()
     })
 })
