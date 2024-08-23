@@ -14,10 +14,17 @@ export function stringToColour(str: string): string {
     return colour
 }
 
-export async function retrieveData(nameAndTag: string, mode: string): Promise<any> {
+export async function retrievePlayerData(nameAndTag: string, mode: string): Promise<any> {
     let [name, tag]: string[] = nameAndTag.split('#')
     let url: string =
-        import.meta.env.VITE_API_URL + name + '?tag=' + tag + '&mode=' + mode.replace(' ', '') + '&size=10'
+        import.meta.env.VITE_PLAYER_API_URL + name + '?tag=' + tag + '&mode=' + mode.replace(' ', '') + '&size=10'
+    let response: any = await fetch(url, { method: 'GET' })
+
+    return response
+}
+
+export async function retrieveMatchData(match_id: string): Promise<any> {
+    let url: string = import.meta.env.VITE_MATCH_API_URL + match_id
     let response: any = await fetch(url, { method: 'GET' })
 
     return response

@@ -6,9 +6,16 @@ interface MatchHistoryProps {
     imageMap: { [id: string]: string }
     handleFilter: () => void
     filter: string
+    handleShowMatchDetails: (match_id: string) => void
 }
 
-export default function MatchHistory({ data, imageMap, handleFilter, filter }: MatchHistoryProps) {
+export default function MatchHistory({
+    data,
+    imageMap,
+    handleFilter,
+    filter,
+    handleShowMatchDetails,
+}: MatchHistoryProps) {
     return (
         <>
             <Stack className="flex-fill d-flex bg-dark border-bottom border-secondary border-2">
@@ -59,6 +66,10 @@ export default function MatchHistory({ data, imageMap, handleFilter, filter }: M
                                     date={match.date}
                                     mode={match.mode}
                                     won={match.won}
+                                    match_id={match.match_id}
+                                    handleShowMatchDetails={() => {
+                                        handleShowMatchDetails(match.match_id)
+                                    }}
                                     key={match.match_id + match.player.id}
                                 ></MatchEntry>
                             )

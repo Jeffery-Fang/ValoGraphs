@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { retrieveDataForPlayer } from '../services/val_api_service.js'
+import { retrievePlayerDataForPlayer } from '../services/val_api_service.js'
 import { createManyMatchStat } from '../services/match_stat_service.js'
 import { saveManyMatchStat } from '../services/data_access_service.js'
 import { MatchStat } from '../entities/MatchStat.js'
@@ -17,7 +17,7 @@ export default async function playersHandler(req: Request, res: Response): Promi
             : 'competitive'
         let size: number = Number(req.query.size) <= 10 && Number(req.query.size) > 0 ? Number(req.query.size) : 5
 
-        let data = await retrieveDataForPlayer(name, tag, mode, size)
+        let data = await retrievePlayerDataForPlayer(name, tag, mode, size)
         let matchStats: MatchStat[] = createManyMatchStat(data.match_data)
         const puuid: string = data.searched_player_id
 

@@ -1,4 +1,4 @@
-import { retrieveDataForPlayer } from '../src/services/val_api_service'
+import { retrievePlayerDataForPlayer } from '../src/services/val_api_service'
 
 const mockFetch = jest.fn()
 global.fetch = mockFetch
@@ -75,14 +75,14 @@ const mockData = [
     },
 ]
 
-describe('testing retrieveDataForPlayer()', (): void => {
+describe('testing retrievePlayerDataForPlayer()', (): void => {
     test('should return an object containing searched_player_id and match_data if successful', async (): Promise<void> => {
         mockFetch.mockResolvedValue({
             json: jest.fn().mockResolvedValue({
                 data: mockData,
             }),
         })
-        let response = await retrieveDataForPlayer('Hexennacht', 'NA1', 'unrated', 10)
+        let response = await retrievePlayerDataForPlayer('Hexennacht', 'NA1', 'unrated', 10)
 
         expect(Object.keys(response)).toContain('searched_player_id')
         expect(Object.keys(response)).toContain('match_data')
@@ -92,7 +92,7 @@ describe('testing retrieveDataForPlayer()', (): void => {
         try {
             mockFetch.mockResolvedValue(undefined)
 
-            await retrieveDataForPlayer('Hexennacht', 'NA1', 'unrated', 10)
+            await retrievePlayerDataForPlayer('Hexennacht', 'NA1', 'unrated', 10)
         } catch (e) {
             expect(e).toBe('no response from henrikdev API')
         }
@@ -106,7 +106,7 @@ describe('testing retrieveDataForPlayer()', (): void => {
                 }),
             })
 
-            await retrieveDataForPlayer('Hexennacht', 'NA1', 'unrated', 10)
+            await retrievePlayerDataForPlayer('Hexennacht', 'NA1', 'unrated', 10)
         } catch (e) {
             expect(e).toBe('some errors')
         }
@@ -120,7 +120,7 @@ describe('testing retrieveDataForPlayer()', (): void => {
                 }),
             })
 
-            await retrieveDataForPlayer('OtherGuy', 'NA1', 'unrated', 10)
+            await retrievePlayerDataForPlayer('OtherGuy', 'NA1', 'unrated', 10)
         } catch (e) {
             expect(e).toBe('specified player was not in retrieved data')
         }

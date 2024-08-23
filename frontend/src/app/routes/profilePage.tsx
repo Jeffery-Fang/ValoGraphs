@@ -4,7 +4,8 @@ import { Container } from 'react-bootstrap'
 import Header from '../../components/Header'
 import ProfileColumn from '../../components/ProfileColumn'
 import MatchHistory from '../../components/MatchHistory'
-import { handleProfileSearch, retrieveData } from '../../utils/commonFunctions'
+import MatchDetails from '../../components/MatchDetails'
+import { handleProfileSearch, retrievePlayerData, retrieveMatchData } from '../../utils/commonFunctions'
 
 const gameModes: string[] = ['unrated', 'competitive', 'team deathmatch']
 
@@ -15,13 +16,16 @@ function App() {
     const [imageMap, updateimageMap] = useState<{ [id: string]: string }>({})
     const { name, tag } = useParams()
 
+    const [showMatchDetails, updateShowMatchDetails] = useState(false)
+    const [matchDetails, updateMatchDetails] = useState<{ [playerName: string]: any }[]>([])
+
     useEffect((): void => {
         init()
     }, [])
 
     async function init(): Promise<void> {
         if (name && tag) {
-            let response: any = await (await retrieveData(name + '#' + tag, currentMode)).json()
+            let response: any = await (await retrievePlayerData(name + '#' + tag, currentMode)).json()
             let newimageMap: { [id: string]: string } = { ...imageMap }
 
             if (!Object.keys(newimageMap).includes('card')) {
@@ -55,7 +59,7 @@ function App() {
 
     async function handleChangeMode(mode: string): Promise<void> {
         if (mode !== currentMode) {
-            let response: any = await (await retrieveData(name + '#' + tag, mode)).json()
+            let response: any = await (await retrievePlayerData(name + '#' + tag, mode)).json()
             let newimageMap: { [id: string]: string } = { ...imageMap }
 
             if (!Object.keys(newimageMap).includes('card')) {
@@ -85,8 +89,58 @@ function App() {
     function handleFilter(): void {
         let input: HTMLInputElement = document.getElementById('agentSearchInput') as HTMLInputElement
 
-        console.log('filtering')
         updateFilter(input.value)
+    }
+
+    async function handleShowMatchDetails(match_id: string): Promise<void> {
+        if (match_id) {
+            let response: any = await (await retrieveMatchData(match_id)).json()
+            let newimageMap: { [id: string]: string } = { ...imageMap }
+
+            for (let element of response) {
+                if (!Object.keys(imageMap).includes(element.agent)) {
+                    let assetData: any = await (
+                        await fetch('https://valorant-api.com/v1/agents/' + element.agent_id, { method: 'GET' })
+                    ).json()
+
+                    newimageMap[element.agent] = assetData['data']['displayIcon']
+                }
+            }
+
+            updateimageMap(newimageMap)
+            updateMatchDetails(response)
+            updateShowMatchDetails(true)
+        }
+    }
+
+    function sortMatchDetails(stat: string): void {
+        let newMatchDetails = [...matchDetails]
+        switch (stat) {
+            case 'name':
+                newMatchDetails.sort((a, b): number => b['player']['name'] - a['player']['name'])
+                break
+            case 'kda':
+                newMatchDetails.sort(
+                    (a, b): number =>
+                        (b['kills'] + b['assists']) / b['deaths'] - (a['kills'] + a['assists']) / a['deaths']
+                )
+                break
+            case 'hs':
+                newMatchDetails.sort((a, b): number => b['hs'] - a['hs'])
+                break
+            case 'dd':
+                newMatchDetails.sort((a, b): number => b['dd'] - a['d'])
+                break
+            case 'adr':
+                newMatchDetails.sort((a, b): number => b['adr'] - a['adr'])
+                break
+            case 'acs':
+                newMatchDetails.sort((a, b): number => b['acs'] - a['acs'])
+                break
+        }
+        newMatchDetails.sort((a, b): number => b[stat] - a[stat])
+
+        updateMatchDetails(newMatchDetails)
     }
 
     const handlerMap: { [id: string]: any } = {
@@ -184,7 +238,6 @@ function App() {
                 fluid
                 className="p-0 vh-100 vw-100 d-flex flex-column bg-dark"
                 style={{
-                    overflowY: 'hidden',
                     overflowX: 'hidden',
                 }}
             >
@@ -205,7 +258,15 @@ function App() {
                             imageMap={imageMap}
                             handleFilter={handleFilter}
                             filter={filter}
+                            handleShowMatchDetails={handleShowMatchDetails}
                         ></MatchHistory>
+                        <MatchDetails
+                            matchDetails={matchDetails}
+                            imageMap={imageMap}
+                            sortMatchDetails={sortMatchDetails}
+                            showMatchDetails={showMatchDetails}
+                            updateShowMatchDetails={updateShowMatchDetails}
+                        ></MatchDetails>
                     </div>
                 </Container>
             </Container>

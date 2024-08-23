@@ -61,7 +61,11 @@ export default function ProfileColumn({ nameAndTag, imageMap, averageStats, matc
                         </Stack>
                         <Stack className="my-auto text-start" gap={2}>
                             {averageStats.map((pair: { [statName: string]: string | number }) => {
-                                return <div>{pair.statName + ': ' + pair.value}</div>
+                                return (
+                                    <div key={pair.statName + ':' + pair.value}>
+                                        {pair.statName + ': ' + pair.value}
+                                    </div>
+                                )
                             })}
                         </Stack>
                     </Stack>

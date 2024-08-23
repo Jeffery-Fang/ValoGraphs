@@ -14,6 +14,8 @@ interface MatchEntryProps {
     date: Date
     mode: string
     won: boolean
+    match_id: string
+    handleShowMatchDetails: () => void
 }
 
 export default function MatchEntry({
@@ -29,6 +31,8 @@ export default function MatchEntry({
     date,
     mode,
     won,
+    match_id,
+    handleShowMatchDetails,
 }: MatchEntryProps) {
     return (
         <>
@@ -39,8 +43,11 @@ export default function MatchEntry({
                     fontFamily: 'Courier New, monospace',
                     color: 'white',
                     fontSize: '13px',
+                    cursor: 'pointer',
                 }}
                 gap={3}
+                onClick={handleShowMatchDetails}
+                id={match_id}
             >
                 <Stack direction="horizontal" className="h-100" gap={1} style={{ width: '10%' }}>
                     {won ? (

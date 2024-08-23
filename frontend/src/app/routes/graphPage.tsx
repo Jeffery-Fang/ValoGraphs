@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Header from '../../components/Header'
 import PlayerStack from '../../components/PlayerStack'
 import GraphContainer from '../../components/GraphContainer'
-import { retrieveData, handleProfileSearch } from '../../utils/commonFunctions'
+import { retrievePlayerData, handleProfileSearch } from '../../utils/commonFunctions'
 
 const gameModes: string[] = ['unrated', 'competitive', 'team deathmatch']
 
@@ -16,7 +16,7 @@ function App() {
             let newPlayerMap = { ...playerMap }
 
             for (let player of Object.keys(playerMap)) {
-                let response = await retrieveData(player, mode)
+                let response = await retrievePlayerData(player, mode)
 
                 if (response.status === 200) {
                     let data = await response.json()
@@ -38,7 +38,7 @@ function App() {
             if (Object.keys(playerMap).includes(input.value)) {
                 alert('Player is already graphed')
             } else {
-                let response: any = await retrieveData(input.value, currentMode)
+                let response: any = await retrievePlayerData(input.value, currentMode)
 
                 if (response.status === 200) {
                     let data = await response.json()

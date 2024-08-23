@@ -12,7 +12,7 @@ const API_KEY: string = <string>process.env.API_KEY
  * @param size - The number of matches to be retrieved
  * @returns
  */
-export async function retrieveDataForPlayer(name: string, tag: string, mode: string, size: number): Promise<any> {
+export async function retrievePlayerDataForPlayer(name: string, tag: string, mode: string, size: number): Promise<any> {
     try {
         let url: string = (PLAYER_URL_ROOT + '/' + name + '/' + tag + '?mode=' + mode + '&size=' + size) as string
         let options: RequestInit = {

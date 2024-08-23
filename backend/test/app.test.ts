@@ -2,7 +2,7 @@ import 'dotenv/config'
 import http from 'http'
 import { default as request } from 'supertest'
 import app from '../src/app.js'
-import { retrieveDataForPlayer } from '../src/services/val_api_service.js'
+import { retrievePlayerDataForPlayer } from '../src/services/val_api_service.js'
 import { createManyMatchStat } from '../src/services/match_stat_service.js'
 import { saveManyMatchStat } from '../src/services/data_access_service.js'
 import { getMatchStatsFromMatchId } from '../src/services/data_access_service.js'
@@ -50,7 +50,7 @@ afterAll((done): void => {
 
 describe('testing GET /players', (): void => {
     beforeEach((): void => {
-        ;(retrieveDataForPlayer as jest.Mock).mockResolvedValue({
+        ;(retrievePlayerDataForPlayer as jest.Mock).mockResolvedValue({
             searched_player_id: mockMatchStat.player.id,
             match_data: {},
         })
@@ -71,8 +71,8 @@ describe('testing GET /players', (): void => {
         const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
-        expect(retrieveDataForPlayer).toHaveBeenCalledWith(name, tag, mode, size)
-        expect(retrieveDataForPlayer).toHaveBeenCalledTimes(1)
+        expect(retrievePlayerDataForPlayer).toHaveBeenCalledWith(name, tag, mode, size)
+        expect(retrievePlayerDataForPlayer).toHaveBeenCalledTimes(1)
         expect(createManyMatchStat).toHaveBeenCalledWith({})
         expect(createManyMatchStat).toHaveBeenCalledTimes(1)
         expect(saveManyMatchStat).toHaveBeenCalledWith([mockMatchStat, mockMatchStat])
@@ -88,7 +88,7 @@ describe('testing GET /players', (): void => {
         const response = await request(app).get(url)
 
         expect(response.status).toBe(400)
-        expect(retrieveDataForPlayer).toHaveBeenCalledTimes(0)
+        expect(retrievePlayerDataForPlayer).toHaveBeenCalledTimes(0)
         expect(createManyMatchStat).toHaveBeenCalledTimes(0)
         expect(saveManyMatchStat).toHaveBeenCalledTimes(0)
     })
@@ -102,8 +102,8 @@ describe('testing GET /players', (): void => {
         const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
-        expect(retrieveDataForPlayer).toHaveBeenCalledWith(name, tag, 'competitive', size)
-        expect(retrieveDataForPlayer).toHaveBeenCalledTimes(1)
+        expect(retrievePlayerDataForPlayer).toHaveBeenCalledWith(name, tag, 'competitive', size)
+        expect(retrievePlayerDataForPlayer).toHaveBeenCalledTimes(1)
         expect(createManyMatchStat).toHaveBeenCalledWith({})
         expect(createManyMatchStat).toHaveBeenCalledTimes(1)
         expect(saveManyMatchStat).toHaveBeenCalledWith([mockMatchStat, mockMatchStat])
@@ -119,8 +119,8 @@ describe('testing GET /players', (): void => {
         const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
-        expect(retrieveDataForPlayer).toHaveBeenCalledWith(name, tag, mode, 5)
-        expect(retrieveDataForPlayer).toHaveBeenCalledTimes(1)
+        expect(retrievePlayerDataForPlayer).toHaveBeenCalledWith(name, tag, mode, 5)
+        expect(retrievePlayerDataForPlayer).toHaveBeenCalledTimes(1)
         expect(createManyMatchStat).toHaveBeenCalledWith({})
         expect(createManyMatchStat).toHaveBeenCalledTimes(1)
         expect(saveManyMatchStat).toHaveBeenCalledWith([mockMatchStat, mockMatchStat])
