@@ -12,7 +12,7 @@ interface PlayerEntryProps {
 export default function PlayerEntry({ handleToggle, handleDelete, visible, nameAndTag }: PlayerEntryProps) {
     return (
         <>
-            <Stack direction="horizontal" className="p-2 border-bottom border-secondary border-2" gap={2}>
+            <Stack direction="horizontal" className="p-2 border-bottom border-end border-secondary border-2" gap={2}>
                 {visible ? (
                     <FaRegEye
                         className="float-start text-secondary"

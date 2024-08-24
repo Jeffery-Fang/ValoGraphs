@@ -1,4 +1,4 @@
-import { Container, Navbar, Offcanvas, Nav, NavDropdown, Form, Button } from 'react-bootstrap'
+import { Container, Navbar, Offcanvas, Nav, NavDropdown, Form, Button, Stack } from 'react-bootstrap'
 import { SiValorant } from 'react-icons/si'
 
 interface HeaderProps {
@@ -66,33 +66,29 @@ export default function Header({ handlerMap, gameModes }: HeaderProps) {
 
     return (
         <>
-            <Navbar className="p-0" expand={false} variant="dark" bg="black">
-                <Container fluid className="p-2">
-                    <div>
-                        <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${false}`} />
-                    </div>
-                    <Navbar.Brand className="my-auto mx-auto">
-                        <Container
-                            fluid
-                            className="d-flex"
+            <Navbar className="w-100" expand={false} variant="dark" bg="black">
+                <Container fluid>
+                    <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${false}`} />
+                    <Navbar.Brand className="mx-auto">
+                        <Stack
+                            direction="horizontal"
                             style={{
                                 fontFamily: 'Courier New, monospace',
                                 color: 'white',
                                 fontSize: '15px',
                             }}
+                            gap={1}
                         >
                             <SiValorant size={45} style={{ fill: '#FF4655' }} />
-                            <h1 className="ps-2">ValoGraphs</h1>
-                        </Container>
+                            <h1 className="my-auto ps-2">ValoGraphs</h1>
+                        </Stack>
                     </Navbar.Brand>
-                    <div>
-                        <Navbar.Toggle className="invisible" />
-                    </div>
+                    <Navbar.Toggle className="invisible" />
                 </Container>
                 <Navbar.Offcanvas
-                    className="border-0"
+                    className="p-2"
                     style={{
-                        width: '20%',
+                        minWidth: '20%',
                         fontFamily: 'Courier New, monospace',
                         color: 'white',
                         fontSize: '16px',
@@ -102,9 +98,9 @@ export default function Header({ handlerMap, gameModes }: HeaderProps) {
                     placement="start"
                     data-bs-theme="dark"
                 >
-                    <Offcanvas.Header closeButton className="pt-4"></Offcanvas.Header>
+                    <Offcanvas.Header closeButton></Offcanvas.Header>
                     <Offcanvas.Body className="pt-0">
-                        <Nav className="justify-content-end flex-grow-1 pe-3">{navOptions}</Nav>
+                        <Nav> {navOptions}</Nav>
                     </Offcanvas.Body>
                 </Navbar.Offcanvas>
             </Navbar>

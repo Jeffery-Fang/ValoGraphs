@@ -117,6 +117,7 @@ function App() {
         let newMatchDetails = [...matchDetails]
         switch (stat) {
             case 'name':
+                //note working
                 newMatchDetails.sort((a, b): number => b['player']['name'] - a['player']['name'])
                 break
             case 'kda':

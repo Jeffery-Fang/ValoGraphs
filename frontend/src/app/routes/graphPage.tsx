@@ -1,4 +1,4 @@
-import { Stack } from 'react-bootstrap'
+import { Stack, Container } from 'react-bootstrap'
 import { useState } from 'react'
 import Header from '../../components/Header'
 import PlayerStack from '../../components/PlayerStack'
@@ -81,24 +81,16 @@ function App() {
 
     return (
         <>
-            <Stack
-                className="vh-100 vw-100 d-flex"
-                style={{
-                    overflowY: 'hidden',
-                    overflowX: 'hidden',
-                }}
-            >
+            <Container fluid className="p-0 vh-100 d-flex flex-wrap bg-dark overflow-x-hidden">
                 <Header handlerMap={handlerMap} gameModes={gameModes}></Header>
-                <Stack direction="horizontal" className="w-100 h-100 bg-dark flex-fill">
-                    <PlayerStack
-                        playerMap={playerMap}
-                        handleAdd={handleAdd}
-                        handleDelete={handleDelete}
-                        handleToggle={handleToggle}
-                    ></PlayerStack>
-                    <GraphContainer playerMap={playerMap}></GraphContainer>
-                </Stack>
-            </Stack>
+                <PlayerStack
+                    playerMap={playerMap}
+                    handleAdd={handleAdd}
+                    handleDelete={handleDelete}
+                    handleToggle={handleToggle}
+                ></PlayerStack>
+                <GraphContainer playerMap={playerMap}></GraphContainer>
+            </Container>
         </>
     )
 }

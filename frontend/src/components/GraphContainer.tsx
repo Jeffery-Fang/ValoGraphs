@@ -49,57 +49,52 @@ export default function GraphContainer({ playerMap }: GraphContainerProps) {
 
     return (
         <>
-            <Stack className="border-start border-secondary border-2 mh-100 w-100 p-0 d-flex">
-                <Stack direction="horizontal" className="w-100 flex-fill">
-                    <div className="w-50 h-100">
-                        <Graph
-                            players={playersColors}
-                            data={hsData}
-                            unit="Headshot Percentage (%)"
-                            title="Headshot Percentage"
-                        ></Graph>
+            <Stack
+                className="d-flex pt-2"
+                style={{
+                    minWidth: '80%',
+                }}
+            >
+                <Stack direction="horizontal" className="d-flex flex-wrap" style={{ maxHeight: '33%' }}>
+                    <div className="flex-fill" style={{ minWidth: '50%' }}>
+                        <Graph players={playersColors} data={hsData} unit="HS %" title="Headshot Percentage"></Graph>
                     </div>
-                    <div className="w-50 h-100">
-                        <Graph
-                            players={playersColors}
-                            data={kdData}
-                            unit="Kills per Death"
-                            title="Kill Death Ratio"
-                        ></Graph>
+                    <div className="flex-fill" style={{ minWidth: '50%' }}>
+                        <Graph players={playersColors} data={kdData} unit="KDR" title="Kill Death Ratio"></Graph>
                     </div>
                 </Stack>
-                <Stack direction="horizontal" className="w-100 flex-fill">
-                    <div className="w-50 h-100">
+                <Stack direction="horizontal" className="d-flex flex-wrap" style={{ maxHeight: '33%' }}>
+                    <div className="flex-fill" style={{ minWidth: '50%' }}>
                         <Graph
                             players={playersColors}
                             data={kdaData}
-                            unit="Kills and Assists per Death"
+                            unit="KDA"
                             title="Kills, Deaths and Assists"
                         ></Graph>
                     </div>
-                    <div className="w-50 h-100">
+                    <div className="flex-fill flex-fill" style={{ minWidth: '50%' }}>
                         <Graph
                             players={playersColors}
                             data={adrData}
-                            unit="Average Damage per Round"
+                            unit="ADR"
                             title="Average Damage per Round"
                         ></Graph>
                     </div>
                 </Stack>
-                <Stack direction="horizontal" className="w-100 flex-fill">
-                    <div className="w-50 h-100">
+                <Stack direction="horizontal" className="d-flex flex-wrap" style={{ maxHeight: '33%' }}>
+                    <div className="flex-fill" style={{ minWidth: '50%' }}>
                         <Graph
                             players={playersColors}
                             data={acsData}
-                            unit="Average Contribution Score"
+                            unit="ACS"
                             title="Average Contribution Score"
                         ></Graph>
                     </div>
-                    <div className="w-50 h-100">
+                    <div className="flex-fill" style={{ minWidth: '50%' }}>
                         <Graph
                             players={playersColors}
                             data={ddData}
-                            unit="Damage Difference per Round"
+                            unit="DD Δ"
                             title="Difference between damage dealt and received per round"
                         ></Graph>
                     </div>

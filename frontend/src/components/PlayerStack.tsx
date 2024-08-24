@@ -13,12 +13,10 @@ export default function PlayerStack({ playerMap, handleAdd, handleToggle, handle
     return (
         <>
             <Stack
-                className="bg-dark border-top border-secondary border-2"
+                className="border-top border-secondary border-2 d-block"
                 style={{
-                    height: '100%',
                     minWidth: '20%',
                     overflowY: 'auto',
-                    overflowX: 'hidden',
                 }}
             >
                 {Object.keys(playerMap).map((player: string) => {
@@ -32,11 +30,15 @@ export default function PlayerStack({ playerMap, handleAdd, handleToggle, handle
                         ></PlayerEntry>
                     )
                 })}
-                <Stack direction="horizontal" className="p-2 border-bottom border-secondary border-2" gap={2}>
+                <Stack
+                    direction="horizontal"
+                    className="p-2 border-bottom border-end border-secondary border-2"
+                    gap={2}
+                >
                     <FaPlus className="invisible"></FaPlus>
                     <div className="vr text-light"></div>
                     <input
-                        className="bg-dark"
+                        className="bg-transparent"
                         spellCheck="false"
                         autoComplete="off"
                         style={{
