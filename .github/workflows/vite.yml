@@ -37,7 +37,8 @@ jobs:
               working-directory: ./frontend
               env:
                   VITE_GITHUB_LINK: https://github.com/Jeffery-Fang/ValoGraphs
-                  VITE_API_URL: https://api.valographs.com/players/
+                  VITE_PLAYER_API_URL: https://api.valographs.com/players/
+                  VITE_MATCH_API_URL: https://api.valographs.com/matches/
               run: npm run build --if-present
 
             - name: Configure AWS Credentials

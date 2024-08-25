@@ -67,7 +67,7 @@ function App() {
                     await fetch('https://valorant-api.com/v1/playercards/' + response[0].card_id, { method: 'GET' })
                 ).json()
 
-                newimageMap['card'] = assetData['data']['smallArt']
+                newimageMap['card'] = assetData['data']['wideArt']
             }
 
             for (let element of response) {

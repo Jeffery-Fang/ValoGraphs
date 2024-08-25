@@ -21,8 +21,6 @@ function App() {
                 if (response.status === 200) {
                     let data = await response.json()
                     newPlayerMap[player].data = data
-                } else {
-                    alert('Error retrieving data for ' + player)
                 }
             }
 
@@ -49,8 +47,6 @@ function App() {
                     input.value = ''
 
                     updatePlayerMap(newPlayerMap)
-                } else {
-                    alert('Error retrieving data for ' + input.value)
                 }
             }
         } else {
