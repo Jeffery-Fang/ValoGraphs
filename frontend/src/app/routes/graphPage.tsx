@@ -1,4 +1,4 @@
-import { Stack, Container } from 'react-bootstrap'
+import { Container } from 'react-bootstrap'
 import { useState } from 'react'
 import Header from '../../components/Header'
 import PlayerStack from '../../components/PlayerStack'
@@ -35,15 +35,17 @@ function App() {
         let input: HTMLInputElement = document.getElementById('newPlayerInput') as HTMLInputElement
 
         if (input && input.value.includes('#')) {
-            if (Object.keys(playerMap).includes(input.value)) {
+            let inputValue: string = input.value.trim()
+
+            if (Object.keys(playerMap).includes(inputValue)) {
                 alert('Player is already graphed')
             } else {
-                let response: any = await retrievePlayerData(input.value, currentMode)
+                let response: any = await retrievePlayerData(inputValue, currentMode)
 
                 if (response.status === 200) {
                     let data = await response.json()
                     let newPlayerMap = { ...playerMap }
-                    newPlayerMap[input.value] = { visible: true, data: data }
+                    newPlayerMap[inputValue] = { visible: true, data: data }
                     input.value = ''
 
                     updatePlayerMap(newPlayerMap)

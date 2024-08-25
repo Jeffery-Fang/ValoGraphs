@@ -20,6 +20,10 @@ export async function retrievePlayerData(nameAndTag: string, mode: string): Prom
         import.meta.env.VITE_PLAYER_API_URL + name + '?tag=' + tag + '&mode=' + mode.replace(' ', '') + '&size=10'
     let response: any = await fetch(url, { method: 'GET' })
 
+    if (response.status !== 200) {
+        alert('Error retrieving ' + name + "'s " + mode + ' data')
+    }
+
     return response
 }
 
@@ -35,7 +39,9 @@ export function handleProfileSearch(): void {
     let input: HTMLInputElement = document.getElementById('profileSearchInput') as HTMLInputElement
 
     if (input && input.value.includes('#')) {
-        temp = input.value.split('#')
+        let inputValue: string = input.value.trim()
+
+        temp = inputValue.split('#')
         window.open(`/profile/${temp[0]}/${temp[1]}`, '_blank')
     } else {
         alert('Invalid Input')

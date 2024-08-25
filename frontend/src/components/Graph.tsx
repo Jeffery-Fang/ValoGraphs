@@ -15,7 +15,7 @@ export default function Graph({ players, data, unit, title }: GraphProps) {
                 <div className="text-center p-2" style={{ color: 'grey', fontSize: '20px' }}>
                     {title}
                 </div>
-                <ResponsiveContainer minWidth={400} aspect={3.4}>
+                <ResponsiveContainer className="pe-4" minWidth={400} aspect={3.4}>
                     <LineChart
                         title={title}
                         data={data}
@@ -41,7 +41,7 @@ export default function Graph({ players, data, unit, title }: GraphProps) {
                         <XAxis stroke="grey" height={50} strokeWidth={2} allowDecimals={false}>
                             <Label position={'center'}>{'Recent Matchs (matches ago)'}</Label>
                         </XAxis>
-                        <YAxis stroke="grey" width={80} strokeWidth={2} allowDecimals={false}>
+                        <YAxis stroke="grey" width={70} strokeWidth={2} allowDecimals={false}>
                             <Label angle={-90}>{unit}</Label>
                         </YAxis>
                         {data.length !== 0 ? (

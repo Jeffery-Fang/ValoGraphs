@@ -66,6 +66,9 @@ export default function MatchHistory({
                                     date={match.date}
                                     mode={match.mode}
                                     won={match.won}
+                                    rounds_blue_won={match.rounds_blue_won}
+                                    rounds_red_won={match.rounds_red_won}
+                                    side={match.side}
                                     match_id={match.match_id}
                                     handleShowMatchDetails={() => {
                                         handleShowMatchDetails(match.match_id)

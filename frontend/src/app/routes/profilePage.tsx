@@ -10,14 +10,14 @@ import { handleProfileSearch, retrievePlayerData, retrieveMatchData } from '../.
 const gameModes: string[] = ['unrated', 'competitive', 'team deathmatch']
 
 function App() {
+    const { name, tag } = useParams()
+
     const [currentMode, updateCurrentMode] = useState('unrated')
     const [data, updateData] = useState<{ [playerName: string]: any }[]>([])
     const [filter, updateFilter] = useState('')
     const [imageMap, updateimageMap] = useState<{ [id: string]: string }>({})
-    const { name, tag } = useParams()
-
-    const [showMatchDetails, updateShowMatchDetails] = useState(false)
     const [matchDetails, updateMatchDetails] = useState<{ [playerName: string]: any }[]>([])
+    const [showMatchDetails, updateShowMatchDetails] = useState(false)
 
     useEffect((): void => {
         init()
@@ -89,7 +89,7 @@ function App() {
     function handleFilter(): void {
         let input: HTMLInputElement = document.getElementById('agentSearchInput') as HTMLInputElement
 
-        updateFilter(input.value)
+        updateFilter(input.value.trim())
     }
 
     async function handleShowMatchDetails(match_id: string): Promise<void> {
@@ -117,8 +117,9 @@ function App() {
         let newMatchDetails = [...matchDetails]
         switch (stat) {
             case 'name':
-                //note working
-                newMatchDetails.sort((a, b): number => b['player']['name'] - a['player']['name'])
+                newMatchDetails.sort((a, b): number => {
+                    return a['player']['name'].localeCompare(b['player']['name'])
+                })
                 break
             case 'kda':
                 newMatchDetails.sort(
@@ -235,25 +236,17 @@ function App() {
 
     return (
         <>
-            <Container
-                fluid
-                className="p-0 vh-100 vw-100 d-flex flex-column bg-dark"
-                style={{
-                    overflowX: 'hidden',
-                }}
-            >
+            <Container fluid className="p-0 vh-100 bg-dark overflow-y-auto">
                 <Header handlerMap={handlerMap} gameModes={gameModes}></Header>
-                <Container fluid className="p-0 h-100 w-100 d-flex flex-row justify-content-center">
-                    <div className="h-100" style={{ width: '20%' }}>
-                        <ProfileColumn
-                            mode={currentMode}
-                            nameAndTag={name + '#' + tag}
-                            imageMap={imageMap}
-                            averageStats={averageStats}
-                            matchDates={matchDates}
-                        ></ProfileColumn>
-                    </div>
-                    <div className="h-100 flex-fill ps-2">
+                <Container fluid className="p-0 d-flex flex-wrap overflow-x-hidden">
+                    <ProfileColumn
+                        mode={currentMode}
+                        nameAndTag={name + '#' + tag}
+                        imageMap={imageMap}
+                        averageStats={averageStats}
+                        matchDates={matchDates}
+                    ></ProfileColumn>
+                    <div className="flex-fill" style={{ minWidth: '80%' }}>
                         <MatchHistory
                             data={data}
                             imageMap={imageMap}
