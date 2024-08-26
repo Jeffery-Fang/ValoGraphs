@@ -1,6 +1,24 @@
 import { Stack, Image } from 'react-bootstrap'
 import { calculateDateDiff } from '../utils/commonFunctions'
 
+/**
+ * agentLink - A link to a picture of the agent
+ * map - The map this match was played on
+ * kills - The number of kills gotten this match
+ * deaths - The number of times the player died this match
+ * assists - The number of assists this match
+ * hs - The headshot percentage this match
+ * dd - The damage difference this match
+ * adr - The average damage per round this match
+ * acs - The average contribution score this match
+ * date - The date this match was played on
+ * mode - The mode this match was played on
+ * won - Whether the played won this match or not
+ * rounds_blue_won - The number of rounds the blue team won
+ * rounds_red_won - The number of rounds the red team won
+ * side - The team the player was on
+ * match_id - The id of this match
+ */
 interface MatchEntryProps {
     agentLink: string
     map: string
@@ -112,56 +130,6 @@ export default function MatchEntry({
                     </Stack>
                 </Stack>
             </Stack>
-            {/* <Stack
-                direction="horizontal"
-                className="border-top border-secondary border-2 d-flex flex-wrap"
-                style={{
-                    fontFamily: 'Courier New, monospace',
-                    color: 'white',
-                    fontSize: '13px',
-                    cursor: 'pointer',
-                }}
-                onClick={handleShowMatchDetails}
-                id={match_id}
-            >
-                {won ? <div className="vr p-1 text-bg-success"></div> : <div className="vr p-1 text-bg-danger"></div>}
-                <Stack direction="horizontal">
-                    <Image rounded src={agentLink} height={60} className="p-2"></Image>
-                    <Stack className="my-auto" gap={1}>
-                        <div>{mode}</div>
-                        <div>{map}</div>
-                    </Stack>
-                </Stack>
-                <Stack direction="horizontal" className="my-auto text-center" gap={2} style={{ minWidth: '90%' }}>
-                    <Stack direction="vertical" gap={1} style={{ maxWidth: '15%' }}>
-                        <div className="w-100">K / D / A</div>
-                        <div className="w-100">{kills + ' / ' + deaths + ' / ' + assists}</div>
-                    </Stack>
-                    <Stack direction="vertical" gap={1} style={{ maxWidth: '15%' }}>
-                        <div className="w-100">HS %</div>
-                        <div className="w-100">{hs}</div>
-                    </Stack>
-                    <Stack direction="vertical" gap={1} style={{ maxWidth: '15%' }}>
-                        <div className="w-100">DD Δ</div>
-                        <div className="w-100">{dd}</div>
-                    </Stack>
-                    <Stack direction="vertical" gap={1} style={{ maxWidth: '15%' }}>
-                        <div className="w-100">ADR</div>
-                        <div className="w-100">{adr}</div>
-                    </Stack>
-                    <Stack direction="vertical" gap={1} style={{ maxWidth: '15%' }}>
-                        <div className="w-100">ACS</div>
-                        <div className="w-100">{acs}</div>
-                    </Stack>
-                    <Stack direction="vertical" className="my-auto" gap={1} style={{ maxWidth: '15%' }}>
-                        {calculateDateDiff(new Date(), date) === 1
-                            ? calculateDateDiff(new Date(), date) + ' day ago'
-                            : calculateDateDiff(new Date(), date) === 0
-                            ? 'Today'
-                            : calculateDateDiff(new Date(), date) + ' days ago'}
-                    </Stack>
-                </Stack>
-            </Stack> */}
         </>
     )
 }

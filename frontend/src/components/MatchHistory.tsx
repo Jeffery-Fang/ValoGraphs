@@ -1,6 +1,13 @@
 import { Stack, Form } from 'react-bootstrap'
 import MatchEntry from './MatchEntry'
 
+/**
+ * data - An array of objects representing individual matches
+ * imageMap - A dictionary that maps asset names to their links
+ * handleFilter - A function that updates the filter base on a text input
+ * filter - The filter currently being used on the matches
+ * handleShowMatchDetails - A function that retrieves data for a specific match and toggles the MatchDetails components
+ */
 interface MatchHistoryProps {
     data: any
     imageMap: { [id: string]: string }

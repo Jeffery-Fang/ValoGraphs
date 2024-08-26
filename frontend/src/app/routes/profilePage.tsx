@@ -5,15 +5,29 @@ import Header from '../../components/Header'
 import ProfileColumn from '../../components/ProfileColumn'
 import MatchHistory from '../../components/MatchHistory'
 import MatchDetails from '../../components/MatchDetails'
-import { handleProfileSearch, retrievePlayerData, retrieveMatchData } from '../../utils/commonFunctions'
+import {
+    handleProfileSearch,
+    retrievePlayerData,
+    retrieveMatchData,
+    calculateAverageStats,
+    countMatchsPerDay,
+} from '../../utils/commonFunctions'
 
 const gameModes: string[] = ['unrated', 'competitive', 'team deathmatch']
 
 function App() {
+    /**
+     *  name, tag - The name and tag used to initialize the profile page
+     *  currentMode - The current mode being displayed, when match data is retrieved it will for matches of this type
+     *  data - An array of objects representing individual matches
+     *  filter - The text that is going to be used to filter the matches via regex
+     *  imageMap - A dictionary mapping an asset name to a link to its image
+     *  matchDetails - An array of objects representing player performance for a particular match
+     *  showMatchDetails - A variable keeping track of the visibility of the match details offcanvas element
+     */
     const { name, tag } = useParams()
-
-    const [currentMode, updateCurrentMode] = useState('unrated')
-    const [data, updateData] = useState<{ [playerName: string]: any }[]>([])
+    const [currentMode, updateCurrentMode] = useState('competitive')
+    const [data, updateData] = useState<{ [stat: string]: any }[]>([])
     const [filter, updateFilter] = useState('')
     const [imageMap, updateimageMap] = useState<{ [id: string]: string }>({})
     const [matchDetails, updateMatchDetails] = useState<{ [playerName: string]: any }[]>([])
@@ -23,6 +37,9 @@ function App() {
         init()
     }, [])
 
+    /**
+     * Initializes the page by retrieving match data for the player and all required assets
+     */
     async function init(): Promise<void> {
         if (name && tag) {
             let response: any = await (await retrievePlayerData(name + '#' + tag, currentMode)).json()
@@ -57,6 +74,11 @@ function App() {
         }
     }
 
+    /**
+     * Updates match data and asset information if the new mode is different from the current one
+     *
+     * @param mode - The mode that the new data will be associated with
+     */
     async function handleChangeMode(mode: string): Promise<void> {
         if (mode !== currentMode) {
             let response: any = await (await retrievePlayerData(name + '#' + tag, mode)).json()
@@ -86,12 +108,21 @@ function App() {
         }
     }
 
+    /**
+     * Updates the filter for match entries
+     */
     function handleFilter(): void {
         let input: HTMLInputElement = document.getElementById('agentSearchInput') as HTMLInputElement
 
         updateFilter(input.value.trim())
     }
 
+    /**
+     * Retrieves all the players associated with a match_id and toggles a offcanvas element
+     * to display them
+     *
+     * @param match_id - The match_id that players are being retrieved for
+     */
     async function handleShowMatchDetails(match_id: string): Promise<void> {
         if (match_id) {
             let response: any = await (await retrieveMatchData(match_id)).json()
@@ -113,6 +144,11 @@ function App() {
         }
     }
 
+    /**
+     * Sorts the player entries in the match details page by some parameter
+     *
+     * @param stat - The stat that player entries will be sorted by
+     */
     function sortMatchDetails(stat: string): void {
         let newMatchDetails = [...matchDetails]
         switch (stat) {
@@ -145,94 +181,14 @@ function App() {
         updateMatchDetails(newMatchDetails)
     }
 
+    //A javascript object that maps text to handlers, to be used by the Header component
+    //to determine what option are available in the offcanvas
     const handlerMap: { [id: string]: any } = {
         'Back to Homepage': '/',
         'View Profile Page': handleProfileSearch,
         'Change Game Mode': handleChangeMode,
         'View GitHub Repository': import.meta.env.VITE_GITHUB_LINK,
     }
-
-    let avgHS: number = 0
-    let avgKDR: number = 0
-    let avgKDA: number = 0
-    let avgADR: number = 0
-    let avgACS: number = 0
-    let avgDD: number = 0
-    let dates: {} = {}
-    let length: number = 0
-
-    for (let match of data) {
-        const agentRegex = new RegExp(filter, 'i')
-        const mapRegex = new RegExp(filter, 'i')
-
-        if (agentRegex.test(match.agent) || mapRegex.test(match.map)) {
-            avgHS += match.hs
-            avgKDR += match.kills / (match.deaths || 1)
-            avgKDA += (match.kills + match.assists) / (match.deaths || 1)
-            avgADR += match.adr
-            avgACS += match.acs
-            avgDD += match.dd
-            length += 1
-
-            let time = new Date(match.date)
-            let timeString = time.toLocaleDateString()
-            if (Object.keys(dates).includes(timeString)) {
-                ;(dates as any)[timeString] += 1
-            } else {
-                ;(dates as any)[timeString] = 1
-            }
-        }
-    }
-
-    avgHS /= length || 1
-    avgKDR /= length || 1
-    avgKDA /= length || 1
-    avgADR /= length || 1
-    avgACS /= length || 1
-    avgDD /= length || 1
-
-    let averageStats: { [statName: string]: string | number }[] = [
-        {
-            statName: 'HS%',
-            value: avgHS.toFixed(2),
-            relative: (avgHS / 25).toFixed(2),
-        },
-        {
-            statName: 'KDR',
-            value: avgKDR.toFixed(2),
-            relative: (avgKDR / (17.05 / 15.67)).toFixed(2),
-        },
-        {
-            statName: 'KDA',
-            value: avgKDA.toFixed(2),
-            relative: (avgKDA / ((17.05 + 3.53) / 15.67)).toFixed(2),
-        },
-        {
-            statName: 'ADR',
-            value: avgADR.toFixed(2),
-            relative:
-                currentMode === 'team deathmatch'
-                    ? Math.abs(avgADR / 4000).toFixed(2)
-                    : Math.abs(avgADR / 130).toFixed(2),
-        },
-        {
-            statName: 'ACS',
-            value: avgACS.toFixed(2),
-            relative:
-                currentMode === 'team deathmatch' ? Math.abs(avgACS / 6000).toFixed(2) : (avgACS / 238).toFixed(2),
-        },
-        {
-            statName: 'DDΔ',
-            value: avgDD.toFixed(2),
-            relative:
-                currentMode === 'team deathmatch' ? Math.abs(avgADR / 500).toFixed(2) : Math.abs(avgDD / 25).toFixed(2),
-        },
-    ]
-
-    let matchDates = Object.keys(dates).map((date: string) => {
-        return { date: date, 'games played': (dates as any)[date] }
-    })
-    matchDates.sort((a, b): number => new Date(a['date']).getTime() - new Date(b['date']).getTime())
 
     return (
         <>
@@ -243,8 +199,8 @@ function App() {
                         mode={currentMode}
                         nameAndTag={name + '#' + tag}
                         imageMap={imageMap}
-                        averageStats={averageStats}
-                        matchDates={matchDates}
+                        averageStats={calculateAverageStats(data, filter, currentMode)}
+                        matchDates={countMatchsPerDay(data, filter)}
                     ></ProfileColumn>
                     <div className="flex-fill" style={{ minWidth: '80%' }}>
                         <MatchHistory

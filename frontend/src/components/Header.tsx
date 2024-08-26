@@ -1,6 +1,10 @@
 import { Container, Navbar, Offcanvas, Nav, NavDropdown, Form, Button, Stack } from 'react-bootstrap'
 import { SiValorant } from 'react-icons/si'
 
+/**
+ * handlerMap - A dictionary mapping text to some action that will be done when the option is selected
+ * gameModes - A list of available game modes for the 'Change Game Mode option
+ */
 interface HeaderProps {
     handlerMap: { [option: string]: any }
     gameModes: string[]

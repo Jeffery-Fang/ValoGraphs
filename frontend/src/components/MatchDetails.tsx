@@ -1,5 +1,12 @@
 import { Offcanvas, Stack, Image } from 'react-bootstrap'
 
+/**
+ * matchDetails - An array of objects representing each unique players performance this match
+ * imageMap - A dictionary that maps asset names to their links
+ * sortMatchDetails - A generic function that sorts the players by a particular stat
+ * showMatchDetails - A variable that determines the visiblity of this component
+ * updateShowMatchDetails - A variable that toggles the visibility of this component
+ */
 interface MatchDetailsProps {
     matchDetails: { [playerName: string]: any }[]
     imageMap: { [id: string]: string }
@@ -52,7 +59,7 @@ export default function MatchDetails({
                 <Offcanvas.Body className="border-start border-end border-secondary border-2 p-0">
                     <Stack
                         direction="horizontal"
-                        className="d-flex flex-wrap"
+                        className="d-flex flex-wrap bg-dark-subtle"
                         style={{
                             fontFamily: 'Courier New, monospace',
                             color: 'white',

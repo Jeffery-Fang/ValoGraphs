@@ -2,6 +2,12 @@ import { CloseButton, Stack } from 'react-bootstrap'
 import { FaEyeSlash, FaRegEye } from 'react-icons/fa'
 import { stringToColour } from '../utils/commonFunctions'
 
+/**
+ * handleToggle - A function that toggles the visible variable in the state of the application
+ * handleDelete - A function that deletes this entry in the state of the application
+ * visible - A variable that where the eye is displayed normally or corssed out
+ * nameAndTag - The text to be displayed on this entry
+ */
 interface PlayerEntryProps {
     handleToggle: () => void
     handleDelete: () => void

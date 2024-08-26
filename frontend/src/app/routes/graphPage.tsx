@@ -8,27 +8,16 @@ import { retrievePlayerData, handleProfileSearch } from '../../utils/commonFunct
 const gameModes: string[] = ['unrated', 'competitive', 'team deathmatch']
 
 function App() {
-    const [currentMode, updateCurrentMode] = useState('unrated')
+    /**
+     * currentMode - The current mode being displayed, when match data is retrieved it will for matches of this type
+     * playerMap - A dictionary mapping a player name to an array of match data
+     */
+    const [currentMode, updateCurrentMode] = useState('competitive')
     const [playerMap, updatePlayerMap] = useState<{ [playerName: string]: any }>({})
 
-    async function handleChangeMode(mode: string): Promise<void> {
-        if (currentMode != mode) {
-            let newPlayerMap = { ...playerMap }
-
-            for (let player of Object.keys(playerMap)) {
-                let response = await retrievePlayerData(player, mode)
-
-                if (response.status === 200) {
-                    let data = await response.json()
-                    newPlayerMap[player].data = data
-                }
-            }
-
-            updatePlayerMap(newPlayerMap)
-            updateCurrentMode(mode)
-        }
-    }
-
+    /**
+     * Retrieves match data for the new player if the input is valid
+     */
     async function handleAdd(): Promise<void> {
         let input: HTMLInputElement = document.getElementById('newPlayerInput') as HTMLInputElement
 
@@ -54,6 +43,46 @@ function App() {
         }
     }
 
+    /**
+     * Updates the match data for all players  if the new mode is different from the current mode
+     *
+     * @param mode - The mode that the new data will be associated with
+     */
+    async function handleChangeMode(mode: string): Promise<void> {
+        if (currentMode != mode) {
+            let newPlayerMap = { ...playerMap }
+
+            for (let player of Object.keys(playerMap)) {
+                let response = await retrievePlayerData(player, mode)
+
+                if (response.status === 200) {
+                    let data = await response.json()
+                    newPlayerMap[player].data = data
+                }
+            }
+
+            updatePlayerMap(newPlayerMap)
+            updateCurrentMode(mode)
+        }
+    }
+
+    /**
+     * Deletes the data of the specified player
+     *
+     * @param name - The name of the player whose data is to be deleted
+     */
+    function handleDelete(name: string): void {
+        let newPlayerMap = { ...playerMap }
+
+        delete newPlayerMap[name]
+        updatePlayerMap(newPlayerMap)
+    }
+
+    /**
+     * Toggles visibility of lines associated with the name
+     *
+     * @param name - The name of the player whose data visibility is to be toggles
+     */
     function handleToggle(name: string): void {
         let newPlayerMap = { ...playerMap }
 
@@ -63,13 +92,8 @@ function App() {
         updatePlayerMap(newPlayerMap)
     }
 
-    function handleDelete(name: string): void {
-        let newPlayerMap = { ...playerMap }
-
-        delete newPlayerMap[name]
-        updatePlayerMap(newPlayerMap)
-    }
-
+    //A javascript object that maps text to handlers, to be used by the Header component
+    //to determine what option are available in the offcanvas
     const handlerMap: { [id: string]: any } = {
         'Back to Homepage': '/',
         'View Profile Page': handleProfileSearch,

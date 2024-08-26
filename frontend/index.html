@@ -6,11 +6,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta
             name="description"
-            property="og:description"
             content="Track and graph your performance data in Valorant. Visualize your stats, analyze your gameplay, and improve your skills with detailed charts and insights. Perfect for players looking to level up their game."
         />
         <title>ValoGraphs</title>
     </head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1HBGP08844"></script>
+    <script>
+        window.dataLayer = window.dataLayer || []
+        function gtag() {
+            dataLayer.push(arguments)
+        }
+        gtag('js', new Date())
+
+        gtag('config', 'G-1HBGP08844')
+    </script>
+
     <body>
         <div id="root"></div>
         <script type="module" src="/src/main.tsx"></script>

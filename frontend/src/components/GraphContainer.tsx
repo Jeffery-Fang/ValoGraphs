@@ -2,6 +2,9 @@ import { Stack } from 'react-bootstrap'
 import Graph from './Graph'
 import { stringToColour } from '../utils/commonFunctions'
 
+/**
+ * playerMap - A dictionary that maps player names to their match data & visibility
+ */
 interface GraphContainerProps {
     playerMap: { [playerName: string]: any }
 }
@@ -57,10 +60,22 @@ export default function GraphContainer({ playerMap }: GraphContainerProps) {
             >
                 <Stack direction="horizontal" className="d-flex flex-wrap" style={{ maxHeight: '33%' }}>
                     <div className="flex-fill" style={{ minWidth: '50%' }}>
-                        <Graph players={playersColors} data={hsData} unit="HS %" title="Headshot Percentage"></Graph>
+                        <Graph
+                            players={playersColors}
+                            data={hsData}
+                            unit="HS %"
+                            title="Headshot Percentage"
+                            reference={20}
+                        ></Graph>
                     </div>
                     <div className="flex-fill" style={{ minWidth: '50%' }}>
-                        <Graph players={playersColors} data={kdData} unit="KDR" title="Kill Death Ratio"></Graph>
+                        <Graph
+                            players={playersColors}
+                            data={kdData}
+                            unit="KDR"
+                            title="Kill Death Ratio"
+                            reference={0.9}
+                        ></Graph>
                     </div>
                 </Stack>
                 <Stack direction="horizontal" className="d-flex flex-wrap" style={{ maxHeight: '33%' }}>
@@ -70,6 +85,7 @@ export default function GraphContainer({ playerMap }: GraphContainerProps) {
                             data={kdaData}
                             unit="KDA"
                             title="Kills, Deaths and Assists"
+                            reference={1.25}
                         ></Graph>
                     </div>
                     <div className="flex-fill flex-fill" style={{ minWidth: '50%' }}>
@@ -78,6 +94,7 @@ export default function GraphContainer({ playerMap }: GraphContainerProps) {
                             data={adrData}
                             unit="ADR"
                             title="Average Damage per Round"
+                            reference={130}
                         ></Graph>
                     </div>
                 </Stack>
@@ -88,6 +105,7 @@ export default function GraphContainer({ playerMap }: GraphContainerProps) {
                             data={acsData}
                             unit="ACS"
                             title="Average Contribution Score"
+                            reference={200}
                         ></Graph>
                     </div>
                     <div className="flex-fill" style={{ minWidth: '50%' }}>
@@ -96,6 +114,7 @@ export default function GraphContainer({ playerMap }: GraphContainerProps) {
                             data={ddData}
                             unit="DD Δ"
                             title="Difference between damage dealt and received per round"
+                            reference={0}
                         ></Graph>
                     </div>
                 </Stack>

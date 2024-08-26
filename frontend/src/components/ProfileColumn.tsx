@@ -4,6 +4,7 @@ import {
     ResponsiveContainer,
     PolarGrid,
     PolarAngleAxis,
+    PolarRadiusAxis,
     Radar,
     XAxis,
     Label,
@@ -12,6 +13,13 @@ import {
     Bar,
 } from 'recharts'
 
+/**
+ * nameAndTag - The name and tag of the player in the format name#tag
+ * imageMap - A dictionary that maps asset names to their links
+ * averageStats - An array containing objects representing the average stats of a player
+ * matchDates - An array containing the unique dates when games were played and the number played per day
+ * mode - The mode of which all the data is associated with
+ */
 interface ProfileColumnProps {
     nameAndTag: string
     imageMap: { [id: string]: string }
@@ -56,6 +64,12 @@ export default function ProfileColumn({ nameAndTag, imageMap, averageStats, matc
                                 <RadarChart data={averageStats}>
                                     <PolarGrid />
                                     <PolarAngleAxis dataKey="statName" />
+                                    <PolarRadiusAxis
+                                        domain={[0, () => 1.5]}
+                                        tick={false}
+                                        tickCount={6}
+                                        axisLine={false}
+                                    />
                                     <Radar dataKey="relative" stroke="#FF0000" fill="#FF0000" fillOpacity={0.5}></Radar>
                                 </RadarChart>
                             </ResponsiveContainer>

@@ -2,6 +2,12 @@ import { Stack } from 'react-bootstrap'
 import { FaPlus } from 'react-icons/fa'
 import PlayerEntry from './PlayerEntry'
 
+/**
+ * playerMap - A dictionary that maps player names to their match data & visibility
+ * handleAdd - A function that retrieves data for the name#tag in the text input
+ * handleToggle - A generic function that toggles visibility of a playerEntry
+ * handleDelete - A generic function that deletes a playerEntry
+ */
 interface PlayerStackProps {
     playerMap: { [playerName: string]: any }
     handleAdd: () => void

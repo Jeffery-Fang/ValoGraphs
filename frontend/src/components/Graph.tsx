@@ -1,14 +1,32 @@
 import { Stack } from 'react-bootstrap'
-import { LineChart, Line, CartesianGrid, YAxis, XAxis, ResponsiveContainer, Tooltip, Label } from 'recharts'
+import {
+    LineChart,
+    Line,
+    CartesianGrid,
+    YAxis,
+    XAxis,
+    ResponsiveContainer,
+    Tooltip,
+    Label,
+    ReferenceLine,
+} from 'recharts'
 
+/**
+ * players - A dictionary that maps a player name to a colour
+ * data - A list of objects where each object represents a match a contains the value for each player for a specific stat
+ * unit - The unit of the stat
+ * title - The title of the graph
+ * reference - A reference value for the stat
+ */
 interface GraphProps {
     players: { [name: string]: any }
     data: { [name: string]: number }[]
     unit: string
     title: string
+    reference: number
 }
 
-export default function Graph({ players, data, unit, title }: GraphProps) {
+export default function Graph({ players, data, unit, title, reference }: GraphProps) {
     return (
         <>
             <Stack className="text-wrap" style={{ fontFamily: 'Courier New, monospace' }}>
@@ -37,6 +55,12 @@ export default function Graph({ players, data, unit, title }: GraphProps) {
                                 />
                             )
                         })}
+                        <ReferenceLine
+                            y={reference}
+                            stroke="red"
+                            strokeWidth={0.5}
+                            ifOverflow="extendDomain"
+                        ></ReferenceLine>
                         <CartesianGrid strokeDasharray="3 3" stroke="grey" />
                         <XAxis stroke="grey" height={50} strokeWidth={2} allowDecimals={false}>
                             <Label position={'center'}>{'Recent Matchs (matches ago)'}</Label>
