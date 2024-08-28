@@ -7,7 +7,7 @@ import { MatchStat } from '../entities/MatchStat.js'
  * @param match_id - The match_id of the match
  * @returns An array of 10 MatchStat objects, one for each of the players that participated in the match
  */
-export async function getMatchStatsFromMatchId(match_id: string): Promise<MatchStat[]> {
+export async function getFromMatchId(match_id: string): Promise<MatchStat[]> {
     try {
         const matchStatRepository = AppDataSource.getRepository(MatchStat)
         const players: MatchStat[] | null = await matchStatRepository.find({
@@ -19,10 +19,6 @@ export async function getMatchStatsFromMatchId(match_id: string): Promise<MatchS
             },
         })
 
-        if (players === null) {
-            throw 'found no players associated with provided match_id'
-        }
-
         return players
     } catch (err) {
         throw err
@@ -30,7 +26,7 @@ export async function getMatchStatsFromMatchId(match_id: string): Promise<MatchS
 }
 
 /**
- * Save the MatchStat object to the database
+ * Saves the MatchStat object to the database
  *
  * @param matchStat - The MatchStat to be saved
  */
@@ -44,7 +40,7 @@ export async function saveOneMatchStat(matchStat: MatchStat): Promise<void> {
 }
 
 /**
- *  Save multiple MatchStat objects to the database
+ *  Saves multiple MatchStat objects to the database
  *
  * @param matchStats - The array of MatchStat objects to be saved
  */

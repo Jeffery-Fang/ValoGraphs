@@ -2,6 +2,8 @@ import { MatchStat } from '../entities/MatchStat.js'
 import { Player } from '../entities/Player.js'
 
 /**
+ * Creates a single MatchStat with the provided fields
+ *
  * @param playerData - Generic data about a match extracted from the response of the henkrikDev Api
  * @param match_id - The match_id of the match
  * @param map - The map the match was played on

@@ -1,89 +1,41 @@
-import { retrievePlayerDataForPlayer } from '../src/services/val_api_service'
-
+import 'dotenv/config'
+import { retrievePlayerData, retrieveProfileData, retrieveMatchData } from '../src/services/val_api_service'
+import { mockPlayerApiResponse, mockProfileApiResponse, mockMatchApiResponses } from './mockData'
 const mockFetch = jest.fn()
 global.fetch = mockFetch
-const mockData = [
-    {
-        metadata: {
-            match_id: ' e5467da1-f1d3-4a49-bebc-f790b0f34959',
-            map: {
-                name: 'Fracture',
-            },
-            queue: {
-                name: 'unrated',
-            },
-        },
-        players: [
-            {
-                puuid: '8918b04d-9034-5838-b3ed-dd7ae3efe5e5',
-                name: 'Hexennacht',
-                tag: 'NA1',
-                team_id: 'Blue',
-            },
-        ],
-        teams: [
-            {
-                team_id: 'Red',
-                rounds: {
-                    won: 4,
-                    lost: 13,
-                },
-                won: true,
-                premier_roster: null,
-            },
-        ],
-        rounds: [
-            {
-                result: 'Elimination',
-            },
-        ],
-    },
-    {
-        metadata: {
-            match_id: ' e5467da1-f1d3-4a49-bebc-f790b0f34959',
-            map: {
-                name: 'Fracture',
-            },
-            queue: {
-                name: 'unrated',
-            },
-        },
-        players: [
-            {
-                puuid: '8918b04d-9034-5838-b3ed-dd7ae3efe5e5',
-                name: 'Hexennacht',
-                tag: 'NA1',
-                team_id: 'Blue',
-            },
-        ],
-        teams: [
-            {
-                team_id: 'Blue',
-                rounds: {
-                    won: 4,
-                    lost: 13,
-                },
-                won: true,
-                premier_roster: null,
-            },
-        ],
-        rounds: [
-            {
-                result: 'Elimination',
-            },
-        ],
-    },
-]
 
-describe('testing retrievePlayerDataForPlayer()', (): void => {
+const PLAYER_URL_ROOT: string = <string>process.env.PLAYER_URL_ROOT
+const PROFILE_URL_ROOT: string = <string>process.env.PROFILE_URL_ROOT
+const MATCH_URL_ROOT: string = <string>process.env.MATCH_URL_ROOT
+const API_KEY: string = <string>process.env.API_KEY
+
+describe('testing retrievePlayerData()', (): void => {
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
+
     test('should return an object containing searched_player_id and match_data if successful', async (): Promise<void> => {
         mockFetch.mockResolvedValue({
             json: jest.fn().mockResolvedValue({
-                data: mockData,
+                data: mockPlayerApiResponse,
             }),
         })
-        let response = await retrievePlayerDataForPlayer('Hexennacht', 'NA1', 'unrated', 10)
+        let name = 'Hexennacht'
+        let tag = 'NA1'
+        let mode = 'unrated'
+        let size = 10
+        let response = await retrievePlayerData(name, tag, mode, size)
 
+        expect(mockFetch).toHaveBeenCalledWith(
+            PLAYER_URL_ROOT + '/' + name + '/' + tag + '?mode=' + mode + '&size=' + size,
+            {
+                method: 'GET',
+                headers: {
+                    Authorization: API_KEY,
+                },
+            }
+        )
+        expect(mockFetch).toHaveBeenCalledTimes(1)
         expect(Object.keys(response)).toContain('searched_player_id')
         expect(Object.keys(response)).toContain('match_data')
     })
@@ -91,8 +43,22 @@ describe('testing retrievePlayerDataForPlayer()', (): void => {
     test('should throw an error if the api call responds with an error', async (): Promise<void> => {
         try {
             mockFetch.mockResolvedValue(undefined)
+            let name = 'Hexennacht'
+            let tag = 'NA1'
+            let mode = 'unrated'
+            let size = 10
+            let response = await retrievePlayerData(name, tag, mode, size)
 
-            await retrievePlayerDataForPlayer('Hexennacht', 'NA1', 'unrated', 10)
+            expect(mockFetch).toHaveBeenCalledWith(
+                PLAYER_URL_ROOT + '/' + name + '/' + tag + '?mode=' + mode + '&size=' + size,
+                {
+                    method: 'GET',
+                    headers: {
+                        Authorization: API_KEY,
+                    },
+                }
+            )
+            expect(mockFetch).toHaveBeenCalledTimes(1)
         } catch (e) {
             expect(e).toBe('no response from henrikdev API')
         }
@@ -105,8 +71,22 @@ describe('testing retrievePlayerDataForPlayer()', (): void => {
                     errors: 'some errors',
                 }),
             })
+            let name = 'Hexennacht'
+            let tag = 'NA1'
+            let mode = 'unrated'
+            let size = 10
+            let response = await retrievePlayerData(name, tag, mode, size)
 
-            await retrievePlayerDataForPlayer('Hexennacht', 'NA1', 'unrated', 10)
+            expect(mockFetch).toHaveBeenCalledWith(
+                PLAYER_URL_ROOT + '/' + name + '/' + tag + '?mode=' + mode + '&size=' + size,
+                {
+                    method: 'GET',
+                    headers: {
+                        Authorization: API_KEY,
+                    },
+                }
+            )
+            expect(mockFetch).toHaveBeenCalledTimes(1)
         } catch (e) {
             expect(e).toBe('some errors')
         }
@@ -116,13 +96,233 @@ describe('testing retrievePlayerDataForPlayer()', (): void => {
         try {
             mockFetch.mockResolvedValue({
                 json: jest.fn().mockResolvedValue({
-                    data: mockData,
+                    data: mockPlayerApiResponse,
                 }),
             })
+            let name = 'NonePlayer'
+            let tag = 'NA1'
+            let mode = 'unrated'
+            let size = 10
+            let response = await retrievePlayerData(name, tag, mode, size)
 
-            await retrievePlayerDataForPlayer('OtherGuy', 'NA1', 'unrated', 10)
+            expect(mockFetch).toHaveBeenCalledWith(
+                PLAYER_URL_ROOT + '/' + name + '/' + tag + '?mode=' + mode + '&size=' + size,
+                {
+                    method: 'GET',
+                    headers: {
+                        Authorization: API_KEY,
+                    },
+                }
+            )
+            expect(mockFetch).toHaveBeenCalledTimes(1)
         } catch (e) {
             expect(e).toBe('specified player was not in retrieved data')
+        }
+    })
+})
+
+describe('testing retrieveProfileData()', (): void => {
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
+
+    test('should return data with correct fields if successful', async (): Promise<void> => {
+        mockFetch.mockResolvedValue({
+            json: jest.fn().mockResolvedValue({
+                data: mockProfileApiResponse,
+            }),
+        })
+        let name = 'Hexennacht'
+        let tag = 'NA1'
+        let mode = 'unrated'
+        let page = 1
+        let response = await retrieveProfileData(name, tag, mode, page)
+        let options: RequestInit = {
+            method: 'GET',
+            headers: {
+                Authorization: API_KEY,
+            },
+        }
+        expect(mockFetch).toHaveBeenCalledWith(
+            PROFILE_URL_ROOT + '/' + name + '/' + tag + '?mode=' + mode + '&page=' + page + '&size=10',
+            options
+        )
+        expect(mockFetch).toHaveBeenCalledWith(`https://api.henrikdev.xyz/valorant/v2/account/${name}/${tag}`, options)
+        expect(mockFetch).toHaveBeenCalledTimes(2)
+        expect(Object.keys(response[0])).toStrictEqual([
+            'playerData',
+            'match_id',
+            'map',
+            'mode',
+            'rounds_blue_won',
+            'rounds_red_won',
+            'won',
+            'numRounds',
+            'date',
+        ])
+    })
+
+    test('should throw an error if the api call responds with an error', async (): Promise<void> => {
+        try {
+            mockFetch.mockResolvedValue(undefined)
+            let name = 'Hexennacht'
+            let tag = 'NA1'
+            let mode = 'unrated'
+            let page = 1
+            let response = await retrieveProfileData(name, tag, mode, page)
+            let options: RequestInit = {
+                method: 'GET',
+                headers: {
+                    Authorization: API_KEY,
+                },
+            }
+            expect(mockFetch).toHaveBeenCalledWith(
+                PROFILE_URL_ROOT + '/' + name + '/' + tag + '?mode=' + mode + '&page=' + page + '&size=10',
+                options
+            )
+            expect(mockFetch).toHaveBeenCalledTimes(1)
+        } catch (e) {
+            expect(e).toBe('no response from henrikdev API')
+        }
+    })
+
+    test('should throw an error if the api call responds with an error', async (): Promise<void> => {
+        try {
+            mockFetch.mockResolvedValue({
+                json: jest.fn().mockResolvedValue({
+                    errors: 'some errors',
+                }),
+            })
+            let name = 'Hexennacht'
+            let tag = 'NA1'
+            let mode = 'unrated'
+            let page = 1
+            let response = await retrieveProfileData(name, tag, mode, page)
+            let options: RequestInit = {
+                method: 'GET',
+                headers: {
+                    Authorization: API_KEY,
+                },
+            }
+            expect(mockFetch).toHaveBeenCalledWith(
+                PROFILE_URL_ROOT + '/' + name + '/' + tag + '?mode=' + mode + '&page=' + page + '&size=10',
+                options
+            )
+            expect(mockFetch).toHaveBeenCalledWith(
+                `https://api.henrikdev.xyz/valorant/v2/account/${name}/${tag}`,
+                options
+            )
+            expect(mockFetch).toHaveBeenCalledTimes(2)
+        } catch (e) {
+            expect(e).toBe('some errors')
+        }
+    })
+})
+
+describe('testing retrieveMatchData()', (): void => {
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
+
+    test('should return data with correct fields if successful', async (): Promise<void> => {
+        mockFetch.mockResolvedValue({
+            json: jest.fn().mockResolvedValue({
+                data: mockMatchApiResponses[0],
+            }),
+        })
+        let match_id = 'b5435599-43af-48dd-b0ba-032260200f25'
+        let response = await retrieveMatchData(match_id)
+        let options: RequestInit = {
+            method: 'GET',
+            headers: {
+                Authorization: API_KEY,
+            },
+        }
+
+        expect(mockFetch).toHaveBeenCalledWith(MATCH_URL_ROOT + '/' + match_id, options)
+        expect(mockFetch).toHaveBeenCalledTimes(1)
+        expect(Object.keys(response[0])).toStrictEqual([
+            'playerData',
+            'match_id',
+            'map',
+            'mode',
+            'rounds_blue_won',
+            'rounds_red_won',
+            'won',
+            'numRounds',
+            'date',
+        ])
+    })
+
+    test('should return data with correct fields if successful', async (): Promise<void> => {
+        mockFetch.mockResolvedValue({
+            json: jest.fn().mockResolvedValue({
+                data: mockMatchApiResponses[1],
+            }),
+        })
+        let match_id = 'b5435599-43af-48dd-b0ba-032260200f25'
+        let response = await retrieveMatchData(match_id)
+        let options: RequestInit = {
+            method: 'GET',
+            headers: {
+                Authorization: API_KEY,
+            },
+        }
+
+        expect(mockFetch).toHaveBeenCalledWith(MATCH_URL_ROOT + '/' + match_id, options)
+        expect(mockFetch).toHaveBeenCalledTimes(1)
+        expect(Object.keys(response[0])).toStrictEqual([
+            'playerData',
+            'match_id',
+            'map',
+            'mode',
+            'rounds_blue_won',
+            'rounds_red_won',
+            'won',
+            'numRounds',
+            'date',
+        ])
+    })
+
+    test('should throw an error if the api call responds with an error', async (): Promise<void> => {
+        try {
+            mockFetch.mockResolvedValue(undefined)
+            let match_id = 'b5435599-43af-48dd-b0ba-032260200f25'
+            let response = await retrieveMatchData(match_id)
+            let options: RequestInit = {
+                method: 'GET',
+                headers: {
+                    Authorization: API_KEY,
+                },
+            }
+
+            expect(mockFetch).toHaveBeenCalledWith(MATCH_URL_ROOT + '/' + match_id, options)
+            expect(mockFetch).toHaveBeenCalledTimes(1)
+        } catch (e) {
+            expect(e).toBe('no response from henrikdev API')
+        }
+    })
+
+    test('should throw an error if the api call responds with an error', async (): Promise<void> => {
+        try {
+            mockFetch.mockResolvedValue({
+                json: jest.fn().mockResolvedValue({
+                    errors: 'some errors',
+                }),
+            })
+            let match_id = 'b5435599-43af-48dd-b0ba-032260200f25'
+            let response = await retrieveMatchData(match_id)
+            let options: RequestInit = {
+                method: 'GET',
+                headers: {
+                    Authorization: API_KEY,
+                },
+            }
+
+            expect(mockFetch).toHaveBeenCalledWith(MATCH_URL_ROOT + '/' + match_id, options)
+            expect(mockFetch).toHaveBeenCalledTimes(1)
+        } catch (e) {
+            expect(e).toBe('some errors')
         }
     })
 })

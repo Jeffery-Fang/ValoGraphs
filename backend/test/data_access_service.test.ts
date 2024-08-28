@@ -1,6 +1,7 @@
 import { AppDataSource } from '../src/data-source'
-import { getMatchStatsFromMatchId, saveOneMatchStat, saveManyMatchStat } from '../src/services/data_access_service'
+import { getFromMatchId, saveOneMatchStat, saveManyMatchStat } from '../src/services/data_access_service'
 import { MatchStat } from '../src/entities/MatchStat'
+import { mockMatchStat } from './mockData'
 
 jest.mock('../src/data-source.js', () => ({
     AppDataSource: {
@@ -8,50 +9,21 @@ jest.mock('../src/data-source.js', () => ({
     },
 }))
 
-const testData = {
-    playerData: {
-        puuid: '8918b04d-9034-5838-b3ed-dd7ae3efe5e5',
-        name: 'Hexennacht',
-        tag: 'NA1',
-        stats: {
-            score: 3645,
-            kills: 14,
-            deaths: 12,
-            assists: 3,
-            headshots: 12,
-            bodyshots: 27,
-            legshots: 2,
-            damage: {
-                dealt: 2773,
-                received: 2378,
-            },
-        },
-        agent: {
-            name: 'Cypher',
-            id: '569fdd95-4d10-43ab-ca70-79becc718b46',
-        },
-        customization: {
-            card: '7cf06550-432c-8840-f9c7-a6b71ee8521a',
-        },
-        team_id: 'Blue',
-    },
-    match_id: 'a9a6fb43-3094-4568-9180-046116d39eab',
-    map: 'Pearl',
-    mode: 'Unrated',
-    won: true,
-    numRounds: 22,
-    date: new Date(),
-}
+describe('testing getFromMatchId()', (): void => {
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
 
-describe('testing getMatchStatsFromMatchId()', (): void => {
-    test('should call find with the input match_id', async (): Promise<void> => {
+    test('should call getRepository() and find() with the MatchStat and match_id respectively', async (): Promise<void> => {
         const mockRepository = {
             find: jest.fn(),
         }
         ;(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepository)
         const match_id: string = 'a9a6fb43-3094-4568-9180-046116d39eab'
-        const response: MatchStat[] = await getMatchStatsFromMatchId(match_id)
+        const response: MatchStat[] = await getFromMatchId(match_id)
 
+        expect(AppDataSource.getRepository).toHaveBeenCalledWith(MatchStat)
+        expect(AppDataSource.getRepository).toHaveBeenCalledTimes(1)
         expect(mockRepository.find).toHaveBeenCalledWith({
             relations: {
                 player: true,
@@ -60,31 +32,18 @@ describe('testing getMatchStatsFromMatchId()', (): void => {
                 match_id: match_id,
             },
         })
+        expect(mockRepository.find).toHaveBeenCalledTimes(1)
     })
 
-    test('should throw an error if no players are found', async (): Promise<void> => {
+    test('should throw an error if there is an error getting the repository', async (): Promise<void> => {
         try {
-            const mockRepository = {
-                find: jest.fn().mockResolvedValue(null),
-            }
-            ;(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepository)
+            ;(AppDataSource.getRepository as jest.Mock).mockImplementation(() => {
+                throw 'error finding repository'
+            })
             const match_id: string = 'a9a6fb43-3094-4568-9180-046116d39eab'
-            const response: MatchStat[] = await getMatchStatsFromMatchId(match_id)
+            const response: MatchStat[] = await getFromMatchId(match_id)
         } catch (e) {
-            expect(e).toBe('found no players associated with provided match_id')
-        }
-    })
-
-    test('should throw an error if no players are found', async (): Promise<void> => {
-        try {
-            const mockRepository = {
-                find: jest.fn().mockResolvedValue(null),
-            }
-            ;(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepository)
-            const match_id: string = 'a9a6fb43-3094-4568-9180-046116d39eab'
-            const response: MatchStat[] = await getMatchStatsFromMatchId(match_id)
-        } catch (e) {
-            expect(e).toBe('found no players associated with provided match_id')
+            expect(e).toBe('error finding repository')
         }
     })
 
@@ -97,7 +56,7 @@ describe('testing getMatchStatsFromMatchId()', (): void => {
             }
             ;(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepository)
             const match_id: string = 'a9a6fb43-3094-4568-9180-046116d39eab'
-            const response: MatchStat[] = await getMatchStatsFromMatchId(match_id)
+            const response: MatchStat[] = await getFromMatchId(match_id)
         } catch (e) {
             expect(e).toBe('database error')
         }
@@ -105,15 +64,35 @@ describe('testing getMatchStatsFromMatchId()', (): void => {
 })
 
 describe('testing saveOneMatchStat()', (): void => {
-    test('should have been called with the matchstat inputted if successful', async (): Promise<void> => {
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
+
+    test('should call getRepository() and save() with the MatchStat and mockMatchStat respectively', async (): Promise<void> => {
         const mockRepository = {
             save: jest.fn(),
         }
         ;(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepository)
-        const response = await saveOneMatchStat({} as MatchStat)
+        const response = await saveOneMatchStat(mockMatchStat)
 
-        expect(mockRepository.save).toHaveBeenCalledWith({})
+        expect(AppDataSource.getRepository).toHaveBeenCalledWith(MatchStat)
+        expect(AppDataSource.getRepository).toHaveBeenCalledTimes(1)
+        expect(mockRepository.save).toHaveBeenCalledWith(mockMatchStat)
         expect(mockRepository.save).toHaveBeenCalledTimes(1)
+    })
+
+    test('should throw an error if there is an error getting the repository', async (): Promise<void> => {
+        try {
+            ;(AppDataSource.getRepository as jest.Mock).mockImplementation(() => {
+                throw 'error finding repository'
+            })
+            const response = await saveOneMatchStat(mockMatchStat)
+
+            expect(AppDataSource.getRepository).toHaveBeenCalledWith(MatchStat)
+            expect(AppDataSource.getRepository).toHaveBeenCalledTimes(1)
+        } catch (e) {
+            expect(e).toBe('error saving one matchstat')
+        }
     })
 
     test('should throw error if there is a database error', async (): Promise<void> => {
@@ -124,7 +103,12 @@ describe('testing saveOneMatchStat()', (): void => {
                 }),
             }
             ;(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepository)
-            const response = await saveOneMatchStat({} as MatchStat)
+            const response = await saveOneMatchStat(mockMatchStat)
+
+            expect(AppDataSource.getRepository).toHaveBeenCalledWith(MatchStat)
+            expect(AppDataSource.getRepository).toHaveBeenCalledTimes(1)
+            expect(mockRepository.save).toHaveBeenCalledWith(mockMatchStat)
+            expect(mockRepository.save).toHaveBeenCalledTimes(1)
         } catch (e) {
             expect(e).toBe('error saving one matchstat')
         }
@@ -132,15 +116,35 @@ describe('testing saveOneMatchStat()', (): void => {
 })
 
 describe('testing saveManyMatchStat()', (): void => {
-    test('should have been called with the matchstats inputted if successful', async (): Promise<void> => {
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
+
+    test('should call getRepository() and save() with the MatchStat and [mockMatchStat, mockMatchStat] respectively', async (): Promise<void> => {
         const mockRepository = {
             save: jest.fn(),
         }
         ;(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepository)
-        const response = await saveManyMatchStat([{} as MatchStat, {} as MatchStat])
+        const response = await saveManyMatchStat([mockMatchStat, mockMatchStat])
 
-        expect(mockRepository.save).toHaveBeenCalledWith([{}, {}])
+        expect(AppDataSource.getRepository).toHaveBeenCalledWith(MatchStat)
+        expect(AppDataSource.getRepository).toHaveBeenCalledTimes(1)
+        expect(mockRepository.save).toHaveBeenCalledWith([mockMatchStat, mockMatchStat])
         expect(mockRepository.save).toHaveBeenCalledTimes(1)
+    })
+
+    test('should throw an error if there is an error getting the repository', async (): Promise<void> => {
+        try {
+            ;(AppDataSource.getRepository as jest.Mock).mockImplementation(() => {
+                throw 'error finding repository'
+            })
+            const response = await saveManyMatchStat([mockMatchStat, mockMatchStat])
+
+            expect(AppDataSource.getRepository).toHaveBeenCalledWith(MatchStat)
+            expect(AppDataSource.getRepository).toHaveBeenCalledTimes(1)
+        } catch (e) {
+            expect(e).toBe('error saving many matchstats')
+        }
     })
 
     test('should throw error if there is a database error', async (): Promise<void> => {
@@ -151,7 +155,12 @@ describe('testing saveManyMatchStat()', (): void => {
                 }),
             }
             ;(AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepository)
-            const response = await saveManyMatchStat([{} as MatchStat, {} as MatchStat])
+            const response = await saveManyMatchStat([mockMatchStat, mockMatchStat])
+
+            expect(AppDataSource.getRepository).toHaveBeenCalledWith(MatchStat)
+            expect(AppDataSource.getRepository).toHaveBeenCalledTimes(1)
+            expect(mockRepository.save).toHaveBeenCalledWith([mockMatchStat, mockMatchStat])
+            expect(mockRepository.save).toHaveBeenCalledTimes(1)
         } catch (e) {
             expect(e).toBe('error saving many matchstats')
         }

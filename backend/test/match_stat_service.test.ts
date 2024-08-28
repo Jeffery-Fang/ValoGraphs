@@ -1,60 +1,25 @@
 import { createManyMatchStat, createOneMatchStat } from '../src/services/match_stat_service'
 import { MatchStat } from '../src/entities/MatchStat'
-
-const testData = {
-    playerData: {
-        puuid: '8918b04d-9034-5838-b3ed-dd7ae3efe5e5',
-        name: 'Hexennacht',
-        tag: 'NA1',
-        stats: {
-            score: 3645,
-            kills: 14,
-            deaths: 12,
-            assists: 3,
-            headshots: 12,
-            bodyshots: 27,
-            legshots: 2,
-            damage: {
-                dealt: 2773,
-                received: 2378,
-            },
-        },
-        agent: {
-            name: 'Cypher',
-            id: '569fdd95-4d10-43ab-ca70-79becc718b46',
-        },
-        customization: {
-            card: '7cf06550-432c-8840-f9c7-a6b71ee8521a',
-        },
-        team_id: 'Blue',
-    },
-    match_id: 'a9a6fb43-3094-4568-9180-046116d39eab',
-    map: 'Pearl',
-    mode: 'Unrated',
-    rounds_blue_won: 13,
-    rounds_red_won: 9,
-    won: true,
-    numRounds: 22,
-    date: new Date(),
-}
+import { mockPackagedData } from './mockData'
 
 describe('testing createOneMatchStat()', (): void => {
     test('should return a MatchStat object with specified values if successful', (): void => {
         const response: MatchStat = createOneMatchStat(
-            testData.playerData,
-            testData.match_id,
-            testData.map,
-            testData.mode,
-            testData.rounds_blue_won,
-            testData.rounds_red_won,
-            testData.won,
-            testData.numRounds,
-            testData.date
+            mockPackagedData.playerData,
+            mockPackagedData.match_id,
+            mockPackagedData.map,
+            mockPackagedData.mode,
+            mockPackagedData.rounds_blue_won,
+            mockPackagedData.rounds_red_won,
+            mockPackagedData.won,
+            mockPackagedData.numRounds,
+            mockPackagedData.date
         )
 
-        expect(response.player.id).toBe(testData.playerData.puuid)
-        expect(response.match_id).toBe(testData.match_id)
-        expect(response.map).toBe(testData.map)
+        expect(response.player.id).toBe(mockPackagedData.playerData.puuid)
+        expect(response.match_id).toBe(mockPackagedData.match_id)
+        expect(response.map).toBe(mockPackagedData.map)
+        expect(response.mode).toBe(mockPackagedData.mode)
         expect(response).toBeInstanceOf(MatchStat)
     })
 
@@ -62,14 +27,14 @@ describe('testing createOneMatchStat()', (): void => {
         expect(() => {
             createOneMatchStat(
                 undefined,
-                testData.match_id,
-                testData.map,
-                testData.mode,
-                testData.rounds_blue_won,
-                testData.rounds_red_won,
-                testData.won,
-                testData.numRounds,
-                testData.date
+                mockPackagedData.match_id,
+                mockPackagedData.map,
+                mockPackagedData.mode,
+                mockPackagedData.rounds_blue_won,
+                mockPackagedData.rounds_red_won,
+                mockPackagedData.won,
+                mockPackagedData.numRounds,
+                mockPackagedData.date
             )
         }).toThrow('error creating a matchstat')
     })
@@ -77,7 +42,7 @@ describe('testing createOneMatchStat()', (): void => {
 
 describe('testing createManyMatchStat()', (): void => {
     test('should return an array of MatchStat objects with specified values if successful', (): void => {
-        const testArray = [testData, testData]
+        const testArray = [mockPackagedData, mockPackagedData]
         const response: MatchStat[] = createManyMatchStat(testArray)
 
         for (let i: number = 0; i < testArray.length; i++) {
@@ -89,7 +54,7 @@ describe('testing createManyMatchStat()', (): void => {
     })
 
     test('should throw an error with invalid input', (): void => {
-        const testArray = [testData, testData, {}]
+        const testArray = [mockPackagedData, mockPackagedData, {}]
 
         expect(() => {
             createManyMatchStat(testArray)
