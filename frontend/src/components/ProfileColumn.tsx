@@ -32,7 +32,7 @@ export default function ProfileColumn({ nameAndTag, imageMap, averageStats, matc
     return (
         <>
             <Stack
-                className="text-center border border-secondary border-2 d-block"
+                className="text-center border-top border-start border-end border-secondary border-2 d-block"
                 style={{
                     width: '20%',
                     minWidth: '200px',
@@ -94,7 +94,7 @@ export default function ProfileColumn({ nameAndTag, imageMap, averageStats, matc
                     >
                         Recent Games Played
                     </div>
-                    <Container fluid className="p-0">
+                    <Container fluid className="p-0 border-bottom border-secondary border-2">
                         <ResponsiveContainer minHeight={200}>
                             <BarChart data={matchDates} margin={{ top: 10, right: 30, left: 0 }}>
                                 <Bar type="monotone" dataKey="games played" stroke="#FF0000"></Bar>

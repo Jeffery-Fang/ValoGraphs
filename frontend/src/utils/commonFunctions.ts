@@ -40,6 +40,19 @@ export async function retrievePlayerData(nameAndTag: string, mode: string): Prom
     return response
 }
 
+export async function retrieveProfileData(nameAndTag: string, mode: string, page: number): Promise<any> {
+    let [name, tag]: string[] = nameAndTag.split('#')
+    let url: string =
+        import.meta.env.VITE_PROFILE_API_URL + name + '?tag=' + tag + '&mode=' + mode.replace(' ', '') + '&page=' + page
+    let response: any = await fetch(url, { method: 'GET' })
+
+    if (response.status !== 200) {
+        alert('Error retrieving ' + name + "'s " + mode + ' data')
+    }
+
+    return response
+}
+
 /**
  * Makes an API call based on the input match_id
  *

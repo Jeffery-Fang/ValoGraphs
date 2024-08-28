@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { retrieveProfileData } from '../services/val_api_service'
+import { retrieveProfileData } from '../services/val_api_service.js'
 import { createManyMatchStat } from '../services/match_stat_service.js'
 import { MatchStat } from '../entities/MatchStat.js'
 

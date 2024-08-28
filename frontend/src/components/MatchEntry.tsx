@@ -18,6 +18,7 @@ import { calculateDateDiff } from '../utils/commonFunctions'
  * rounds_red_won - The number of rounds the red team won
  * side - The team the player was on
  * match_id - The id of this match
+ * handleShowMatchDetails - Toggles visibilitiy of matchDetails
  */
 interface MatchEntryProps {
     agentLink: string

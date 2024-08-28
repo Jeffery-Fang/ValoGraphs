@@ -10,7 +10,7 @@ const gameModes: string[] = ['unrated', 'competitive', 'team deathmatch']
 function App() {
     /**
      * currentMode - The current mode being displayed, when match data is retrieved it will for matches of this type
-     * playerMap - A dictionary mapping a player name to an array of match data
+     * playerMap - A dictionary mapping a player name to an array of their match data
      */
     const [currentMode, updateCurrentMode] = useState('competitive')
     const [playerMap, updatePlayerMap] = useState<{ [playerName: string]: any }>({})
@@ -58,6 +58,8 @@ function App() {
                 if (response.status === 200) {
                     let data = await response.json()
                     newPlayerMap[player].data = data
+                } else {
+                    newPlayerMap[player].data = []
                 }
             }
 

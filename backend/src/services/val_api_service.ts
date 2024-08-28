@@ -16,7 +16,7 @@ const API_KEY: string = <string>process.env.API_KEY
  */
 export async function retrievePlayerData(name: string, tag: string, mode: string, size: number): Promise<any> {
     try {
-        let url: string = (PLAYER_URL_ROOT + '/' + name + '/' + tag + '?mode=' + mode + '&size=' + size) as string
+        let url: string = (PLAYER_URL_ROOT + name + '/' + tag + '?mode=' + mode + '&size=' + size) as string
         let options: RequestInit = {
             method: 'GET',
             headers: {
@@ -105,7 +105,6 @@ export async function retrievePlayerData(name: string, tag: string, mode: string
 export async function retrieveProfileData(name: string, tag: string, mode: string, page: number) {
     try {
         let url: string = (PROFILE_URL_ROOT +
-            '/' +
             name +
             '/' +
             tag +
@@ -193,7 +192,7 @@ export async function retrieveProfileData(name: string, tag: string, mode: strin
  */
 export async function retrieveMatchData(match_id: string): Promise<any> {
     try {
-        let url: string = (MATCH_URL_ROOT + '/' + match_id) as string
+        let url: string = (MATCH_URL_ROOT + match_id) as string
         let options: RequestInit = {
             method: 'GET',
             headers: {

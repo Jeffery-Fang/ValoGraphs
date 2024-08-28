@@ -1,5 +1,5 @@
-import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 import Header from '../../components/Header'
 import ProfileColumn from '../../components/ProfileColumn'
@@ -11,6 +11,7 @@ import {
     retrieveMatchData,
     calculateAverageStats,
     countMatchsPerDay,
+    retrieveProfileData,
 } from '../../utils/commonFunctions'
 
 const gameModes: string[] = ['unrated', 'competitive', 'team deathmatch']
@@ -32,6 +33,7 @@ function App() {
     const [imageMap, updateimageMap] = useState<{ [id: string]: string }>({})
     const [matchDetails, updateMatchDetails] = useState<{ [playerName: string]: any }[]>([])
     const [showMatchDetails, updateShowMatchDetails] = useState(false)
+    const [page, updatePage] = useState(1)
 
     useEffect((): void => {
         init()
@@ -42,7 +44,7 @@ function App() {
      */
     async function init(): Promise<void> {
         if (name && tag) {
-            let response: any = await (await retrievePlayerData(name + '#' + tag, currentMode)).json()
+            let response: any = await (await retrieveProfileData(name + '#' + tag, currentMode, page)).json()
             let newimageMap: { [id: string]: string } = { ...imageMap }
 
             if (!Object.keys(newimageMap).includes('card')) {
@@ -67,6 +69,7 @@ function App() {
                 }
             }
 
+            updatePage(page + 1)
             updateimageMap(newimageMap)
             updateData(response)
         } else {
@@ -144,6 +147,63 @@ function App() {
         }
     }
 
+    async function handleLoadMatches(): Promise<void> {
+        let response: any = await (await retrieveProfileData(name + '#' + tag, currentMode, page)).json()
+        let newimageMap: { [id: string]: string } = { ...imageMap }
+        let newData = [...data]
+
+        for (let element of response) {
+            if (!Object.keys(imageMap).includes(element.agent)) {
+                let assetData: any = await (
+                    await fetch('https://valorant-api.com/v1/agents/' + element.agent_id, { method: 'GET' })
+                ).json()
+
+                newimageMap[element.agent] = assetData['data']['displayIcon']
+            }
+        }
+
+        newData.push(...response)
+        updatePage(page + 1)
+        updateimageMap(newimageMap)
+        updateData(newData)
+    }
+
+    async function handleUpdateProfile() {
+        if (name && tag) {
+            await (await retrievePlayerData(name + '#' + tag, currentMode)).json()
+            let response: any = await (await retrieveProfileData(name + '#' + tag, currentMode, 1)).json()
+            let newimageMap: { [id: string]: string } = { ...imageMap }
+
+            if (!Object.keys(newimageMap).includes('card')) {
+                let assetData: any = await (
+                    await fetch(
+                        'https://valorant-api.com/v1/playercards/' +
+                            (response.length > 0 ? response[response.length - 1].card_id : response[0].card_id),
+                        { method: 'GET' }
+                    )
+                ).json()
+
+                newimageMap['card'] = assetData['data']['wideArt']
+            }
+
+            for (let element of response) {
+                if (!Object.keys(imageMap).includes(element.agent)) {
+                    let assetData: any = await (
+                        await fetch('https://valorant-api.com/v1/agents/' + element.agent_id, { method: 'GET' })
+                    ).json()
+
+                    newimageMap[element.agent] = assetData['data']['displayIcon']
+                }
+            }
+
+            updatePage(page + 1)
+            updateimageMap(newimageMap)
+            updateData(response)
+        } else {
+            alert('Invalid name and tag')
+        }
+    }
+
     /**
      * Sorts the player entries in the match details page by some parameter
      *
@@ -167,7 +227,7 @@ function App() {
                 newMatchDetails.sort((a, b): number => b['hs'] - a['hs'])
                 break
             case 'dd':
-                newMatchDetails.sort((a, b): number => b['dd'] - a['d'])
+                newMatchDetails.sort((a, b): number => b['dd'] - a['dd'])
                 break
             case 'adr':
                 newMatchDetails.sort((a, b): number => b['adr'] - a['adr'])
@@ -176,7 +236,6 @@ function App() {
                 newMatchDetails.sort((a, b): number => b['acs'] - a['acs'])
                 break
         }
-        newMatchDetails.sort((a, b): number => b[stat] - a[stat])
 
         updateMatchDetails(newMatchDetails)
     }
@@ -209,6 +268,8 @@ function App() {
                             handleFilter={handleFilter}
                             filter={filter}
                             handleShowMatchDetails={handleShowMatchDetails}
+                            handleLoadMatches={handleLoadMatches}
+                            handleUpdateProfile={handleUpdateProfile}
                         ></MatchHistory>
                         <MatchDetails
                             matchDetails={matchDetails}

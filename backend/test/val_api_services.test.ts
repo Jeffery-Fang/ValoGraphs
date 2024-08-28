@@ -26,15 +26,12 @@ describe('testing retrievePlayerData()', (): void => {
         let size = 10
         let response = await retrievePlayerData(name, tag, mode, size)
 
-        expect(mockFetch).toHaveBeenCalledWith(
-            PLAYER_URL_ROOT + '/' + name + '/' + tag + '?mode=' + mode + '&size=' + size,
-            {
-                method: 'GET',
-                headers: {
-                    Authorization: API_KEY,
-                },
-            }
-        )
+        expect(mockFetch).toHaveBeenCalledWith(PLAYER_URL_ROOT + name + '/' + tag + '?mode=' + mode + '&size=' + size, {
+            method: 'GET',
+            headers: {
+                Authorization: API_KEY,
+            },
+        })
         expect(mockFetch).toHaveBeenCalledTimes(1)
         expect(Object.keys(response)).toContain('searched_player_id')
         expect(Object.keys(response)).toContain('match_data')
@@ -50,7 +47,7 @@ describe('testing retrievePlayerData()', (): void => {
             let response = await retrievePlayerData(name, tag, mode, size)
 
             expect(mockFetch).toHaveBeenCalledWith(
-                PLAYER_URL_ROOT + '/' + name + '/' + tag + '?mode=' + mode + '&size=' + size,
+                PLAYER_URL_ROOT + name + '/' + tag + '?mode=' + mode + '&size=' + size,
                 {
                     method: 'GET',
                     headers: {
@@ -78,7 +75,7 @@ describe('testing retrievePlayerData()', (): void => {
             let response = await retrievePlayerData(name, tag, mode, size)
 
             expect(mockFetch).toHaveBeenCalledWith(
-                PLAYER_URL_ROOT + '/' + name + '/' + tag + '?mode=' + mode + '&size=' + size,
+                PLAYER_URL_ROOT + name + '/' + tag + '?mode=' + mode + '&size=' + size,
                 {
                     method: 'GET',
                     headers: {
@@ -106,7 +103,7 @@ describe('testing retrievePlayerData()', (): void => {
             let response = await retrievePlayerData(name, tag, mode, size)
 
             expect(mockFetch).toHaveBeenCalledWith(
-                PLAYER_URL_ROOT + '/' + name + '/' + tag + '?mode=' + mode + '&size=' + size,
+                PLAYER_URL_ROOT + name + '/' + tag + '?mode=' + mode + '&size=' + size,
                 {
                     method: 'GET',
                     headers: {
@@ -144,7 +141,7 @@ describe('testing retrieveProfileData()', (): void => {
             },
         }
         expect(mockFetch).toHaveBeenCalledWith(
-            PROFILE_URL_ROOT + '/' + name + '/' + tag + '?mode=' + mode + '&page=' + page + '&size=10',
+            PROFILE_URL_ROOT + name + '/' + tag + '?mode=' + mode + '&page=' + page + '&size=10',
             options
         )
         expect(mockFetch).toHaveBeenCalledWith(`https://api.henrikdev.xyz/valorant/v2/account/${name}/${tag}`, options)
@@ -177,7 +174,7 @@ describe('testing retrieveProfileData()', (): void => {
                 },
             }
             expect(mockFetch).toHaveBeenCalledWith(
-                PROFILE_URL_ROOT + '/' + name + '/' + tag + '?mode=' + mode + '&page=' + page + '&size=10',
+                PROFILE_URL_ROOT + name + '/' + tag + '?mode=' + mode + '&page=' + page + '&size=10',
                 options
             )
             expect(mockFetch).toHaveBeenCalledTimes(1)
@@ -205,7 +202,7 @@ describe('testing retrieveProfileData()', (): void => {
                 },
             }
             expect(mockFetch).toHaveBeenCalledWith(
-                PROFILE_URL_ROOT + '/' + name + '/' + tag + '?mode=' + mode + '&page=' + page + '&size=10',
+                PROFILE_URL_ROOT + name + '/' + tag + '?mode=' + mode + '&page=' + page + '&size=10',
                 options
             )
             expect(mockFetch).toHaveBeenCalledWith(
@@ -239,7 +236,7 @@ describe('testing retrieveMatchData()', (): void => {
             },
         }
 
-        expect(mockFetch).toHaveBeenCalledWith(MATCH_URL_ROOT + '/' + match_id, options)
+        expect(mockFetch).toHaveBeenCalledWith(MATCH_URL_ROOT + match_id, options)
         expect(mockFetch).toHaveBeenCalledTimes(1)
         expect(Object.keys(response[0])).toStrictEqual([
             'playerData',
@@ -269,7 +266,7 @@ describe('testing retrieveMatchData()', (): void => {
             },
         }
 
-        expect(mockFetch).toHaveBeenCalledWith(MATCH_URL_ROOT + '/' + match_id, options)
+        expect(mockFetch).toHaveBeenCalledWith(MATCH_URL_ROOT + match_id, options)
         expect(mockFetch).toHaveBeenCalledTimes(1)
         expect(Object.keys(response[0])).toStrictEqual([
             'playerData',
@@ -296,7 +293,7 @@ describe('testing retrieveMatchData()', (): void => {
                 },
             }
 
-            expect(mockFetch).toHaveBeenCalledWith(MATCH_URL_ROOT + '/' + match_id, options)
+            expect(mockFetch).toHaveBeenCalledWith(MATCH_URL_ROOT + match_id, options)
             expect(mockFetch).toHaveBeenCalledTimes(1)
         } catch (e) {
             expect(e).toBe('no response from henrikdev API')
@@ -319,7 +316,7 @@ describe('testing retrieveMatchData()', (): void => {
                 },
             }
 
-            expect(mockFetch).toHaveBeenCalledWith(MATCH_URL_ROOT + '/' + match_id, options)
+            expect(mockFetch).toHaveBeenCalledWith(MATCH_URL_ROOT + match_id, options)
             expect(mockFetch).toHaveBeenCalledTimes(1)
         } catch (e) {
             expect(e).toBe('some errors')
