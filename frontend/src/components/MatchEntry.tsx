@@ -86,14 +86,14 @@ export default function MatchEntry({
                     onClick={handleShowMatchDetails}
                     id={match_id}
                 >
-                    <Stack direction="horizontal" className="flex-fill" style={{ maxWidth: '40%' }}>
+                    <Stack direction="horizontal" className="flex-fill">
                         <Image rounded src={agentLink} height={60} className="p-2"></Image>
                         <Stack className="my-auto" gap={1}>
                             <div>{mode}</div>
                             <div>{map}</div>
                         </Stack>
                     </Stack>
-                    <Stack className="flex-fill" style={{ maxWidth: '60%' }}>
+                    <Stack className="flex-fill" style={{ minWidth: '100px', maxWidth: '100px' }}>
                         <div className="my-auto mx-auto">
                             {side === 'Blue'
                                 ? rounds_blue_won + ' : ' + rounds_red_won

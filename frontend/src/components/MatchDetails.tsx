@@ -33,6 +33,16 @@ export default function MatchDetails({
 
     return (
         <>
+            <style>
+                {`
+                @media only screen and (max-width: 1000px) {
+                    .disappear {
+                        visibility: hidden;
+                    }
+                }
+                `}
+            </style>
+
             <Offcanvas
                 className="vh-100 vw-100"
                 placement="bottom"
@@ -73,7 +83,7 @@ export default function MatchDetails({
                                 sortMatchDetails('name')
                             }}
                         >
-                            <div className="px-2" style={{ marginLeft: 60 }}>
+                            <div className="px-2 disappear" style={{ marginLeft: 60 }}>
                                 Name
                             </div>
                         </Stack>
@@ -104,7 +114,7 @@ export default function MatchDetails({
                                     sortMatchDetails('dd')
                                 }}
                             >
-                                DDΔ
+                                DD Δ
                             </div>
                             <div
                                 style={{ minWidth: '19%', cursor: 'pointer' }}
@@ -129,14 +139,14 @@ export default function MatchDetails({
                             return (
                                 <Stack
                                     direction="horizontal"
-                                    className="border-top border-secondary border-2 d-flex flex-wrap w-100"
+                                    className="border-top border-secondary border-2 d-flex flex-wrap"
                                     style={{
                                         fontFamily: 'Courier New, monospace',
                                         color: 'white',
                                         fontSize: '13px',
                                         cursor: 'pointer',
                                     }}
-                                    key={player.player_id + player.match_id}
+                                    key={player.player.id + player.match_id}
                                     onClick={() => {
                                         window.open(`/profile/${player.player.name}/${player.player.tag}`, '_blank')
                                     }}
@@ -152,16 +162,14 @@ export default function MatchDetails({
                                             <div className="vr p-1 text-bg-danger"></div>
                                         )}
                                         <Image rounded src={imageMap[player.agent]} height={60} className="p-1"></Image>
-                                        <Stack className="h-100 my-auto">
-                                            <div className="w-100">{player.player.name}</div>
-                                        </Stack>
+                                        <div style={{ minWidth: '100px', maxWidth: '100px' }}>{player.player.name}</div>
                                     </Stack>
                                     <Stack
                                         direction="horizontal"
                                         className="my-auto text-center flex-fill"
                                         style={{ minWidth: '90%' }}
                                     >
-                                        <div style={{ minWidth: '24%' }}>
+                                        <div className="text-nowrap" style={{ minWidth: '24%' }}>
                                             {player.kills + ' / ' + player.deaths + ' / ' + player.assists}
                                         </div>
                                         <div style={{ minWidth: '19%' }}>{player.hs}</div>
