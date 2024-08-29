@@ -1,10 +1,9 @@
-<!-- PROJECT LOGO -->
+
 <br />
 <div align="center">
   <a href="https://Valographs.com">
-    <svg stroke="black" fill="#FF4655" stroke-width="0" role="img" viewBox="0 0 24 24" class="text-danger" height="45" width="45" xmlns="http://www.w3.org/2000/svg"><path d="M23.792 2.152a.252.252 0 0 0-.098.083c-3.384 4.23-6.769 8.46-10.15 12.69-.107.093-.025.288.119.265 2.439.003 4.877 0 7.316.001a.66.66 0 0 0 .552-.25c.774-.967 1.55-1.934 2.324-2.903a.72.72 0 0 0 .144-.49c-.002-3.077 0-6.153-.003-9.23.016-.11-.1-.206-.204-.167zM.077 2.166c-.077.038-.074.132-.076.205.002 3.074.001 6.15.001 9.225a.679.679 0 0 0 .158.463l7.64 9.55c.12.152.308.25.505.247 2.455 0 4.91.003 7.365 0 .142.02.222-.174.116-.265C10.661 15.176 5.526 8.766.4 2.35c-.08-.094-.174-.272-.322-.184z"></path></svg>
+    <img src='https://github.com/user-attachments/assets/b219ac30-3fce-459c-9fdc-8e027debbdc7' height='40' width='40'>
   </a>
-
   <h3 align="center">ValoGraphs</h3>
   <p align="center">
     A performance visualization platform for Valorant
@@ -73,3 +72,32 @@ Now once the prerequisites are met there just follow the steps below.
 6. In the console where frontend development server was started type 'o' and 'enter' to open a tab with the client
 
 ### Gallery & Demonstrations
+
+<img src='https://github.com/user-attachments/assets/0d4b8df1-3d22-4faf-8516-d2e4284f76e3'></img>
+*Graph Page Desktop View*
+
+<img src='https://github.com/user-attachments/assets/4d339898-73a0-4026-b044-00bc1855cf7d'></img>
+*Profile Page Desktop View*
+
+<img src='https://github.com/user-attachments/assets/b4a1b7d9-64a2-4962-9be2-20b468258704' width="auto" height="500"></img>
+
+*Graph Page Mobile View*
+
+<img src='https://github.com/user-attachments/assets/16cd4288-43cf-4cf3-84da-17ed92f7fb0d' width="auto" height="500"></img>
+
+*Profile Page Mobile View*
+
+## Contact
+
+Jeffery Fang - JefferyFang02@gmail.com
+
+## Tools & Technologies
+
+- Postgres
+- Express
+- React
+- Node
+- Jest
+- Vite
+- Bootstrap
+- AWS(Elastic Beanstalk, RDS, CloudFront, etc.)
