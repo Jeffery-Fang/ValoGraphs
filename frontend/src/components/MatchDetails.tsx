@@ -5,14 +5,15 @@ import { Offcanvas, Stack, Image } from 'react-bootstrap'
  * imageMap - A dictionary that maps asset names to their links
  * sortMatchDetails - A generic function that sorts the players by a particular stat
  * showMatchDetails - A variable that determines the visiblity of this component
- * updateShowMatchDetails - A variable that toggles the visibility of this component
+ * setShowMatchDetails - A variable that toggles the visibility of this component
  */
 interface MatchDetailsProps {
     matchDetails: { [playerName: string]: any }[]
     imageMap: { [id: string]: string }
     sortMatchDetails: (stat: string) => void
     showMatchDetails: boolean
-    updateShowMatchDetails: (show: boolean) => void
+    setShowMatchDetails: (show: boolean) => void
+    region: string
 }
 
 export default function MatchDetails({
@@ -20,7 +21,8 @@ export default function MatchDetails({
     imageMap,
     sortMatchDetails,
     showMatchDetails,
-    updateShowMatchDetails,
+    setShowMatchDetails,
+    region,
 }: MatchDetailsProps) {
     let map: string =
         matchDetails.length > 0 && Object.keys(matchDetails[0]).includes('map')
@@ -48,7 +50,7 @@ export default function MatchDetails({
                 placement="bottom"
                 show={showMatchDetails}
                 onHide={() => {
-                    updateShowMatchDetails(false)
+                    setShowMatchDetails(false)
                 }}
                 data-bs-theme="dark"
                 backdrop={false}
@@ -148,7 +150,10 @@ export default function MatchDetails({
                                     }}
                                     key={player.player.id + player.match_id}
                                     onClick={() => {
-                                        window.open(`/profile/${player.player.name}/${player.player.tag}`, '_blank')
+                                        window.open(
+                                            `/profile/${region}/${player.player.name}/${player.player.tag}`,
+                                            '_blank'
+                                        )
                                     }}
                                 >
                                     <Stack

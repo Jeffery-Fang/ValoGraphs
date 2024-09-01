@@ -26,14 +26,14 @@ function App() {
      *  matchDetails - An array of objects representing player performance for a particular match
      *  showMatchDetails - A variable keeping track of the visibility of the match details offcanvas element
      */
-    const { name, tag } = useParams()
-    const [currentMode, updateCurrentMode] = useState('competitive')
-    const [data, updateData] = useState<{ [stat: string]: any }[]>([])
-    const [filter, updateFilter] = useState('')
-    const [imageMap, updateimageMap] = useState<{ [id: string]: string }>({})
-    const [matchDetails, updateMatchDetails] = useState<{ [playerName: string]: any }[]>([])
-    const [showMatchDetails, updateShowMatchDetails] = useState(false)
-    const [page, updatePage] = useState(1)
+    const { region, name, tag } = useParams()
+    const [currentMode, setCurrentMode] = useState('competitive')
+    const [data, setData] = useState<{ [stat: string]: any }[]>([])
+    const [filter, setFilter] = useState('')
+    const [imageMap, setImageMap] = useState<{ [id: string]: string }>({})
+    const [matchDetails, setMatchDetails] = useState<{ [playerName: string]: any }[]>([])
+    const [showMatchDetails, setShowMatchDetails] = useState(false)
+    const [page, setPage] = useState(1)
 
     useEffect((): void => {
         init()
@@ -43,8 +43,10 @@ function App() {
      * Initializes the page by retrieving match data for the player and all required assets
      */
     async function init(): Promise<void> {
-        if (name && tag) {
-            let response: any = await (await retrieveProfileData(name + '#' + tag, currentMode, page)).json()
+        if (name && tag && region) {
+            let response: any = await (
+                await retrieveProfileData(name + '#' + tag, currentMode, page, region as string)
+            ).json()
             let newimageMap: { [id: string]: string } = { ...imageMap }
 
             if (!Object.keys(newimageMap).includes('card')) {
@@ -69,9 +71,9 @@ function App() {
                 }
             }
 
-            updatePage(page + 1)
-            updateimageMap(newimageMap)
-            updateData(response)
+            setPage(page + 1)
+            setImageMap(newimageMap)
+            setData(response)
         } else {
             alert('Invalid name and tag')
         }
@@ -84,7 +86,7 @@ function App() {
      */
     async function handleChangeMode(mode: string): Promise<void> {
         if (mode !== currentMode) {
-            let response: any = await (await retrievePlayerData(name + '#' + tag, mode)).json()
+            let response: any = await (await retrieveProfileData(name + '#' + tag, mode, 1, region as string)).json()
             let newimageMap: { [id: string]: string } = { ...imageMap }
 
             if (!Object.keys(newimageMap).includes('card')) {
@@ -105,9 +107,10 @@ function App() {
                 }
             }
 
-            updateimageMap(newimageMap)
-            updateData(response)
-            updateCurrentMode(mode)
+            setPage(2)
+            setImageMap(newimageMap)
+            setData(response)
+            setCurrentMode(mode)
         }
     }
 
@@ -117,7 +120,7 @@ function App() {
     function handleFilter(): void {
         let input: HTMLInputElement = document.getElementById('agentSearchInput') as HTMLInputElement
 
-        updateFilter(input.value.trim())
+        setFilter(input.value.trim())
     }
 
     /**
@@ -128,7 +131,7 @@ function App() {
      */
     async function handleShowMatchDetails(match_id: string): Promise<void> {
         if (match_id) {
-            let response: any = await (await retrieveMatchData(match_id)).json()
+            let response: any = await (await retrieveMatchData(match_id, region as string)).json()
             let newimageMap: { [id: string]: string } = { ...imageMap }
 
             for (let element of response) {
@@ -141,14 +144,16 @@ function App() {
                 }
             }
 
-            updateimageMap(newimageMap)
-            updateMatchDetails(response)
-            updateShowMatchDetails(true)
+            setImageMap(newimageMap)
+            setMatchDetails(response)
+            setShowMatchDetails(true)
         }
     }
 
     async function handleLoadMatches(): Promise<void> {
-        let response: any = await (await retrieveProfileData(name + '#' + tag, currentMode, page)).json()
+        let response: any = await (
+            await retrieveProfileData(name + '#' + tag, currentMode, page, region as string)
+        ).json()
         let newimageMap: { [id: string]: string } = { ...imageMap }
         let newData = [...data]
 
@@ -163,15 +168,17 @@ function App() {
         }
 
         newData.push(...response)
-        updatePage(page + 1)
-        updateimageMap(newimageMap)
-        updateData(newData)
+        setPage(page + 1)
+        setImageMap(newimageMap)
+        setData(newData)
     }
 
     async function handleUpdateProfile() {
         if (name && tag) {
-            await (await retrievePlayerData(name + '#' + tag, currentMode)).json()
-            let response: any = await (await retrieveProfileData(name + '#' + tag, currentMode, 1)).json()
+            await (await retrievePlayerData(name + '#' + tag, currentMode, region as string)).json()
+            let response: any = await (
+                await retrieveProfileData(name + '#' + tag, currentMode, 1, region as string)
+            ).json()
             let newimageMap: { [id: string]: string } = { ...imageMap }
 
             if (!Object.keys(newimageMap).includes('card')) {
@@ -196,9 +203,9 @@ function App() {
                 }
             }
 
-            updatePage(page + 1)
-            updateimageMap(newimageMap)
-            updateData(response)
+            setPage(2)
+            setImageMap(newimageMap)
+            setData(response)
         } else {
             alert('Invalid name and tag')
         }
@@ -237,7 +244,7 @@ function App() {
                 break
         }
 
-        updateMatchDetails(newMatchDetails)
+        setMatchDetails(newMatchDetails)
     }
 
     //A javascript object that maps text to handlers, to be used by the Header component
@@ -252,7 +259,15 @@ function App() {
     return (
         <>
             <Container fluid className="p-0 vh-100 bg-dark overflow-y-auto">
-                <Header handlerMap={handlerMap} gameModes={gameModes}></Header>
+                <Header
+                    handlerMap={handlerMap}
+                    gameModes={gameModes}
+                    regions={[]}
+                    currentRegion={(region as string).toUpperCase()}
+                    handleChangeRegion={(dummy: string) => {
+                        dummy
+                    }}
+                ></Header>
                 <Container fluid className="p-0 d-flex flex-wrap overflow-x-hidden">
                     <ProfileColumn
                         mode={currentMode}
@@ -276,7 +291,8 @@ function App() {
                             imageMap={imageMap}
                             sortMatchDetails={sortMatchDetails}
                             showMatchDetails={showMatchDetails}
-                            updateShowMatchDetails={updateShowMatchDetails}
+                            setShowMatchDetails={setShowMatchDetails}
+                            region={region as string}
                         ></MatchDetails>
                     </div>
                 </Container>

@@ -6,14 +6,17 @@ import GraphContainer from '../../components/GraphContainer'
 import { retrievePlayerData, handleProfileSearch } from '../../utils/commonFunctions'
 
 const gameModes: string[] = ['unrated', 'competitive', 'team deathmatch']
+const regions: string[] = ['NA', 'EU', 'LATAM', 'BR', 'AP', 'KR']
 
 function App() {
     /**
      * currentMode - The current mode being displayed, when match data is retrieved it will for matches of this type
+     * currentRegion - The region that any new player being added will be from
      * playerMap - A dictionary mapping a player name to an array of their match data
      */
-    const [currentMode, updateCurrentMode] = useState('competitive')
-    const [playerMap, updatePlayerMap] = useState<{ [playerName: string]: any }>({})
+    const [currentMode, setCurrentMode] = useState('competitive')
+    const [currentRegion, setCurrentRegion] = useState('NA')
+    const [playerMap, setPlayerMap] = useState<{ [playerName: string]: any }>({})
 
     /**
      * Retrieves match data for the new player if the input is valid
@@ -27,15 +30,15 @@ function App() {
             if (Object.keys(playerMap).includes(inputValue)) {
                 alert('Player is already graphed')
             } else {
-                let response: any = await retrievePlayerData(inputValue, currentMode)
+                let response: any = await retrievePlayerData(inputValue, currentMode, currentRegion)
 
                 if (response.status === 200) {
                     let data = await response.json()
                     let newPlayerMap = { ...playerMap }
-                    newPlayerMap[inputValue] = { visible: true, data: data }
+                    newPlayerMap[inputValue] = { visible: true, data: data, region: currentRegion }
                     input.value = ''
 
-                    updatePlayerMap(newPlayerMap)
+                    setPlayerMap(newPlayerMap)
                 }
             }
         } else {
@@ -53,7 +56,7 @@ function App() {
             let newPlayerMap = { ...playerMap }
 
             for (let player of Object.keys(playerMap)) {
-                let response = await retrievePlayerData(player, mode)
+                let response = await retrievePlayerData(player, mode, playerMap[player].region)
 
                 if (response.status === 200) {
                     let data = await response.json()
@@ -63,9 +66,13 @@ function App() {
                 }
             }
 
-            updatePlayerMap(newPlayerMap)
-            updateCurrentMode(mode)
+            setPlayerMap(newPlayerMap)
+            setCurrentMode(mode)
         }
+    }
+
+    function handleChangeRegion(region: string): void {
+        setCurrentRegion(region)
     }
 
     /**
@@ -77,7 +84,7 @@ function App() {
         let newPlayerMap = { ...playerMap }
 
         delete newPlayerMap[name]
-        updatePlayerMap(newPlayerMap)
+        setPlayerMap(newPlayerMap)
     }
 
     /**
@@ -91,7 +98,7 @@ function App() {
         if (Object.keys(newPlayerMap).includes(name)) {
             newPlayerMap[name].visible = !newPlayerMap[name].visible
         }
-        updatePlayerMap(newPlayerMap)
+        setPlayerMap(newPlayerMap)
     }
 
     //A javascript object that maps text to handlers, to be used by the Header component
@@ -106,7 +113,13 @@ function App() {
     return (
         <>
             <Container fluid className="p-0 vh-100 d-flex flex-wrap bg-dark overflow-x-hidden">
-                <Header handlerMap={handlerMap} gameModes={gameModes}></Header>
+                <Header
+                    handlerMap={handlerMap}
+                    gameModes={gameModes}
+                    regions={regions}
+                    currentRegion={currentRegion}
+                    handleChangeRegion={handleChangeRegion}
+                ></Header>
                 <PlayerStack
                     playerMap={playerMap}
                     handleAdd={handleAdd}

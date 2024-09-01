@@ -1,4 +1,4 @@
-import { Container, Navbar, Offcanvas, Nav, NavDropdown, Form, Button, Stack } from 'react-bootstrap'
+import { Container, Navbar, Offcanvas, Nav, NavDropdown, Form, Button, Stack, Dropdown } from 'react-bootstrap'
 import { SiValorant } from 'react-icons/si'
 
 /**
@@ -8,9 +8,12 @@ import { SiValorant } from 'react-icons/si'
 interface HeaderProps {
     handlerMap: { [option: string]: any }
     gameModes: string[]
+    regions: string[]
+    currentRegion: string
+    handleChangeRegion: (region: string) => void
 }
 
-export default function Header({ handlerMap, gameModes }: HeaderProps) {
+export default function Header({ handlerMap, gameModes, regions, currentRegion, handleChangeRegion }: HeaderProps) {
     const navOptions = Object.keys(handlerMap).map((text: string, index: number) => {
         if (text === 'View Profile Page') {
             return (
@@ -26,11 +29,16 @@ export default function Header({ handlerMap, gameModes }: HeaderProps) {
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter') {
                                     e.preventDefault()
-                                    handlerMap[text]()
+                                    handlerMap[text](currentRegion)
                                 }
                             }}
                         />
-                        <Button variant="outline-danger" onClick={handlerMap[text]}>
+                        <Button
+                            variant="outline-danger"
+                            onClick={() => {
+                                handlerMap[text](currentRegion)
+                            }}
+                        >
                             Search
                         </Button>
                     </Form>
@@ -87,7 +95,42 @@ export default function Header({ handlerMap, gameModes }: HeaderProps) {
                             <h1 className="my-auto ps-2">ValoGraphs</h1>
                         </Stack>
                     </Navbar.Brand>
-                    <Navbar.Toggle className="invisible" />
+                    {regions.length > 0 ? (
+                        <Dropdown
+                            style={{
+                                fontFamily: 'Courier New, monospace',
+                                color: 'white',
+                            }}
+                        >
+                            <Dropdown.Toggle className="bg-black border border-dark" id="dropdown-basic">
+                                {currentRegion === 'LATAM' ? 'LT' : currentRegion}
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu className="bg-black border border-dark" align={'end'}>
+                                {regions.map((region: string, index: number) => {
+                                    return (
+                                        <>
+                                            <Dropdown.Item
+                                                key={index}
+                                                className="text-secondary"
+                                                onClick={() => {
+                                                    handleChangeRegion(region)
+                                                }}
+                                            >
+                                                {region}
+                                            </Dropdown.Item>
+                                        </>
+                                    )
+                                })}
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    ) : (
+                        <Dropdown className="invisible px-1">
+                            <Dropdown.Toggle
+                                className="bg-black border border-dark"
+                                id="dropdown-basic"
+                            ></Dropdown.Toggle>
+                        </Dropdown>
+                    )}
                 </Container>
                 <Navbar.Offcanvas
                     className="p-2"

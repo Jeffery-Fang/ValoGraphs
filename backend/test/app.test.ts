@@ -44,11 +44,12 @@ describe('testing GET /players', (): void => {
         const tag = mockMatchStat.player.tag
         const mode = mockMatchStat.mode.toLowerCase()
         const size = 10
-        const url = '/players/' + name + '?tag=' + tag + '&mode=' + mode + '&size=' + size
+        const region = 'na'
+        const url = '/players/' + name + '?tag=' + tag + '&mode=' + mode + '&size=' + size + '&region=' + region
         const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
-        expect(retrievePlayerData).toHaveBeenCalledWith(name, tag, mode, size)
+        expect(retrievePlayerData).toHaveBeenCalledWith(name, tag, mode, size, region)
         expect(retrievePlayerData).toHaveBeenCalledTimes(1)
         expect(createManyMatchStat).toHaveBeenCalledWith({})
         expect(createManyMatchStat).toHaveBeenCalledTimes(1)
@@ -56,30 +57,17 @@ describe('testing GET /players', (): void => {
         expect(saveManyMatchStat).toHaveBeenCalledTimes(1)
     })
 
-    test('should return status 400 with an invalid input', async (): Promise<void> => {
-        const name = mockMatchStat.player.name
-        const tag = mockMatchStat.player.tag
-        const mode = mockMatchStat.mode.toLowerCase()
-        const size = 10
-        const url = '/players/' + name + '&mode=' + mode + '&size=' + size
-        const response = await request(app).get(url)
-
-        expect(response.status).toBe(400)
-        expect(retrievePlayerData).toHaveBeenCalledTimes(0)
-        expect(createManyMatchStat).toHaveBeenCalledTimes(0)
-        expect(saveManyMatchStat).toHaveBeenCalledTimes(0)
-    })
-
     test('should return status 200 with an out of bounds mode', async (): Promise<void> => {
         const name = mockMatchStat.player.name
         const tag = mockMatchStat.player.tag
         const mode = 'spike rush'
         const size = 10
-        const url = '/players/' + name + '?tag=' + tag + '&mode=' + mode + '&size=' + size
+        const region = 'na'
+        const url = '/players/' + name + '?tag=' + tag + '&mode=' + mode + '&size=' + size + '&region=' + region
         const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
-        expect(retrievePlayerData).toHaveBeenCalledWith(name, tag, 'competitive', size)
+        expect(retrievePlayerData).toHaveBeenCalledWith(name, tag, 'competitive', size, region)
         expect(retrievePlayerData).toHaveBeenCalledTimes(1)
         expect(createManyMatchStat).toHaveBeenCalledWith({})
         expect(createManyMatchStat).toHaveBeenCalledTimes(1)
@@ -92,47 +80,84 @@ describe('testing GET /players', (): void => {
         const tag = mockMatchStat.player.tag
         const mode = mockMatchStat.mode.toLowerCase()
         const size = 15
-        const url = '/players/' + name + '?tag=' + tag + '&mode=' + mode + '&size=' + size
+        const region = 'na'
+        const url = '/players/' + name + '?tag=' + tag + '&mode=' + mode + '&size=' + size + '&region=' + region
         const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
-        expect(retrievePlayerData).toHaveBeenCalledWith(name, tag, mode, 5)
+        expect(retrievePlayerData).toHaveBeenCalledWith(name, tag, mode, 5, region)
         expect(retrievePlayerData).toHaveBeenCalledTimes(1)
         expect(createManyMatchStat).toHaveBeenCalledWith({})
         expect(createManyMatchStat).toHaveBeenCalledTimes(1)
         expect(saveManyMatchStat).toHaveBeenCalledWith([mockMatchStat, mockMatchStat])
         expect(saveManyMatchStat).toHaveBeenCalledTimes(1)
     })
+
+    test('should return status 200 with an out of bounds region', async (): Promise<void> => {
+        const name = mockMatchStat.player.name
+        const tag = mockMatchStat.player.tag
+        const mode = mockMatchStat.mode.toLowerCase()
+        const size = 10
+        const region = 'wonderland'
+        const url = '/players/' + name + '?tag=' + tag + '&mode=' + mode + '&size=' + size + '&region=' + region
+        const response = await request(app).get(url)
+
+        expect(response.status).toBe(200)
+        expect(retrievePlayerData).toHaveBeenCalledWith(name, tag, mode, size, 'na')
+        expect(retrievePlayerData).toHaveBeenCalledTimes(1)
+        expect(createManyMatchStat).toHaveBeenCalledWith({})
+        expect(createManyMatchStat).toHaveBeenCalledTimes(1)
+        expect(saveManyMatchStat).toHaveBeenCalledWith([mockMatchStat, mockMatchStat])
+        expect(saveManyMatchStat).toHaveBeenCalledTimes(1)
+    })
+
+    test('should return status 400 with an invalid input', async (): Promise<void> => {
+        const name = mockMatchStat.player.name
+        const tag = mockMatchStat.player.tag
+        const mode = mockMatchStat.mode.toLowerCase()
+        const size = 10
+        const region = 'na'
+        const url = '/players/' + name + '&mode=' + mode + '&size=' + size + '&region=' + region
+        const response = await request(app).get(url)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toEqual({ error: 'invalid input' })
+        expect(retrievePlayerData).toHaveBeenCalledTimes(0)
+        expect(createManyMatchStat).toHaveBeenCalledTimes(0)
+        expect(saveManyMatchStat).toHaveBeenCalledTimes(0)
+    })
 })
 
 describe('testing GET /matches', (): void => {
     beforeEach((): void => {
         ;(getFromMatchId as jest.Mock).mockResolvedValue([])
+        ;(retrieveMatchData as jest.Mock).mockResolvedValue([{}, {}, {}, {}, {}, {}, {}, {}, {}, {}])
         ;(createManyMatchStat as jest.Mock).mockReturnValue([])
         ;(saveManyMatchStat as jest.Mock).mockResolvedValue(undefined)
-        ;(retrieveMatchData as jest.Mock).mockResolvedValue([{}, {}, {}, {}, {}, {}, {}, {}, {}, {}])
     })
 
     afterEach(() => {
         jest.clearAllMocks()
     })
 
-    test("should call retrieveMatchData if the match hasn't been stored and should return status 200", async (): Promise<void> => {
+    test("should return status 200 if the match hasn't yet been stored", async (): Promise<void> => {
         const match_id = mockMatchStat.match_id
-        const url = '/matches/' + match_id
+        const region = 'na'
+        const url = '/matches/' + match_id + '?region=' + region
         const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
         expect(getFromMatchId).toHaveBeenCalledWith(match_id)
         expect(getFromMatchId).toHaveBeenCalledTimes(1)
-        expect(retrieveMatchData).toHaveBeenCalledWith(match_id)
+        expect(retrieveMatchData).toHaveBeenCalledWith(match_id, region)
         expect(retrieveMatchData).toHaveBeenCalledTimes(1)
     })
 
-    test('should not call retrieveMatchData if the match has already been stored and should return status 200', async (): Promise<void> => {
+    test('should return status 200 if the match has already been stored', async (): Promise<void> => {
         ;(getFromMatchId as jest.Mock).mockResolvedValue([{}, {}, {}, {}, {}, {}, {}, {}, {}, {}])
         const match_id = mockMatchStat.match_id
-        const url = '/matches/' + match_id
+        const region = 'na'
+        const url = '/matches/' + match_id + '?region=' + region
         const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
@@ -141,15 +166,38 @@ describe('testing GET /matches', (): void => {
         expect(retrieveMatchData).toHaveBeenCalledTimes(0)
     })
 
+    test('should return 200 if the region is out of bounds and there are no other issues', async (): Promise<void> => {
+        const match_id = mockMatchStat.match_id
+        const region = 'wonderland'
+        const url = '/matches/' + match_id + '?region=' + region
+        const response = await request(app).get(url)
+
+        expect(response.status).toBe(200)
+        expect(getFromMatchId).toHaveBeenCalledWith(match_id)
+        expect(getFromMatchId).toHaveBeenCalledTimes(1)
+        expect(retrieveMatchData).toHaveBeenCalledWith(match_id, 'na')
+        expect(retrieveMatchData).toHaveBeenCalledTimes(1)
+    })
+
     test('should return status 400 if there is a database error', async (): Promise<void> => {
         const match_id = mockMatchStat.match_id
-        const url = '/matches/' + match_id
+        const region = 'na'
+        const url = '/matches/' + match_id + '?region=' + region
 
         ;(getFromMatchId as jest.Mock).mockRejectedValueOnce('database error')
         const response = await request(app).get(url)
 
         expect(response.status).toBe(400)
         expect(response.body).toEqual({ error: 'database error' })
+    })
+
+    test('should return status 400 if no region is provided', async (): Promise<void> => {
+        const match_id = mockMatchStat.match_id
+        const url = '/matches/' + match_id
+        const response = await request(app).get(url)
+
+        expect(response.status).toBe(400)
+        expect(response.body).toEqual({ error: 'invalid input' })
     })
 })
 
@@ -163,16 +211,65 @@ describe('testing GET /profiles', (): void => {
         jest.clearAllMocks()
     })
 
-    test('should call retrieveProfileData() and createManyMatchStat() and return status 200 with valid input', async (): Promise<void> => {
+    test('should return status 200 with valid input', async (): Promise<void> => {
         const name = mockMatchStat.player.name
         const tag = mockMatchStat.player.tag
         const mode = mockMatchStat.mode.toLowerCase()
         const page = 1
-        const url = '/profiles/' + name + '?tag=' + tag + '&mode=' + mode + '&page=' + page
+        const region = 'na'
+        const url = '/profiles/' + name + '?tag=' + tag + '&mode=' + mode + '&page=' + page + '&region=' + region
         const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
-        expect(retrieveProfileData).toHaveBeenCalledWith(name, tag, mode, page)
+        expect(retrieveProfileData).toHaveBeenCalledWith(name, tag, mode, page, region)
+        expect(retrieveProfileData).toHaveBeenCalledTimes(1)
+        expect(createManyMatchStat).toHaveBeenCalledWith({})
+        expect(createManyMatchStat).toHaveBeenCalledTimes(1)
+    })
+
+    test('should return status 200 with valid input with out of bounds mode', async (): Promise<void> => {
+        const name = mockMatchStat.player.name
+        const tag = mockMatchStat.player.tag
+        const mode = 'spike rush'
+        const page = 1
+        const region = 'na'
+        const url = '/profiles/' + name + '?tag=' + tag + '&mode=' + mode + '&page=' + page + '&region=' + region
+        const response = await request(app).get(url)
+
+        expect(response.status).toBe(200)
+        expect(retrieveProfileData).toHaveBeenCalledWith(name, tag, 'competitive', page, region)
+        expect(retrieveProfileData).toHaveBeenCalledTimes(1)
+        expect(createManyMatchStat).toHaveBeenCalledWith({})
+        expect(createManyMatchStat).toHaveBeenCalledTimes(1)
+    })
+
+    test('should return status 200 with valid input with out of bounds page', async (): Promise<void> => {
+        const name = mockMatchStat.player.name
+        const tag = mockMatchStat.player.tag
+        const mode = mockMatchStat.mode.toLowerCase()
+        const page = 0
+        const region = 'na'
+        const url = '/profiles/' + name + '?tag=' + tag + '&mode=' + mode + '&page=' + page + '&region=' + region
+        const response = await request(app).get(url)
+
+        expect(response.status).toBe(200)
+        expect(retrieveProfileData).toHaveBeenCalledWith(name, tag, mode, 1, region)
+        expect(retrieveProfileData).toHaveBeenCalledTimes(1)
+        expect(createManyMatchStat).toHaveBeenCalledWith({})
+        expect(createManyMatchStat).toHaveBeenCalledTimes(1)
+    })
+
+    test('should return status 200 with valid input with out of bounds region', async (): Promise<void> => {
+        const name = mockMatchStat.player.name
+        const tag = mockMatchStat.player.tag
+        const mode = mockMatchStat.mode.toLowerCase()
+        const page = 1
+        const region = 'wonderland'
+        const url = '/profiles/' + name + '?tag=' + tag + '&mode=' + mode + '&page=' + page + '&region=' + region
+        const response = await request(app).get(url)
+
+        expect(response.status).toBe(200)
+        expect(retrieveProfileData).toHaveBeenCalledWith(name, tag, mode, page, 'na')
         expect(retrieveProfileData).toHaveBeenCalledTimes(1)
         expect(createManyMatchStat).toHaveBeenCalledWith({})
         expect(createManyMatchStat).toHaveBeenCalledTimes(1)
@@ -183,42 +280,13 @@ describe('testing GET /profiles', (): void => {
         const tag = mockMatchStat.player.tag
         const mode = mockMatchStat.mode.toLowerCase()
         const page = 1
-        const url = '/profiles/' + name + '&mode=' + mode + '&page=' + page
+        const region = 'na'
+        const url = '/profiles/' + name + '&mode=' + mode + '&page=' + page + '&region=' + region
         const response = await request(app).get(url)
 
         expect(response.status).toBe(400)
         expect(retrieveProfileData).toHaveBeenCalledTimes(0)
         expect(createManyMatchStat).toHaveBeenCalledTimes(0)
-    })
-
-    test('should call retrieveProfileData() and createManyMatchStat() and return status 200 with out of bounds mode', async (): Promise<void> => {
-        const name = mockMatchStat.player.name
-        const tag = mockMatchStat.player.tag
-        const mode = 'spike rush'
-        const page = 1
-        const url = '/profiles/' + name + '?tag=' + tag + '&mode=' + mode + '&page=' + page
-        const response = await request(app).get(url)
-
-        expect(response.status).toBe(200)
-        expect(retrieveProfileData).toHaveBeenCalledWith(name, tag, 'competitive', page)
-        expect(retrieveProfileData).toHaveBeenCalledTimes(1)
-        expect(createManyMatchStat).toHaveBeenCalledWith({})
-        expect(createManyMatchStat).toHaveBeenCalledTimes(1)
-    })
-
-    test('should call retrieveProfileData() and createManyMatchStat() and return status 200 with out of bounds page', async (): Promise<void> => {
-        const name = mockMatchStat.player.name
-        const tag = mockMatchStat.player.tag
-        const mode = mockMatchStat.mode.toLowerCase()
-        const page = 0
-        const url = '/profiles/' + name + '?tag=' + tag + '&mode=' + mode + '&page=' + page
-        const response = await request(app).get(url)
-
-        expect(response.status).toBe(200)
-        expect(retrieveProfileData).toHaveBeenCalledWith(name, tag, mode, 1)
-        expect(retrieveProfileData).toHaveBeenCalledTimes(1)
-        expect(createManyMatchStat).toHaveBeenCalledWith({})
-        expect(createManyMatchStat).toHaveBeenCalledTimes(1)
     })
 })
 

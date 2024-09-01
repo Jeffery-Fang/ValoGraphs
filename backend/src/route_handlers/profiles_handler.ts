@@ -5,7 +5,12 @@ import { MatchStat } from '../entities/MatchStat.js'
 
 export default async function profilesHandler(req: Request, res: Response): Promise<void> {
     try {
-        if (req.query.tag === undefined || req.query.mode === undefined || req.query.page === undefined) {
+        if (
+            req.query.tag === undefined ||
+            req.query.mode === undefined ||
+            req.query.page === undefined ||
+            req.query.region === undefined
+        ) {
             throw 'invalid input'
         }
 
@@ -15,8 +20,11 @@ export default async function profilesHandler(req: Request, res: Response): Prom
             ? <string>req.query.mode
             : 'competitive'
         let page: number = Number(req.query.page) > 0 ? Number(req.query.page) : 1
+        let region: string = ['na', 'eu', 'latam', 'br', 'ap', 'kr'].includes(<string>req.query.region)
+            ? <string>req.query.region
+            : 'na'
 
-        let data = await retrieveProfileData(name, tag, mode, page)
+        let data = await retrieveProfileData(name, tag, mode, page, region)
         let matchStats: MatchStat[] = createManyMatchStat(data)
 
         res.status(200).json(matchStats)

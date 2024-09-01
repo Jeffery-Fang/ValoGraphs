@@ -12,11 +12,27 @@ const API_KEY: string = <string>process.env.API_KEY
  * @param tag - The tag of the player whos matches the data will be from
  * @param mode - The mode the matches
  * @param size - The number of matches to be retrieved
+ * @param region - The region where the player is from
  * @returns An array of data that can be used to create MatchStat objects
  */
-export async function retrievePlayerData(name: string, tag: string, mode: string, size: number): Promise<any> {
+export async function retrievePlayerData(
+    name: string,
+    tag: string,
+    mode: string,
+    size: number,
+    region: string
+): Promise<any> {
     try {
-        let url: string = (PLAYER_URL_ROOT + name + '/' + tag + '?mode=' + mode + '&size=' + size) as string
+        let url: string = (PLAYER_URL_ROOT +
+            region +
+            '/pc/' +
+            name +
+            '/' +
+            tag +
+            '?mode=' +
+            mode +
+            '&size=' +
+            size) as string
         let options: RequestInit = {
             method: 'GET',
             headers: {
@@ -100,11 +116,14 @@ export async function retrievePlayerData(name: string, tag: string, mode: string
  * @param tag - The tag of the player whos matches the data will be from
  * @param mode - The mode the matches
  * @param page - The page the matches will be from(pages of size 10)
+ * @param region - The region where the player is from
  * @returns An array of data that can be used to create MatchStat objects
  */
-export async function retrieveProfileData(name: string, tag: string, mode: string, page: number) {
+export async function retrieveProfileData(name: string, tag: string, mode: string, page: number, region: string) {
     try {
         let url: string = (PROFILE_URL_ROOT +
+            region +
+            '/' +
             name +
             '/' +
             tag +
@@ -119,6 +138,7 @@ export async function retrieveProfileData(name: string, tag: string, mode: strin
                 Authorization: API_KEY,
             },
         }
+
         let response: any = await fetch(url, options)
         let accountDetails: any = await fetch(`https://api.henrikdev.xyz/valorant/v2/account/${name}/${tag}`, options)
         let data = []
@@ -188,11 +208,12 @@ export async function retrieveProfileData(name: string, tag: string, mode: strin
  * Retrieves match data for all players that participated in the specified match
  *
  * @param match_id - The match_id of the match we are retrieving data for
+ * @param region - The region where the match was played
  * @returns An array of data that can be used to create MatchStat objects
  */
-export async function retrieveMatchData(match_id: string): Promise<any> {
+export async function retrieveMatchData(match_id: string, region: string): Promise<any> {
     try {
-        let url: string = (MATCH_URL_ROOT + match_id) as string
+        let url: string = (MATCH_URL_ROOT + region + '/' + match_id) as string
         let options: RequestInit = {
             method: 'GET',
             headers: {

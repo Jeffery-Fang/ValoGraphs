@@ -24,30 +24,35 @@ describe('testing retrievePlayerData()', (): void => {
         let tag = 'NA1'
         let mode = 'unrated'
         let size = 10
-        let response = await retrievePlayerData(name, tag, mode, size)
+        let region = 'na'
+        let response = await retrievePlayerData(name, tag, mode, size, region)
 
-        expect(mockFetch).toHaveBeenCalledWith(PLAYER_URL_ROOT + name + '/' + tag + '?mode=' + mode + '&size=' + size, {
-            method: 'GET',
-            headers: {
-                Authorization: API_KEY,
-            },
-        })
+        expect(mockFetch).toHaveBeenCalledWith(
+            PLAYER_URL_ROOT + region + '/pc/' + name + '/' + tag + '?mode=' + mode + '&size=' + size,
+            {
+                method: 'GET',
+                headers: {
+                    Authorization: API_KEY,
+                },
+            }
+        )
         expect(mockFetch).toHaveBeenCalledTimes(1)
         expect(Object.keys(response)).toContain('searched_player_id')
         expect(Object.keys(response)).toContain('match_data')
     })
 
-    test('should throw an error if the api call responds with an error', async (): Promise<void> => {
+    test('should throw an error if the fetch responds with undefined', async (): Promise<void> => {
         try {
             mockFetch.mockResolvedValue(undefined)
             let name = 'Hexennacht'
             let tag = 'NA1'
             let mode = 'unrated'
             let size = 10
-            let response = await retrievePlayerData(name, tag, mode, size)
+            let region = 'na'
+            let response = await retrievePlayerData(name, tag, mode, size, region)
 
             expect(mockFetch).toHaveBeenCalledWith(
-                PLAYER_URL_ROOT + name + '/' + tag + '?mode=' + mode + '&size=' + size,
+                PLAYER_URL_ROOT + region + '/pc/' + name + '/' + tag + '?mode=' + mode + '&size=' + size,
                 {
                     method: 'GET',
                     headers: {
@@ -72,10 +77,11 @@ describe('testing retrievePlayerData()', (): void => {
             let tag = 'NA1'
             let mode = 'unrated'
             let size = 10
-            let response = await retrievePlayerData(name, tag, mode, size)
+            let region = 'na'
+            let response = await retrievePlayerData(name, tag, mode, size, region)
 
             expect(mockFetch).toHaveBeenCalledWith(
-                PLAYER_URL_ROOT + name + '/' + tag + '?mode=' + mode + '&size=' + size,
+                PLAYER_URL_ROOT + region + '/pc/' + name + '/' + tag + '?mode=' + mode + '&size=' + size,
                 {
                     method: 'GET',
                     headers: {
@@ -100,10 +106,11 @@ describe('testing retrievePlayerData()', (): void => {
             let tag = 'NA1'
             let mode = 'unrated'
             let size = 10
-            let response = await retrievePlayerData(name, tag, mode, size)
+            let region = 'na'
+            let response = await retrievePlayerData(name, tag, mode, size, region)
 
             expect(mockFetch).toHaveBeenCalledWith(
-                PLAYER_URL_ROOT + name + '/' + tag + '?mode=' + mode + '&size=' + size,
+                PLAYER_URL_ROOT + region + '/pc/' + name + '/' + tag + '?mode=' + mode + '&size=' + size,
                 {
                     method: 'GET',
                     headers: {
@@ -133,7 +140,8 @@ describe('testing retrieveProfileData()', (): void => {
         let tag = 'NA1'
         let mode = 'unrated'
         let page = 1
-        let response = await retrieveProfileData(name, tag, mode, page)
+        let region = 'na'
+        let response = await retrieveProfileData(name, tag, mode, page, region)
         let options: RequestInit = {
             method: 'GET',
             headers: {
@@ -141,7 +149,7 @@ describe('testing retrieveProfileData()', (): void => {
             },
         }
         expect(mockFetch).toHaveBeenCalledWith(
-            PROFILE_URL_ROOT + name + '/' + tag + '?mode=' + mode + '&page=' + page + '&size=10',
+            PROFILE_URL_ROOT + region + '/' + name + '/' + tag + '?mode=' + mode + '&page=' + page + '&size=10',
             options
         )
         expect(mockFetch).toHaveBeenCalledWith(`https://api.henrikdev.xyz/valorant/v2/account/${name}/${tag}`, options)
@@ -159,14 +167,15 @@ describe('testing retrieveProfileData()', (): void => {
         ])
     })
 
-    test('should throw an error if the api call responds with an error', async (): Promise<void> => {
+    test('should throw an error if fetch responds with undefined', async (): Promise<void> => {
         try {
             mockFetch.mockResolvedValue(undefined)
             let name = 'Hexennacht'
             let tag = 'NA1'
             let mode = 'unrated'
             let page = 1
-            let response = await retrieveProfileData(name, tag, mode, page)
+            let region = 'na'
+            let response = await retrieveProfileData(name, tag, mode, page, region)
             let options: RequestInit = {
                 method: 'GET',
                 headers: {
@@ -174,7 +183,7 @@ describe('testing retrieveProfileData()', (): void => {
                 },
             }
             expect(mockFetch).toHaveBeenCalledWith(
-                PROFILE_URL_ROOT + name + '/' + tag + '?mode=' + mode + '&page=' + page + '&size=10',
+                PROFILE_URL_ROOT + region + '/' + name + '/' + tag + '?mode=' + mode + '&page=' + page + '&size=10',
                 options
             )
             expect(mockFetch).toHaveBeenCalledTimes(1)
@@ -194,7 +203,8 @@ describe('testing retrieveProfileData()', (): void => {
             let tag = 'NA1'
             let mode = 'unrated'
             let page = 1
-            let response = await retrieveProfileData(name, tag, mode, page)
+            let region = 'na'
+            let response = await retrieveProfileData(name, tag, mode, page, region)
             let options: RequestInit = {
                 method: 'GET',
                 headers: {
@@ -202,7 +212,7 @@ describe('testing retrieveProfileData()', (): void => {
                 },
             }
             expect(mockFetch).toHaveBeenCalledWith(
-                PROFILE_URL_ROOT + name + '/' + tag + '?mode=' + mode + '&page=' + page + '&size=10',
+                PROFILE_URL_ROOT + region + '/' + name + '/' + tag + '?mode=' + mode + '&page=' + page + '&size=10',
                 options
             )
             expect(mockFetch).toHaveBeenCalledWith(
@@ -228,7 +238,8 @@ describe('testing retrieveMatchData()', (): void => {
             }),
         })
         let match_id = 'b5435599-43af-48dd-b0ba-032260200f25'
-        let response = await retrieveMatchData(match_id)
+        let region = 'na'
+        let response = await retrieveMatchData(match_id, region)
         let options: RequestInit = {
             method: 'GET',
             headers: {
@@ -236,7 +247,7 @@ describe('testing retrieveMatchData()', (): void => {
             },
         }
 
-        expect(mockFetch).toHaveBeenCalledWith(MATCH_URL_ROOT + match_id, options)
+        expect(mockFetch).toHaveBeenCalledWith(MATCH_URL_ROOT + region + '/' + match_id, options)
         expect(mockFetch).toHaveBeenCalledTimes(1)
         expect(Object.keys(response[0])).toStrictEqual([
             'playerData',
@@ -258,7 +269,8 @@ describe('testing retrieveMatchData()', (): void => {
             }),
         })
         let match_id = 'b5435599-43af-48dd-b0ba-032260200f25'
-        let response = await retrieveMatchData(match_id)
+        let region = 'na'
+        let response = await retrieveMatchData(match_id, region)
         let options: RequestInit = {
             method: 'GET',
             headers: {
@@ -266,7 +278,7 @@ describe('testing retrieveMatchData()', (): void => {
             },
         }
 
-        expect(mockFetch).toHaveBeenCalledWith(MATCH_URL_ROOT + match_id, options)
+        expect(mockFetch).toHaveBeenCalledWith(MATCH_URL_ROOT + region + '/' + match_id, options)
         expect(mockFetch).toHaveBeenCalledTimes(1)
         expect(Object.keys(response[0])).toStrictEqual([
             'playerData',
@@ -281,11 +293,12 @@ describe('testing retrieveMatchData()', (): void => {
         ])
     })
 
-    test('should throw an error if the api call responds with an error', async (): Promise<void> => {
+    test('should throw an error if the fetch responds with undefined', async (): Promise<void> => {
         try {
             mockFetch.mockResolvedValue(undefined)
             let match_id = 'b5435599-43af-48dd-b0ba-032260200f25'
-            let response = await retrieveMatchData(match_id)
+            let region = 'na'
+            let response = await retrieveMatchData(match_id, region)
             let options: RequestInit = {
                 method: 'GET',
                 headers: {
@@ -293,7 +306,7 @@ describe('testing retrieveMatchData()', (): void => {
                 },
             }
 
-            expect(mockFetch).toHaveBeenCalledWith(MATCH_URL_ROOT + match_id, options)
+            expect(mockFetch).toHaveBeenCalledWith(MATCH_URL_ROOT + match_id + '?region=' + region, options)
             expect(mockFetch).toHaveBeenCalledTimes(1)
         } catch (e) {
             expect(e).toBe('no response from henrikdev API')
@@ -308,7 +321,8 @@ describe('testing retrieveMatchData()', (): void => {
                 }),
             })
             let match_id = 'b5435599-43af-48dd-b0ba-032260200f25'
-            let response = await retrieveMatchData(match_id)
+            let region = 'na'
+            let response = await retrieveMatchData(match_id, region)
             let options: RequestInit = {
                 method: 'GET',
                 headers: {
@@ -316,7 +330,7 @@ describe('testing retrieveMatchData()', (): void => {
                 },
             }
 
-            expect(mockFetch).toHaveBeenCalledWith(MATCH_URL_ROOT + match_id, options)
+            expect(mockFetch).toHaveBeenCalledWith(MATCH_URL_ROOT + match_id + '?region=' + region, options)
             expect(mockFetch).toHaveBeenCalledTimes(1)
         } catch (e) {
             expect(e).toBe('some errors')

@@ -21,29 +21,24 @@ export function stringToColour(str: string): string {
 }
 
 /**
- * Makes an API call based on the input name, tag and mode and return the response
+ * Retrieves the latest match data for the player specified
  *
  * @param nameAndTag - The name and tag of the player you are retrieving data for
  * @param mode - The mode that the matches will be of
+ * @param region - The region that the data is from
  * @returns The API response where the body will be a list of objects representing matches the player played in of the given mode
  */
-export async function retrievePlayerData(nameAndTag: string, mode: string): Promise<any> {
+export async function retrievePlayerData(nameAndTag: string, mode: string, region: string): Promise<any> {
     let [name, tag]: string[] = nameAndTag.split('#')
     let url: string =
-        import.meta.env.VITE_PLAYER_API_URL + name + '?tag=' + tag + '&mode=' + mode.replace(' ', '') + '&size=10'
-    let response: any = await fetch(url, { method: 'GET' })
-
-    if (response.status !== 200) {
-        alert('Error retrieving ' + name + "'s " + mode + ' data')
-    }
-
-    return response
-}
-
-export async function retrieveProfileData(nameAndTag: string, mode: string, page: number): Promise<any> {
-    let [name, tag]: string[] = nameAndTag.split('#')
-    let url: string =
-        import.meta.env.VITE_PROFILE_API_URL + name + '?tag=' + tag + '&mode=' + mode.replace(' ', '') + '&page=' + page
+        import.meta.env.VITE_PLAYER_API_URL +
+        name +
+        '?tag=' +
+        tag +
+        '&mode=' +
+        mode.replace(' ', '') +
+        '&size=10&region=' +
+        region.toLowerCase()
     let response: any = await fetch(url, { method: 'GET' })
 
     if (response.status !== 200) {
@@ -54,13 +49,50 @@ export async function retrieveProfileData(nameAndTag: string, mode: string, page
 }
 
 /**
- * Makes an API call based on the input match_id
+ * Retrieves the stoerd match data for the player specified in pages
+ *
+ * @param nameAndTag - The name and tag of the player you are retrieving data for
+ * @param mode - The mode that the matches will be of
+ * @param page - The page of data(pages of size 10)
+ * @param region - The region that the data is from
+ * @returns
+ */
+export async function retrieveProfileData(
+    nameAndTag: string,
+    mode: string,
+    page: number,
+    region: string
+): Promise<any> {
+    let [name, tag]: string[] = nameAndTag.split('#')
+    let url: string =
+        import.meta.env.VITE_PROFILE_API_URL +
+        name +
+        '?tag=' +
+        tag +
+        '&mode=' +
+        mode.replace(' ', '') +
+        '&page=' +
+        page +
+        '&region=' +
+        region.toLowerCase()
+    let response: any = await fetch(url, { method: 'GET' })
+
+    if (response.status !== 200) {
+        alert('Error retrieving ' + name + "'s " + mode + ' data')
+    }
+
+    return response
+}
+
+/**
+ * Retrieves the match data for all players that played in this particular match
  *
  * @param match_id - The match_id of the match you are retrieving data for
+ * @param region - The region that the data is from
  * @returns The API response where the body will be a list of 10 objects representing the players who played in the match
  */
-export async function retrieveMatchData(match_id: string): Promise<any> {
-    let url: string = import.meta.env.VITE_MATCH_API_URL + match_id
+export async function retrieveMatchData(match_id: string, region: string): Promise<any> {
+    let url: string = import.meta.env.VITE_MATCH_API_URL + match_id + '?region=' + region.toLowerCase()
     let response: any = await fetch(url, { method: 'GET' })
 
     if (response.status !== 200) {
@@ -73,7 +105,7 @@ export async function retrieveMatchData(match_id: string): Promise<any> {
 /**
  * Opens a new window to the link /profile/:name/:tag where the values are retrieved from a input element
  */
-export function handleProfileSearch(): void {
+export function handleProfileSearch(region: string): void {
     let temp: string[]
     let input: HTMLInputElement = document.getElementById('profileSearchInput') as HTMLInputElement
 
@@ -81,7 +113,7 @@ export function handleProfileSearch(): void {
         let inputValue: string = input.value.trim()
 
         temp = inputValue.split('#')
-        window.open(`/profile/${temp[0]}/${temp[1]}`, '_blank')
+        window.open(`/profile/${region.toLowerCase()}/${temp[0]}/${temp[1]}`, '_blank')
     } else {
         alert('Invalid Input')
     }

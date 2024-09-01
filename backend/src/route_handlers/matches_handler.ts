@@ -9,7 +9,14 @@ export default async function matchesHandler(req: Request, res: Response): Promi
         const response: MatchStat[] = await getFromMatchId(req.params.match_id)
 
         if (response.length < 10) {
-            let data = await retrieveMatchData(req.params.match_id)
+            if (req.query.region === undefined) {
+                throw 'invalid input'
+            }
+
+            let region: string = ['na', 'eu', 'latam', 'br', 'ap', 'kr'].includes(<string>req.query.region)
+                ? <string>req.query.region
+                : 'na'
+            let data = await retrieveMatchData(req.params.match_id, region)
             let matchStats: MatchStat[] = createManyMatchStat(data)
 
             res.status(200).json(matchStats)

@@ -6,7 +6,12 @@ import { MatchStat } from '../entities/MatchStat.js'
 
 export default async function playersHandler(req: Request, res: Response): Promise<void> {
     try {
-        if (req.query.tag === undefined || req.query.mode === undefined || req.query.size === undefined) {
+        if (
+            req.query.tag === undefined ||
+            req.query.mode === undefined ||
+            req.query.size === undefined ||
+            req.query.region === undefined
+        ) {
             throw 'invalid input'
         }
 
@@ -16,8 +21,11 @@ export default async function playersHandler(req: Request, res: Response): Promi
             ? <string>req.query.mode
             : 'competitive'
         let size: number = Number(req.query.size) <= 10 && Number(req.query.size) > 0 ? Number(req.query.size) : 5
+        let region: string = ['na', 'eu', 'latam', 'br', 'ap', 'kr'].includes(<string>req.query.region)
+            ? <string>req.query.region
+            : 'na'
 
-        let data = await retrievePlayerData(name, tag, mode, size)
+        let data = await retrievePlayerData(name, tag, mode, size, region)
         let matchStats: MatchStat[] = createManyMatchStat(data.match_data)
         const puuid: string = data.searched_player_id
 
