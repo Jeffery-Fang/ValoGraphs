@@ -2,7 +2,7 @@ import { AppDataSource } from '../data-source.js'
 import { MatchStat } from '../entities/MatchStat.js'
 
 /**
- * Gets the MatchStat object associated for the match for each of the 10 player in the match
+ * Gets the MatchStat objects associated for the match for each of the 10 player in the match
  *
  * @param match_id - The match_id of the match
  * @returns An array of 10 MatchStat objects, one for each of the players that participated in the match

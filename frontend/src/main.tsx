@@ -3,12 +3,14 @@ import { StrictMode } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import GraphPage from './app/routes/graphPage.tsx'
 import ProfilePage from './app/routes/profilePage.tsx'
+import ErrorPage from './app/routes/errorPage.tsx'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: <GraphPage />,
+        errorElement: <ErrorPage />,
     },
     {
         path: '/profile/:region/:name/:tag',

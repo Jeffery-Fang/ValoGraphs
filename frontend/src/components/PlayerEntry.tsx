@@ -5,17 +5,25 @@ import { stringToColour } from '../utils/commonFunctions'
 /**
  * handleToggle - A function that toggles the visible variable in the state of the application
  * handleDelete - A function that deletes this entry in the state of the application
+ * handleSearch - A function that opens the profile page for this player
  * visible - A variable that where the eye is displayed normally or corssed out
  * nameAndTag - The text to be displayed on this entry
  */
 interface PlayerEntryProps {
     handleToggle: () => void
     handleDelete: () => void
+    handleSearch: () => void
     visible: boolean
     nameAndTag: string
 }
 
-export default function PlayerEntry({ handleToggle, handleDelete, visible, nameAndTag }: PlayerEntryProps) {
+export default function PlayerEntry({
+    handleToggle,
+    handleDelete,
+    handleSearch,
+    visible,
+    nameAndTag,
+}: PlayerEntryProps) {
     return (
         <>
             <Stack direction="horizontal" className="p-2 border-bottom border-end border-secondary border-2" gap={2}>
@@ -40,7 +48,9 @@ export default function PlayerEntry({ handleToggle, handleDelete, visible, nameA
                         color: stringToColour(nameAndTag),
                         fontFamily: 'Courier New, monospace',
                         fontSize: '16px',
+                        cursor: 'pointer',
                     }}
+                    onClick={handleSearch}
                 >
                     {nameAndTag}
                 </div>

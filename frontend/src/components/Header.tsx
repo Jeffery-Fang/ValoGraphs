@@ -4,6 +4,8 @@ import { SiValorant } from 'react-icons/si'
 /**
  * handlerMap - A dictionary mapping text to some action that will be done when the option is selected
  * gameModes - A list of available game modes for the 'Change Game Mode option
+ * regions - A list of regions that are supported
+ * currentRegion - The current selected region
  */
 interface HeaderProps {
     handlerMap: { [option: string]: any }

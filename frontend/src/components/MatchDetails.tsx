@@ -6,6 +6,7 @@ import { Offcanvas, Stack, Image } from 'react-bootstrap'
  * sortMatchDetails - A generic function that sorts the players by a particular stat
  * showMatchDetails - A variable that determines the visiblity of this component
  * setShowMatchDetails - A variable that toggles the visibility of this component
+ * region - The region the match was played in
  */
 interface MatchDetailsProps {
     matchDetails: { [playerName: string]: any }[]
@@ -71,118 +72,130 @@ export default function MatchDetails({
                 <Offcanvas.Body className="border-start border-end border-secondary border-2 p-0">
                     <Stack
                         direction="horizontal"
-                        className="d-flex flex-wrap bg-dark-subtle"
+                        className="bg-dark-subtle"
                         style={{
                             fontFamily: 'Courier New, monospace',
                             color: 'white',
                             fontSize: '13px',
                         }}
                     >
-                        <Stack
-                            className="flex-fill"
-                            style={{ cursor: 'pointer', minWidth: '10%' }}
-                            onClick={() => {
-                                sortMatchDetails('name')
-                            }}
-                        >
-                            <div className="px-2 disappear" style={{ marginLeft: 60 }}>
-                                Name
-                            </div>
-                        </Stack>
-                        <Stack
-                            direction="horizontal"
-                            className="my-auto text-center flex-fill"
-                            style={{ minWidth: '90%' }}
-                        >
-                            <div
-                                style={{ minWidth: '24%', cursor: 'pointer' }}
+                        <div className="vr p-1 invisible"></div>
+                        <Stack direction="horizontal" className="d-flex flex-wrap flex-fill">
+                            <Stack
+                                className="flex-fill"
+                                style={{ cursor: 'pointer', minWidth: '10%' }}
                                 onClick={() => {
-                                    sortMatchDetails('kda')
+                                    sortMatchDetails('name')
                                 }}
                             >
-                                K / D / A
-                            </div>
-                            <div
-                                style={{ minWidth: '19%', cursor: 'pointer' }}
-                                onClick={() => {
-                                    sortMatchDetails('hs')
-                                }}
+                                <div className="px-2 disappear" style={{ marginLeft: 60 }}>
+                                    Name
+                                </div>
+                            </Stack>
+                            <Stack
+                                direction="horizontal"
+                                className="my-auto text-center flex-fill"
+                                style={{ minWidth: '90%' }}
                             >
-                                HS %
-                            </div>
-                            <div
-                                style={{ minWidth: '19%', cursor: 'pointer' }}
-                                onClick={() => {
-                                    sortMatchDetails('dd')
-                                }}
-                            >
-                                DD Δ
-                            </div>
-                            <div
-                                style={{ minWidth: '19%', cursor: 'pointer' }}
-                                onClick={() => {
-                                    sortMatchDetails('adr')
-                                }}
-                            >
-                                ADR
-                            </div>
-                            <div
-                                style={{ minWidth: '19%', cursor: 'pointer' }}
-                                onClick={() => {
-                                    sortMatchDetails('acs')
-                                }}
-                            >
-                                ACS
-                            </div>
+                                <div
+                                    style={{ minWidth: '24%', cursor: 'pointer' }}
+                                    onClick={() => {
+                                        sortMatchDetails('kda')
+                                    }}
+                                >
+                                    K / D / A
+                                </div>
+                                <div
+                                    style={{ minWidth: '19%', cursor: 'pointer' }}
+                                    onClick={() => {
+                                        sortMatchDetails('hs')
+                                    }}
+                                >
+                                    HS %
+                                </div>
+                                <div
+                                    style={{ minWidth: '19%', cursor: 'pointer' }}
+                                    onClick={() => {
+                                        sortMatchDetails('dd')
+                                    }}
+                                >
+                                    DD Δ
+                                </div>
+                                <div
+                                    style={{ minWidth: '19%', cursor: 'pointer' }}
+                                    onClick={() => {
+                                        sortMatchDetails('adr')
+                                    }}
+                                >
+                                    ADR
+                                </div>
+                                <div
+                                    style={{ minWidth: '19%', cursor: 'pointer' }}
+                                    onClick={() => {
+                                        sortMatchDetails('acs')
+                                    }}
+                                >
+                                    ACS
+                                </div>
+                            </Stack>
                         </Stack>
                     </Stack>
                     <Stack className="border-bottom border-secondary border-2 d-flex">
                         {matchDetails.map((player: any) => {
                             return (
-                                <Stack
-                                    direction="horizontal"
-                                    className="border-top border-secondary border-2 d-flex flex-wrap"
-                                    style={{
-                                        fontFamily: 'Courier New, monospace',
-                                        color: 'white',
-                                        fontSize: '13px',
-                                        cursor: 'pointer',
-                                    }}
-                                    key={player.player.id + player.match_id}
-                                    onClick={() => {
-                                        window.open(
-                                            `/profile/${region}/${player.player.name}/${player.player.tag}`,
-                                            '_blank'
-                                        )
-                                    }}
-                                >
+                                <>
                                     <Stack
                                         direction="horizontal"
-                                        className="h-100 flex-fill"
-                                        style={{ minWidth: '10%' }}
+                                        className="border-top border-secondary border-2"
+                                        style={{
+                                            fontFamily: 'Courier New, monospace',
+                                            color: 'white',
+                                            fontSize: '13px',
+                                            cursor: 'pointer',
+                                        }}
+                                        key={player.player.id + player.match_id}
+                                        onClick={() => {
+                                            window.open(
+                                                `/profile/${region}/${player.player.name}/${player.player.tag}`,
+                                                '_blank'
+                                            )
+                                        }}
                                     >
                                         {player.won ? (
                                             <div className="vr p-1 text-bg-success"></div>
                                         ) : (
                                             <div className="vr p-1 text-bg-danger"></div>
                                         )}
-                                        <Image rounded src={imageMap[player.agent]} height={60} className="p-1"></Image>
-                                        <div style={{ minWidth: '100px', maxWidth: '100px' }}>{player.player.name}</div>
+                                        <Stack direction="horizontal" className="d-flex flex-wrap flex-fill">
+                                            <Stack
+                                                direction="horizontal"
+                                                className="flex-fill"
+                                                style={{ minWidth: '10%' }}
+                                            >
+                                                <Image
+                                                    rounded
+                                                    src={imageMap[player.agent]}
+                                                    height={60}
+                                                    className="p-1"
+                                                ></Image>
+                                                <div style={{ width: '100px' }}>{player.player.name}</div>
+                                            </Stack>
+                                            <Stack
+                                                direction="horizontal"
+                                                className="my-auto text-center flex-fill"
+                                                style={{ minWidth: '90%' }}
+                                            >
+                                                <div className="text-nowrap" style={{ minWidth: '24%' }}>
+                                                    {player.kills + ' / ' + player.deaths + ' / ' + player.assists}
+                                                </div>
+                                                <div style={{ minWidth: '19%' }}>{player.hs}</div>
+                                                <div style={{ minWidth: '19%' }}>{player.dd}</div>
+                                                <div style={{ minWidth: '19%' }}>{player.adr}</div>
+                                                <div style={{ minWidth: '19%' }}>{player.acs}</div>
+                                            </Stack>
+                                        </Stack>
                                     </Stack>
-                                    <Stack
-                                        direction="horizontal"
-                                        className="my-auto text-center flex-fill"
-                                        style={{ minWidth: '90%' }}
-                                    >
-                                        <div className="text-nowrap" style={{ minWidth: '24%' }}>
-                                            {player.kills + ' / ' + player.deaths + ' / ' + player.assists}
-                                        </div>
-                                        <div style={{ minWidth: '19%' }}>{player.hs}</div>
-                                        <div style={{ minWidth: '19%' }}>{player.dd}</div>
-                                        <div style={{ minWidth: '19%' }}>{player.adr}</div>
-                                        <div style={{ minWidth: '19%' }}>{player.acs}</div>
-                                    </Stack>
-                                </Stack>
+                                </>
                             )
                         })}
                     </Stack>

@@ -18,13 +18,14 @@ const gameModes: string[] = ['unrated', 'competitive', 'team deathmatch']
 
 function App() {
     /**
-     *  name, tag - The name and tag used to initialize the profile page
+     *  region, name, tag - The name and tag and region  used to initialize the profile page
      *  currentMode - The current mode being displayed, when match data is retrieved it will for matches of this type
      *  data - An array of objects representing individual matches
      *  filter - The text that is going to be used to filter the matches via regex
      *  imageMap - A dictionary mapping an asset name to a link to its image
      *  matchDetails - An array of objects representing player performance for a particular match
      *  showMatchDetails - A variable keeping track of the visibility of the match details offcanvas element
+     *  page - The page of matches that will next be retrieved
      */
     const { region, name, tag } = useParams()
     const [currentMode, setCurrentMode] = useState('competitive')
@@ -150,6 +151,9 @@ function App() {
         }
     }
 
+    /**
+     * Retrieves match data for the next page of matches and appends them to the data array
+     */
     async function handleLoadMatches(): Promise<void> {
         let response: any = await (
             await retrieveProfileData(name + '#' + tag, currentMode, page, region as string)
@@ -173,6 +177,9 @@ function App() {
         setData(newData)
     }
 
+    /**
+     * Updates the most recent matches for the player and them retrieves the profile again with the most recent matches
+     */
     async function handleUpdateProfile() {
         if (name && tag) {
             await (await retrievePlayerData(name + '#' + tag, currentMode, region as string)).json()

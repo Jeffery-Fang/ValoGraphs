@@ -31,6 +31,13 @@ export default function PlayerStack({ playerMap, handleAdd, handleToggle, handle
                             nameAndTag={player}
                             handleToggle={() => handleToggle(player)}
                             handleDelete={() => handleDelete(player)}
+                            handleSearch={() => {
+                                let temp = player.split('#')
+                                window.open(
+                                    `/profile/${playerMap[player].region.toLowerCase()}/${temp[0]}/${temp[1]}`,
+                                    '_blank'
+                                )
+                            }}
                             visible={playerMap[player].visible}
                             key={player}
                         ></PlayerEntry>

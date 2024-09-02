@@ -47,7 +47,7 @@ function App() {
     }
 
     /**
-     * Updates the match data for all players  if the new mode is different from the current mode
+     * Updates the match data for all players if the new mode is different from the current mode
      *
      * @param mode - The mode that the new data will be associated with
      */

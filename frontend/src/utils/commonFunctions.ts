@@ -161,12 +161,20 @@ export function calculateAverageStats(
             avgHS += match.hs
             avgKDR += match.kills / (match.deaths || 1)
             avgKDA += (match.kills + match.assists) / (match.deaths || 1)
-            avgADR += match.adr
-            avgACS += match.acs
-            avgDD += match.dd
             length += 1
+
+            if (currentMode === 'team deathmatch') {
+                avgADR += match.adr * (match.rounds_blue_won + match.rounds_red_won)
+                avgACS += match.acs * (match.rounds_blue_won + match.rounds_red_won)
+                avgDD += match.dd * (match.rounds_blue_won + match.rounds_red_won)
+            } else {
+                avgADR += match.adr
+                avgACS += match.acs
+                avgDD += match.dd
+            }
         }
     }
+
     avgHS /= length || 1
     avgKDR /= length || 1
     avgKDA /= length || 1
