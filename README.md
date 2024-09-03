@@ -73,17 +73,17 @@ Now once the prerequisites are met there just follow the steps below.
 
 ### Gallery & Demonstrations
 
-<img src='https://github.com/user-attachments/assets/0d4b8df1-3d22-4faf-8516-d2e4284f76e3'></img>
+<img src='https://github.com/user-attachments/assets/1f284bd9-cb90-4b13-8087-dd85a4480df4'></img>
 *Graph Page Desktop View*
 
-<img src='https://github.com/user-attachments/assets/4d339898-73a0-4026-b044-00bc1855cf7d'></img>
+<img src='https://github.com/user-attachments/assets/2eb82719-7463-4b22-9c37-7f76d6af804b'></img>
 *Profile Page Desktop View*
 
-<img src='https://github.com/user-attachments/assets/b4a1b7d9-64a2-4962-9be2-20b468258704' width="auto" height="500"></img>
+<img src='https://github.com/user-attachments/assets/8e68be93-91ed-4c1e-a98e-ae2d1013db34' width="auto" height="500"></img>
 
 *Graph Page Mobile View*
 
-<img src='https://github.com/user-attachments/assets/16cd4288-43cf-4cf3-84da-17ed92f7fb0d' width="auto" height="500"></img>
+<img src='https://github.com/user-attachments/assets/65b598e8-e2cf-4312-ae90-edc61489301b' width="auto" height="500"></img>
 
 *Profile Page Mobile View*
 
