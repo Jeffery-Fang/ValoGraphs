@@ -180,7 +180,7 @@ function App() {
     /**
      * Updates the most recent matches for the player and them retrieves the profile again with the most recent matches
      */
-    async function handleUpdateProfile() {
+    async function handleUpdateProfile(): Promise<void> {
         if (name && tag) {
             await (await retrievePlayerData(name + '#' + tag, currentMode, region as string)).json()
             let response: any = await (

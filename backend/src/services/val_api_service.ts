@@ -119,7 +119,13 @@ export async function retrievePlayerData(
  * @param region - The region where the player is from
  * @returns An array of data that can be used to create MatchStat objects
  */
-export async function retrieveProfileData(name: string, tag: string, mode: string, page: number, region: string) {
+export async function retrieveProfileData(
+    name: string,
+    tag: string,
+    mode: string,
+    page: number,
+    region: string
+): Promise<any> {
     try {
         let url: string = (PROFILE_URL_ROOT +
             region +

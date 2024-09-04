@@ -110,17 +110,15 @@ export default function Header({ handlerMap, gameModes, regions, currentRegion, 
                             <Dropdown.Menu className="bg-black border border-dark" align={'end'}>
                                 {regions.map((region: string, index: number) => {
                                     return (
-                                        <>
-                                            <Dropdown.Item
-                                                key={index}
-                                                className="text-secondary"
-                                                onClick={() => {
-                                                    handleChangeRegion(region)
-                                                }}
-                                            >
-                                                {region}
-                                            </Dropdown.Item>
-                                        </>
+                                        <Dropdown.Item
+                                            key={index}
+                                            className="text-secondary"
+                                            onClick={() => {
+                                                handleChangeRegion(region)
+                                            }}
+                                        >
+                                            {region}
+                                        </Dropdown.Item>
                                     )
                                 })}
                             </Dropdown.Menu>

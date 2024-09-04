@@ -143,59 +143,53 @@ export default function MatchDetails({
                     <Stack className="border-bottom border-secondary border-2 d-flex">
                         {matchDetails.map((player: any) => {
                             return (
-                                <>
-                                    <Stack
-                                        direction="horizontal"
-                                        className="border-top border-secondary border-2"
-                                        style={{
-                                            fontFamily: 'Courier New, monospace',
-                                            color: 'white',
-                                            fontSize: '13px',
-                                            cursor: 'pointer',
-                                        }}
-                                        key={player.player.id + player.match_id}
-                                        onClick={() => {
-                                            window.open(
-                                                `/profile/${region}/${player.player.name}/${player.player.tag}`,
-                                                '_blank'
-                                            )
-                                        }}
-                                    >
-                                        {player.won ? (
-                                            <div className="vr p-1 text-bg-success"></div>
-                                        ) : (
-                                            <div className="vr p-1 text-bg-danger"></div>
-                                        )}
-                                        <Stack direction="horizontal" className="d-flex flex-wrap flex-fill">
-                                            <Stack
-                                                direction="horizontal"
-                                                className="flex-fill"
-                                                style={{ minWidth: '10%' }}
-                                            >
-                                                <Image
-                                                    rounded
-                                                    src={imageMap[player.agent]}
-                                                    height={60}
-                                                    className="p-1"
-                                                ></Image>
-                                                <div style={{ width: '100px' }}>{player.player.name}</div>
-                                            </Stack>
-                                            <Stack
-                                                direction="horizontal"
-                                                className="my-auto text-center flex-fill"
-                                                style={{ minWidth: '90%' }}
-                                            >
-                                                <div className="text-nowrap" style={{ minWidth: '24%' }}>
-                                                    {player.kills + ' / ' + player.deaths + ' / ' + player.assists}
-                                                </div>
-                                                <div style={{ minWidth: '19%' }}>{player.hs}</div>
-                                                <div style={{ minWidth: '19%' }}>{player.dd}</div>
-                                                <div style={{ minWidth: '19%' }}>{player.adr}</div>
-                                                <div style={{ minWidth: '19%' }}>{player.acs}</div>
-                                            </Stack>
+                                <Stack
+                                    direction="horizontal"
+                                    className="border-top border-secondary border-2"
+                                    style={{
+                                        fontFamily: 'Courier New, monospace',
+                                        color: 'white',
+                                        fontSize: '13px',
+                                        cursor: 'pointer',
+                                    }}
+                                    key={player.player.id + player.match_id}
+                                    onClick={() => {
+                                        window.open(
+                                            `/profile/${region}/${player.player.name}/${player.player.tag}`,
+                                            '_blank'
+                                        )
+                                    }}
+                                >
+                                    {player.won ? (
+                                        <div className="vr p-1 text-bg-success"></div>
+                                    ) : (
+                                        <div className="vr p-1 text-bg-danger"></div>
+                                    )}
+                                    <Stack direction="horizontal" className="d-flex flex-wrap flex-fill">
+                                        <Stack direction="horizontal" className="flex-fill" style={{ minWidth: '10%' }}>
+                                            <Image
+                                                rounded
+                                                src={imageMap[player.agent]}
+                                                height={60}
+                                                className="p-1"
+                                            ></Image>
+                                            <div style={{ width: '100px' }}>{player.player.name}</div>
+                                        </Stack>
+                                        <Stack
+                                            direction="horizontal"
+                                            className="my-auto text-center flex-fill"
+                                            style={{ minWidth: '90%' }}
+                                        >
+                                            <div className="text-nowrap" style={{ minWidth: '24%' }}>
+                                                {player.kills + ' / ' + player.deaths + ' / ' + player.assists}
+                                            </div>
+                                            <div style={{ minWidth: '19%' }}>{player.hs}</div>
+                                            <div style={{ minWidth: '19%' }}>{player.dd}</div>
+                                            <div style={{ minWidth: '19%' }}>{player.adr}</div>
+                                            <div style={{ minWidth: '19%' }}>{player.acs}</div>
                                         </Stack>
                                     </Stack>
-                                </>
+                                </Stack>
                             )
                         })}
                     </Stack>
