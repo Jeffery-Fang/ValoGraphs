@@ -111,15 +111,15 @@ export default function MatchEntry({
                         </Stack>
                         <Stack direction="vertical" gap={1} style={{ width: '10%' }}>
                             <div className="w-100">DD Δ</div>
-                            <div className="w-100">{dd}</div>
+                            <div className="w-100">{Math.round(dd)}</div>
                         </Stack>
                         <Stack direction="vertical" gap={1} style={{ width: '10%' }}>
                             <div className="w-100">ADR</div>
-                            <div className="w-100">{adr}</div>
+                            <div className="w-100">{Math.round(adr)}</div>
                         </Stack>
                         <Stack direction="vertical" gap={1} style={{ width: '10%' }}>
                             <div className="w-100">ACS</div>
-                            <div className="w-100">{acs}</div>
+                            <div className="w-100">{Math.round(acs)}</div>
                         </Stack>
                         <Stack direction="vertical" className="my-auto" gap={1} style={{ width: '15%' }}>
                             {calculateDateDiff(new Date(), date) === 1

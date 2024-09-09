@@ -83,7 +83,9 @@ function App() {
     function handleDelete(name: string): void {
         let newPlayerMap = { ...playerMap }
 
-        delete newPlayerMap[name]
+        if (Object.keys(newPlayerMap).includes(name)) {
+            delete newPlayerMap[name]
+        }
         setPlayerMap(newPlayerMap)
     }
 

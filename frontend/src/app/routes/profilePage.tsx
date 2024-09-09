@@ -48,9 +48,9 @@ function App() {
             let response: any = await (
                 await retrieveProfileData(name + '#' + tag, currentMode, page, region as string)
             ).json()
-            let newimageMap: { [id: string]: string } = { ...imageMap }
+            let newImageMap: { [id: string]: string } = { ...imageMap }
 
-            if (!Object.keys(newimageMap).includes('card')) {
+            if (!Object.keys(newImageMap).includes('card')) {
                 let assetData: any = await (
                     await fetch(
                         'https://valorant-api.com/v1/playercards/' +
@@ -59,7 +59,7 @@ function App() {
                     )
                 ).json()
 
-                newimageMap['card'] = assetData['data']['wideArt']
+                newImageMap['card'] = assetData['data']['wideArt']
             }
 
             for (let element of response) {
@@ -68,12 +68,12 @@ function App() {
                         await fetch('https://valorant-api.com/v1/agents/' + element.agent_id, { method: 'GET' })
                     ).json()
 
-                    newimageMap[element.agent] = assetData['data']['displayIcon']
+                    newImageMap[element.agent] = assetData['data']['displayIcon']
                 }
             }
 
             setPage(page + 1)
-            setImageMap(newimageMap)
+            setImageMap(newImageMap)
             setData(response)
         } else {
             alert('Invalid name and tag')
@@ -88,14 +88,14 @@ function App() {
     async function handleChangeMode(mode: string): Promise<void> {
         if (mode !== currentMode) {
             let response: any = await (await retrieveProfileData(name + '#' + tag, mode, 1, region as string)).json()
-            let newimageMap: { [id: string]: string } = { ...imageMap }
+            let newImageMap: { [id: string]: string } = { ...imageMap }
 
-            if (!Object.keys(newimageMap).includes('card')) {
+            if (!Object.keys(newImageMap).includes('card')) {
                 let assetData: any = await (
                     await fetch('https://valorant-api.com/v1/playercards/' + response[0].card_id, { method: 'GET' })
                 ).json()
 
-                newimageMap['card'] = assetData['data']['wideArt']
+                newImageMap['card'] = assetData['data']['wideArt']
             }
 
             for (let element of response) {
@@ -104,12 +104,12 @@ function App() {
                         await fetch('https://valorant-api.com/v1/agents/' + element.agent_id, { method: 'GET' })
                     ).json()
 
-                    newimageMap[element.agent] = assetData['data']['displayIcon']
+                    newImageMap[element.agent] = assetData['data']['displayIcon']
                 }
             }
 
             setPage(2)
-            setImageMap(newimageMap)
+            setImageMap(newImageMap)
             setData(response)
             setCurrentMode(mode)
         }
@@ -133,7 +133,7 @@ function App() {
     async function handleShowMatchDetails(match_id: string): Promise<void> {
         if (match_id) {
             let response: any = await (await retrieveMatchData(match_id, region as string)).json()
-            let newimageMap: { [id: string]: string } = { ...imageMap }
+            let newImageMap: { [id: string]: string } = { ...imageMap }
 
             for (let element of response) {
                 if (!Object.keys(imageMap).includes(element.agent)) {
@@ -141,11 +141,11 @@ function App() {
                         await fetch('https://valorant-api.com/v1/agents/' + element.agent_id, { method: 'GET' })
                     ).json()
 
-                    newimageMap[element.agent] = assetData['data']['displayIcon']
+                    newImageMap[element.agent] = assetData['data']['displayIcon']
                 }
             }
 
-            setImageMap(newimageMap)
+            setImageMap(newImageMap)
             setMatchDetails(response)
             setShowMatchDetails(true)
         }
@@ -158,7 +158,7 @@ function App() {
         let response: any = await (
             await retrieveProfileData(name + '#' + tag, currentMode, page, region as string)
         ).json()
-        let newimageMap: { [id: string]: string } = { ...imageMap }
+        let newImageMap: { [id: string]: string } = { ...imageMap }
         let newData = [...data]
 
         for (let element of response) {
@@ -167,13 +167,13 @@ function App() {
                     await fetch('https://valorant-api.com/v1/agents/' + element.agent_id, { method: 'GET' })
                 ).json()
 
-                newimageMap[element.agent] = assetData['data']['displayIcon']
+                newImageMap[element.agent] = assetData['data']['displayIcon']
             }
         }
 
         newData.push(...response)
         setPage(page + 1)
-        setImageMap(newimageMap)
+        setImageMap(newImageMap)
         setData(newData)
     }
 
@@ -186,9 +186,9 @@ function App() {
             let response: any = await (
                 await retrieveProfileData(name + '#' + tag, currentMode, 1, region as string)
             ).json()
-            let newimageMap: { [id: string]: string } = { ...imageMap }
+            let newImageMap: { [id: string]: string } = { ...imageMap }
 
-            if (!Object.keys(newimageMap).includes('card')) {
+            if (!Object.keys(newImageMap).includes('card')) {
                 let assetData: any = await (
                     await fetch(
                         'https://valorant-api.com/v1/playercards/' +
@@ -197,7 +197,7 @@ function App() {
                     )
                 ).json()
 
-                newimageMap['card'] = assetData['data']['wideArt']
+                newImageMap['card'] = assetData['data']['wideArt']
             }
 
             for (let element of response) {
@@ -206,12 +206,12 @@ function App() {
                         await fetch('https://valorant-api.com/v1/agents/' + element.agent_id, { method: 'GET' })
                     ).json()
 
-                    newimageMap[element.agent] = assetData['data']['displayIcon']
+                    newImageMap[element.agent] = assetData['data']['displayIcon']
                 }
             }
 
             setPage(2)
-            setImageMap(newimageMap)
+            setImageMap(newImageMap)
             setData(response)
         } else {
             alert('Invalid name and tag')

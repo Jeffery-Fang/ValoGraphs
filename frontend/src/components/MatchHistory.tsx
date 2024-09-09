@@ -78,9 +78,21 @@ export default function MatchHistory({
                                     deaths={match.deaths}
                                     assists={match.assists}
                                     hs={match.hs}
-                                    dd={match.dd}
-                                    adr={match.adr}
-                                    acs={match.acs}
+                                    dd={
+                                        match.mode === 'Team Deathmatch'
+                                            ? Math.round(match.dd * (match.rounds_blue_won + match.rounds_red_won))
+                                            : match.dd
+                                    }
+                                    adr={
+                                        match.mode === 'Team Deathmatch'
+                                            ? Math.round(match.adr * (match.rounds_blue_won + match.rounds_red_won))
+                                            : match.adr
+                                    }
+                                    acs={
+                                        match.mode === 'Team Deathmatch'
+                                            ? Math.round(match.acs * (match.rounds_blue_won + match.rounds_red_won))
+                                            : match.acs
+                                    }
                                     date={match.date}
                                     mode={match.mode}
                                     won={match.won}
