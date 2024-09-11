@@ -5,7 +5,7 @@ import { default as request } from 'supertest'
 import { retrievePlayerData, retrieveProfileData, retrieveMatchData } from '../src/services/val_api_service.js'
 import { createManyMatchStat } from '../src/services/match_stat_service.js'
 import { saveManyMatchStat, getFromMatchId } from '../src/services/data_access_service.js'
-import { mockMatchStat } from './mockData.js'
+import { mockMatchStat } from './mock_data'
 
 let server: http.Server
 

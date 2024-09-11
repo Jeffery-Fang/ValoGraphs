@@ -1,6 +1,6 @@
 import { Stack } from 'react-bootstrap'
 import Graph from './Graph'
-import { stringToColour } from '../utils/commonFunctions'
+import { stringToColour } from '../utils/common_functions'
 
 /**
  * playerMap - A dictionary that maps player names to their match data & visibility

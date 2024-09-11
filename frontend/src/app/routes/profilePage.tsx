@@ -12,11 +12,11 @@ import {
     calculateAverageStats,
     countMatchsPerDay,
     retrieveProfileData,
-} from '../../utils/commonFunctions'
+} from '../../utils/common_functions'
 
 const gameModes: string[] = ['unrated', 'competitive', 'team deathmatch']
 
-function App() {
+function ProfilePage() {
     /**
      *  region, name, tag - The name and tag and region  used to initialize the profile page
      *  currentMode - The current mode being displayed, when match data is retrieved it will for matches of this type
@@ -308,4 +308,4 @@ function App() {
     )
 }
 
-export default App
+export default ProfilePage

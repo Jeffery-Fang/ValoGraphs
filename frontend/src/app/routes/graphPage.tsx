@@ -3,12 +3,12 @@ import { useState } from 'react'
 import Header from '../../components/Header'
 import PlayerStack from '../../components/PlayerStack'
 import GraphContainer from '../../components/GraphContainer'
-import { retrievePlayerData, handleProfileSearch } from '../../utils/commonFunctions'
+import { retrievePlayerData, handleProfileSearch } from '../../utils/common_functions'
 
 const gameModes: string[] = ['unrated', 'competitive', 'team deathmatch']
 const regions: string[] = ['NA', 'EU', 'LATAM', 'BR', 'AP', 'KR']
 
-function App() {
+function GraphPage() {
     /**
      * currentMode - The current mode being displayed, when match data is retrieved it will for matches of this type
      * currentRegion - The region that any new player being added will be from
@@ -134,4 +134,4 @@ function App() {
     )
 }
 
-export default App
+export default GraphPage

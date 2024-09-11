@@ -1,7 +1,7 @@
 import { AppDataSource } from '../src/data-source'
 import { getFromMatchId, saveOneMatchStat, saveManyMatchStat } from '../src/services/data_access_service'
 import { MatchStat } from '../src/entities/MatchStat'
-import { mockMatchStat } from './mockData'
+import { mockMatchStat } from './mock_data'
 
 jest.mock('../src/data-source.js', () => ({
     AppDataSource: {

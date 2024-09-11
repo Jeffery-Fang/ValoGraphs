@@ -156,8 +156,12 @@ export async function retrieveProfileData(
         response = await response.json()
         accountDetails = await accountDetails.json()
 
-        if (Object.keys(response).includes('errors') || Object.keys(accountDetails).includes('errors')) {
+        if (Object.keys(response).includes('errors')) {
             throw response.errors
+        }
+
+        if (Object.keys(accountDetails).includes('errors')) {
+            throw accountDetails.errors
         }
 
         for (let match of response['data']) {

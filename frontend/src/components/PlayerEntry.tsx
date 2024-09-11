@@ -1,6 +1,6 @@
 import { CloseButton, Stack } from 'react-bootstrap'
 import { FaEyeSlash, FaRegEye } from 'react-icons/fa'
-import { stringToColour } from '../utils/commonFunctions'
+import { stringToColour } from '../utils/common_functions'
 
 /**
  * handleToggle - A function that toggles the visible variable in the state of the application

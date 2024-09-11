@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import { retrievePlayerData, retrieveProfileData, retrieveMatchData } from '../src/services/val_api_service'
-import { mockPlayerApiResponse, mockProfileApiResponse, mockMatchApiResponses } from './mockData'
+import { mockPlayerApiResponse, mockProfileApiResponse, mockMatchApiResponses } from './mock_data'
 const mockFetch = jest.fn()
 global.fetch = mockFetch
 
@@ -192,13 +192,51 @@ describe('testing retrieveProfileData()', (): void => {
         }
     })
 
-    test('should throw an error if the api call responds with an error', async (): Promise<void> => {
+    test('should throw an error if stored matches api call responds with an error', async (): Promise<void> => {
         try {
             mockFetch.mockResolvedValue({
                 json: jest.fn().mockResolvedValue({
                     errors: 'some errors',
                 }),
             })
+            let name = 'Hexennacht'
+            let tag = 'NA1'
+            let mode = 'unrated'
+            let page = 1
+            let region = 'na'
+            let response = await retrieveProfileData(name, tag, mode, page, region)
+            let options: RequestInit = {
+                method: 'GET',
+                headers: {
+                    Authorization: API_KEY,
+                },
+            }
+            expect(mockFetch).toHaveBeenCalledWith(
+                PROFILE_URL_ROOT + region + '/' + name + '/' + tag + '?mode=' + mode + '&page=' + page + '&size=10',
+                options
+            )
+            expect(mockFetch).toHaveBeenCalledWith(
+                `https://api.henrikdev.xyz/valorant/v2/account/${name}/${tag}`,
+                options
+            )
+            expect(mockFetch).toHaveBeenCalledTimes(2)
+        } catch (e) {
+            expect(e).toBe('some errors')
+        }
+    })
+
+    test('should throw an error if the account details api call responds with an error', async (): Promise<void> => {
+        try {
+            mockFetch
+                .mockResolvedValueOnce({
+                    json: jest.fn().mockResolvedValue({}),
+                })
+                .mockResolvedValue({
+                    json: jest.fn().mockResolvedValue({
+                        errors: 'some errors',
+                    }),
+                })
+
             let name = 'Hexennacht'
             let tag = 'NA1'
             let mode = 'unrated'

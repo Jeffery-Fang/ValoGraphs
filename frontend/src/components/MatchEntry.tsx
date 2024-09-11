@@ -1,5 +1,5 @@
 import { Stack, Image } from 'react-bootstrap'
-import { calculateDateDiff } from '../utils/commonFunctions'
+import { calculateDateDiff } from '../utils/common_functions'
 
 /**
  * agentLink - A link to a picture of the agent

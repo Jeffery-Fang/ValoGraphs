@@ -1,6 +1,6 @@
 import { Container, Stack } from 'react-bootstrap'
 
-function App() {
+function ErrorPage() {
     return (
         <>
             <Container
@@ -24,4 +24,4 @@ function App() {
     )
 }
 
-export default App
+export default ErrorPage
