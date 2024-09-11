@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import GraphPage from './routes/GraphPage.tsx'
-import ProfilePage from './routes/ProfilePage.tsx'
-import ErrorPage from './routes/ErrorPage.tsx'
+import GraphPage from './routes/GraphPage'
+import ProfilePage from './routes/ProfilePage'
+import ErrorPage from './routes/ErrorPage'
 
 const router = createBrowserRouter([
     {
