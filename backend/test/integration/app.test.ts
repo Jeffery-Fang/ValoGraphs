@@ -1,17 +1,17 @@
 import 'dotenv/config'
 import http from 'http'
-import app from '../src/app.js'
+import app from '../../src/app.js'
 import { default as request } from 'supertest'
-import { retrievePlayerData, retrieveProfileData, retrieveMatchData } from '../src/services/val_api_service.js'
-import { createManyMatchStat } from '../src/services/match_stat_service.js'
-import { saveManyMatchStat, getFromMatchId } from '../src/services/data_access_service.js'
-import { mockMatchStat } from './mock_data'
+import { retrievePlayerData, retrieveProfileData, retrieveMatchData } from '../../src/services/val_api_service.js'
+import { createManyMatchStat } from '../../src/services/match_stat_service.js'
+import { saveManyMatchStat, getFromMatchId } from '../../src/services/data_access_service.js'
+import { mockMatchStat } from '../mock_data.js'
 
 let server: http.Server
 
-jest.mock('../src/services/val_api_service.js')
-jest.mock('../src/services/match_stat_service.js')
-jest.mock('../src/services/data_access_service.js')
+jest.mock('../../src/services/val_api_service.js')
+jest.mock('../../src/services/match_stat_service.js')
+jest.mock('../../src/services/data_access_service.js')
 
 beforeAll((done): void => {
     server = app.listen(3000, (): void => {
@@ -45,7 +45,7 @@ describe('testing GET /players', (): void => {
         const mode = mockMatchStat.mode.toLowerCase()
         const size = 10
         const region = 'na'
-        const url = '/players/' + name + '?tag=' + tag + '&mode=' + mode + '&size=' + size + '&region=' + region
+        const url = `/players/${name}?tag=${tag}&mode=${mode}&size=${size}&region=${region}`
         const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
@@ -63,7 +63,7 @@ describe('testing GET /players', (): void => {
         const mode = 'spike rush'
         const size = 10
         const region = 'na'
-        const url = '/players/' + name + '?tag=' + tag + '&mode=' + mode + '&size=' + size + '&region=' + region
+        const url = `/players/${name}?tag=${tag}&mode=${mode}&size=${size}&region=${region}`
         const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
@@ -81,7 +81,7 @@ describe('testing GET /players', (): void => {
         const mode = mockMatchStat.mode.toLowerCase()
         const size = 15
         const region = 'na'
-        const url = '/players/' + name + '?tag=' + tag + '&mode=' + mode + '&size=' + size + '&region=' + region
+        const url = `/players/${name}?tag=${tag}&mode=${mode}&size=${size}&region=${region}`
         const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
@@ -99,7 +99,7 @@ describe('testing GET /players', (): void => {
         const mode = mockMatchStat.mode.toLowerCase()
         const size = 10
         const region = 'wonderland'
-        const url = '/players/' + name + '?tag=' + tag + '&mode=' + mode + '&size=' + size + '&region=' + region
+        const url = `/players/${name}?tag=${tag}&mode=${mode}&size=${size}&region=${region}`
         const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
@@ -117,7 +117,7 @@ describe('testing GET /players', (): void => {
         const mode = mockMatchStat.mode.toLowerCase()
         const size = 10
         const region = 'na'
-        const url = '/players/' + name + '&mode=' + mode + '&size=' + size + '&region=' + region
+        const url = `/players/${name}?mode=${mode}&size=${size}&region=${region}`
         const response = await request(app).get(url)
 
         expect(response.status).toBe(400)
@@ -143,7 +143,7 @@ describe('testing GET /matches', (): void => {
     test("should return status 200 if the match hasn't yet been stored", async (): Promise<void> => {
         const match_id = mockMatchStat.match_id
         const region = 'na'
-        const url = '/matches/' + match_id + '?region=' + region
+        const url = `/matches/${match_id}?region=${region}`
         const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
@@ -157,7 +157,7 @@ describe('testing GET /matches', (): void => {
         ;(getFromMatchId as jest.Mock).mockResolvedValue([{}, {}, {}, {}, {}, {}, {}, {}, {}, {}])
         const match_id = mockMatchStat.match_id
         const region = 'na'
-        const url = '/matches/' + match_id + '?region=' + region
+        const url = `/matches/${match_id}?region=${region}`
         const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
@@ -169,7 +169,7 @@ describe('testing GET /matches', (): void => {
     test('should return 200 if the region is out of bounds and there are no other issues', async (): Promise<void> => {
         const match_id = mockMatchStat.match_id
         const region = 'wonderland'
-        const url = '/matches/' + match_id + '?region=' + region
+        const url = `/matches/${match_id}?region=${region}`
         const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
@@ -182,7 +182,7 @@ describe('testing GET /matches', (): void => {
     test('should return status 400 if there is a database error', async (): Promise<void> => {
         const match_id = mockMatchStat.match_id
         const region = 'na'
-        const url = '/matches/' + match_id + '?region=' + region
+        const url = `/matches/${match_id}?region=${region}`
 
         ;(getFromMatchId as jest.Mock).mockRejectedValueOnce('database error')
         const response = await request(app).get(url)
@@ -193,7 +193,7 @@ describe('testing GET /matches', (): void => {
 
     test('should return status 400 if no region is provided', async (): Promise<void> => {
         const match_id = mockMatchStat.match_id
-        const url = '/matches/' + match_id
+        const url = `/matches/${match_id}`
         const response = await request(app).get(url)
 
         expect(response.status).toBe(400)
@@ -217,7 +217,7 @@ describe('testing GET /profiles', (): void => {
         const mode = mockMatchStat.mode.toLowerCase()
         const page = 1
         const region = 'na'
-        const url = '/profiles/' + name + '?tag=' + tag + '&mode=' + mode + '&page=' + page + '&region=' + region
+        const url = `/profiles/${name}?tag=${tag}&mode=${mode}&page=${page}&region=${region}`
         const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
@@ -233,7 +233,7 @@ describe('testing GET /profiles', (): void => {
         const mode = 'spike rush'
         const page = 1
         const region = 'na'
-        const url = '/profiles/' + name + '?tag=' + tag + '&mode=' + mode + '&page=' + page + '&region=' + region
+        const url = `/profiles/${name}?tag=${tag}&mode=${mode}&page=${page}&region=${region}`
         const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
@@ -249,7 +249,7 @@ describe('testing GET /profiles', (): void => {
         const mode = mockMatchStat.mode.toLowerCase()
         const page = 0
         const region = 'na'
-        const url = '/profiles/' + name + '?tag=' + tag + '&mode=' + mode + '&page=' + page + '&region=' + region
+        const url = `/profiles/${name}?tag=${tag}&mode=${mode}&page=${page}&region=${region}`
         const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
@@ -265,7 +265,7 @@ describe('testing GET /profiles', (): void => {
         const mode = mockMatchStat.mode.toLowerCase()
         const page = 1
         const region = 'wonderland'
-        const url = '/profiles/' + name + '?tag=' + tag + '&mode=' + mode + '&page=' + page + '&region=' + region
+        const url = `/profiles/${name}?tag=${tag}&mode=${mode}&page=${page}&region=${region}`
         const response = await request(app).get(url)
 
         expect(response.status).toBe(200)
@@ -281,7 +281,7 @@ describe('testing GET /profiles', (): void => {
         const mode = mockMatchStat.mode.toLowerCase()
         const page = 1
         const region = 'na'
-        const url = '/profiles/' + name + '&mode=' + mode + '&page=' + page + '&region=' + region
+        const url = `/profiles/${name}?mode=${mode}&page=${page}&region=${region}`
         const response = await request(app).get(url)
 
         expect(response.status).toBe(400)

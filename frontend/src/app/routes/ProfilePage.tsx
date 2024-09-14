@@ -52,11 +52,7 @@ function ProfilePage() {
 
             if (!Object.keys(newImageMap).includes('card')) {
                 let assetData: any = await (
-                    await fetch(
-                        'https://valorant-api.com/v1/playercards/' +
-                            (response.length > 0 ? response[response.length - 1].card_id : response[0].card_id),
-                        { method: 'GET' }
-                    )
+                    await fetch(`${import.meta.env.VITE_PLAYER_CARD_URL}/${response[0].card_id}`, { method: 'GET' })
                 ).json()
 
                 newImageMap['card'] = assetData['data']['wideArt']
@@ -65,7 +61,7 @@ function ProfilePage() {
             for (let element of response) {
                 if (!Object.keys(imageMap).includes(element.agent)) {
                     let assetData: any = await (
-                        await fetch('https://valorant-api.com/v1/agents/' + element.agent_id, { method: 'GET' })
+                        await fetch(`${import.meta.env.VITE_AGENT_URL}/${element.agent_id}`, { method: 'GET' })
                     ).json()
 
                     newImageMap[element.agent] = assetData['data']['displayIcon']
@@ -92,7 +88,7 @@ function ProfilePage() {
 
             if (!Object.keys(newImageMap).includes('card')) {
                 let assetData: any = await (
-                    await fetch('https://valorant-api.com/v1/playercards/' + response[0].card_id, { method: 'GET' })
+                    await fetch(`${import.meta.env.VITE_PLAYER_CARD_URL}/${response[0].card_id}`, { method: 'GET' })
                 ).json()
 
                 newImageMap['card'] = assetData['data']['wideArt']
@@ -101,7 +97,7 @@ function ProfilePage() {
             for (let element of response) {
                 if (!Object.keys(imageMap).includes(element.agent)) {
                     let assetData: any = await (
-                        await fetch('https://valorant-api.com/v1/agents/' + element.agent_id, { method: 'GET' })
+                        await fetch(`${import.meta.env.VITE_AGENT_URL}/${element.agent_id}`, { method: 'GET' })
                     ).json()
 
                     newImageMap[element.agent] = assetData['data']['displayIcon']
@@ -138,7 +134,7 @@ function ProfilePage() {
             for (let element of response) {
                 if (!Object.keys(imageMap).includes(element.agent)) {
                     let assetData: any = await (
-                        await fetch('https://valorant-api.com/v1/agents/' + element.agent_id, { method: 'GET' })
+                        await fetch(`${import.meta.env.VITE_AGENT_URL}/${element.agent_id}`, { method: 'GET' })
                     ).json()
 
                     newImageMap[element.agent] = assetData['data']['displayIcon']
@@ -164,7 +160,7 @@ function ProfilePage() {
         for (let element of response) {
             if (!Object.keys(imageMap).includes(element.agent)) {
                 let assetData: any = await (
-                    await fetch('https://valorant-api.com/v1/agents/' + element.agent_id, { method: 'GET' })
+                    await fetch(`${import.meta.env.VITE_AGENT_URL}/${element.agent_id}`, { method: 'GET' })
                 ).json()
 
                 newImageMap[element.agent] = assetData['data']['displayIcon']
@@ -190,11 +186,7 @@ function ProfilePage() {
 
             if (!Object.keys(newImageMap).includes('card')) {
                 let assetData: any = await (
-                    await fetch(
-                        'https://valorant-api.com/v1/playercards/' +
-                            (response.length > 0 ? response[response.length - 1].card_id : response[0].card_id),
-                        { method: 'GET' }
-                    )
+                    await fetch(`${import.meta.env.VITE_PLAYER_CARD_URL}/${response[0].card_id}`, { method: 'GET' })
                 ).json()
 
                 newImageMap['card'] = assetData['data']['wideArt']
@@ -203,7 +195,7 @@ function ProfilePage() {
             for (let element of response) {
                 if (!Object.keys(imageMap).includes(element.agent)) {
                     let assetData: any = await (
-                        await fetch('https://valorant-api.com/v1/agents/' + element.agent_id, { method: 'GET' })
+                        await fetch(`${import.meta.env.VITE_AGENT_URL}/${element.agent_id}`, { method: 'GET' })
                     ).json()
 
                     newImageMap[element.agent] = assetData['data']['displayIcon']

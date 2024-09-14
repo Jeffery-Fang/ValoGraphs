@@ -37,9 +37,11 @@ jobs:
               working-directory: ./frontend
               env:
                   VITE_GITHUB_LINK: https://github.com/Jeffery-Fang/ValoGraphs
-                  VITE_PLAYER_API_URL: https://api.valographs.com/players/
-                  VITE_MATCH_API_URL: https://api.valographs.com/matches/
-                  VITE_PROFILE_API_URL: 'https://api.valographs.com/profiles/'
+                  VITE_PLAYER_API_URL: https://api.valographs.com/players
+                  VITE_MATCH_API_URL: https://api.valographs.com/matches
+                  VITE_PROFILE_API_URL: 'https://api.valographs.com/profiles'
+                  VITE_PLAYER_CARD_URL: 'https://valorant-api.com/v1/playercards'
+                  VITE_AGENT_URL: 'https://valorant-api.com/v1/agents'
               run: npm run build --if-present
 
             - name: Configure AWS Credentials

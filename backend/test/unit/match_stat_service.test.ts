@@ -1,6 +1,6 @@
-import { createManyMatchStat, createOneMatchStat } from '../src/services/match_stat_service'
-import { MatchStat } from '../src/entities/MatchStat'
-import { mockPackagedData } from './mock_data'
+import { createManyMatchStat, createOneMatchStat } from '../../src/services/match_stat_service'
+import { MatchStat } from '../../src/entities/MatchStat'
+import { mockPackagedData } from '../mock_data'
 
 describe('testing createOneMatchStat()', (): void => {
     test('should return a MatchStat object with specified values if successful', (): void => {

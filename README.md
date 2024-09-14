@@ -1,4 +1,3 @@
-
 <br />
 <div align="center">
   <a href="https://Valographs.com">
@@ -43,9 +42,10 @@ Now once the prerequisites are met there just follow the steps below.
 3. Create a `.env` file in the backend directory with the following environment variables
 
     ```js
-    PLAYER_URL_ROOT = 'https://api.henrikdev.xyz/valorant/v4/matches/na/pc/'
-    PROFILE_URL_ROOT = 'https://api.henrikdev.xyz/valorant/v1/stored-matches/na/'
-    MATCH_URL_ROOT = 'https://api.henrikdev.xyz/valorant/v4/match/na/'
+    PLAYER_URL_ROOT = 'https://api.henrikdev.xyz/valorant/v4/matches/na/pc'
+    PROFILE_URL_ROOT = 'https://api.henrikdev.xyz/valorant/v1/stored-matches/na'
+    MATCH_URL_ROOT = 'https://api.henrikdev.xyz/valorant/v4/match/na'
+    ACCOUNT_URL_ROOT = 'https://api.henrikdev.xyz/valorant/v1/account/na'
 
     DB_HOST = 'YOUR DB HOST'
     DB_USERNAME = 'YOUR DB USERNAME'
@@ -58,9 +58,12 @@ Now once the prerequisites are met there just follow the steps below.
 4. Create a `.env` file in the frontend directory with the following environment variables
 
     ```js
-    VITE_PLAYER_API_URL = 'http://localhost:3000/players/'
-    VITE_MATCH_API_URL = 'http://localhost:3000/matches/'
-    VITE_PROFILE_API_URL = 'http://localhost:3000/profiles/'
+    VITE_PLAYER_API_URL = 'http://localhost:3000/players'
+    VITE_MATCH_API_URL = 'http://localhost:3000/matches'
+    VITE_PROFILE_API_URL = 'http://localhost:3000/profiles'
+
+    VITE_PLAYER_CARD_URL = 'https://valorant-api.com/v1/playercards'
+    VITE_AGENT_URL = 'https://valorant-api.com/v1/agents'
     ```
 
 5. Go into the backend and frontend directories and start the development servers
@@ -74,30 +77,30 @@ Now once the prerequisites are met there just follow the steps below.
 ### Gallery & Demonstrations
 
 <img src='https://github.com/user-attachments/assets/1f284bd9-cb90-4b13-8087-dd85a4480df4'></img>
-*Graph Page Desktop View*
+_Graph Page Desktop View_
 
 <img src='https://github.com/user-attachments/assets/2eb82719-7463-4b22-9c37-7f76d6af804b'></img>
-*Profile Page Desktop View*
+_Profile Page Desktop View_
 
 <img src='https://github.com/user-attachments/assets/8e68be93-91ed-4c1e-a98e-ae2d1013db34' width="auto" height="500"></img>
 
-*Graph Page Mobile View*
+_Graph Page Mobile View_
 
 <img src='https://github.com/user-attachments/assets/65b598e8-e2cf-4312-ae90-edc61489301b' width="auto" height="500"></img>
 
-*Profile Page Mobile View*
+_Profile Page Mobile View_
 
 ## Contact
 
-Jeffery Fang - JefferyFang02@gmail.com
+Jeffery Fang - JefferyFang324@gmail.com
 
 ## Tools & Technologies
 
-- Postgres
-- Express
-- React
-- Node
-- Jest
-- Vite
-- Bootstrap
-- AWS(Elastic Beanstalk, RDS, CloudFront, etc.)
+-   Postgres
+-   Express
+-   React
+-   Node
+-   Jest
+-   Vite
+-   Bootstrap
+-   AWS(Elastic Beanstalk, RDS, CloudFront, etc.)

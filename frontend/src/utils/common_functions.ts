@@ -30,19 +30,14 @@ export function stringToColour(str: string): string {
  */
 export async function retrievePlayerData(nameAndTag: string, mode: string, region: string): Promise<any> {
     let [name, tag]: string[] = nameAndTag.split('#')
-    let url: string =
-        import.meta.env.VITE_PLAYER_API_URL +
-        name +
-        '?tag=' +
-        tag +
-        '&mode=' +
-        mode.replace(' ', '') +
-        '&size=10&region=' +
-        region.toLowerCase()
+    let url: string = `${import.meta.env.VITE_PLAYER_API_URL}/${name}?tag=${tag}&mode=${mode.replace(
+        ' ',
+        ''
+    )}&size=10&region=${region.toLowerCase()}`
     let response: any = await fetch(url, { method: 'GET' })
 
     if (response.status !== 200) {
-        alert('Error retrieving ' + name + "'s " + mode + ' data')
+        alert(`Error retrieving ${name}'s ${mode} data`)
     }
 
     return response
@@ -64,21 +59,14 @@ export async function retrieveProfileData(
     region: string
 ): Promise<any> {
     let [name, tag]: string[] = nameAndTag.split('#')
-    let url: string =
-        import.meta.env.VITE_PROFILE_API_URL +
-        name +
-        '?tag=' +
-        tag +
-        '&mode=' +
-        mode.replace(' ', '') +
-        '&page=' +
-        page +
-        '&region=' +
-        region.toLowerCase()
+    let url: string = `${import.meta.env.VITE_PROFILE_API_URL}/${name}?tag=${tag}&mode=${mode.replace(
+        ' ',
+        ''
+    )}&page=${page}&region=${region.toLowerCase()}`
     let response: any = await fetch(url, { method: 'GET' })
 
     if (response.status !== 200) {
-        alert('Error retrieving ' + name + "'s " + mode + ' data')
+        alert(`Error retrieving ${name}'s ${mode} data`)
     }
 
     return response
@@ -92,11 +80,11 @@ export async function retrieveProfileData(
  * @returns The API response where the body will be a list of 10 objects representing the players who played in the match
  */
 export async function retrieveMatchData(match_id: string, region: string): Promise<any> {
-    let url: string = import.meta.env.VITE_MATCH_API_URL + match_id + '?region=' + region.toLowerCase()
+    let url: string = `${import.meta.env.VITE_MATCH_API_URL}/${match_id}?region=${region.toLowerCase()}`
     let response: any = await fetch(url, { method: 'GET' })
 
     if (response.status !== 200) {
-        alert('Error retrieving match details for match ' + match_id)
+        alert(`Error retrieving match details for match ${match_id}`)
     }
 
     return response

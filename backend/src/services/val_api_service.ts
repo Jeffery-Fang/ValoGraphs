@@ -3,6 +3,7 @@ import 'dotenv/config'
 const PLAYER_URL_ROOT: string = <string>process.env.PLAYER_URL_ROOT
 const PROFILE_URL_ROOT: string = <string>process.env.PROFILE_URL_ROOT
 const MATCH_URL_ROOT: string = <string>process.env.MATCH_URL_ROOT
+const ACCOUNT_URL_ROOT: string = <string>process.env.ACCOUNT_URL_ROOT
 const API_KEY: string = <string>process.env.API_KEY
 
 /**
@@ -23,16 +24,7 @@ export async function retrievePlayerData(
     region: string
 ): Promise<any> {
     try {
-        let url: string = (PLAYER_URL_ROOT +
-            region +
-            '/pc/' +
-            name +
-            '/' +
-            tag +
-            '?mode=' +
-            mode +
-            '&size=' +
-            size) as string
+        let url: string = `${PLAYER_URL_ROOT}/${region}/pc/${name}/${tag}?mode=${mode}&size=${size}`
         let options: RequestInit = {
             method: 'GET',
             headers: {
@@ -127,17 +119,7 @@ export async function retrieveProfileData(
     region: string
 ): Promise<any> {
     try {
-        let url: string = (PROFILE_URL_ROOT +
-            region +
-            '/' +
-            name +
-            '/' +
-            tag +
-            '?mode=' +
-            mode +
-            '&page=' +
-            page +
-            '&size=10') as string
+        let url: string = `${PROFILE_URL_ROOT}/${region}/${name}/${tag}?mode=${mode}&page=${page}&size=10`
         let options: RequestInit = {
             method: 'GET',
             headers: {
@@ -146,7 +128,7 @@ export async function retrieveProfileData(
         }
 
         let response: any = await fetch(url, options)
-        let accountDetails: any = await fetch(`https://api.henrikdev.xyz/valorant/v2/account/${name}/${tag}`, options)
+        let accountDetails: any = await fetch(`${ACCOUNT_URL_ROOT}/${name}/${tag}`, options)
         let data = []
 
         if (response === undefined || accountDetails === undefined) {
@@ -223,7 +205,7 @@ export async function retrieveProfileData(
  */
 export async function retrieveMatchData(match_id: string, region: string): Promise<any> {
     try {
-        let url: string = (MATCH_URL_ROOT + region + '/' + match_id) as string
+        let url: string = `${MATCH_URL_ROOT}/${region}/${match_id}`
         let options: RequestInit = {
             method: 'GET',
             headers: {
