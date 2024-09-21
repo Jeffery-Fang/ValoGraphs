@@ -90,6 +90,10 @@ _Graph Page Mobile View_
 
 _Profile Page Mobile View_
 
+## Acknowledgements
+
+-   [HenrikDev](https://github.com/Henrik-3/unofficial-valorant-api) for providing the API used in this project
+
 ## Contact
 
 Jeffery Fang - JefferyFang324@gmail.com
