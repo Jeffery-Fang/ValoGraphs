@@ -74,7 +74,7 @@ Now once the prerequisites are met there just follow the steps below.
 
 6. In the console where frontend development server was started type 'o' and 'enter' to open a tab with the client
 
-### Gallery & Demonstrations
+## Gallery & Demonstrations
 
 <img src='https://github.com/user-attachments/assets/1f284bd9-cb90-4b13-8087-dd85a4480df4'></img>
 _Graph Page Desktop View_
