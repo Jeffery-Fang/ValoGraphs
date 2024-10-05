@@ -24,7 +24,7 @@ export default function Header({ handlerMap, gameModes, regions, currentRegion, 
                         <Form.Control
                             type="search"
                             spellCheck="false"
-                            placeholder="Playername #Tag"
+                            placeholder="player name#tag"
                             className="me-2"
                             aria-label="Search"
                             id="profileSearchInput"

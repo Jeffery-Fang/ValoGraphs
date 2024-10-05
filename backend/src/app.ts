@@ -1,7 +1,7 @@
 import express, { Application } from 'express'
-import { default as playersRouter } from './routers/players_router.js'
-import { default as matchesRouter } from './routers/matches_router.js'
-import { default as profilesRouter } from './routers/profiles_router.js'
+import { default as playersRouter } from './routers/playersRouter.js'
+import { default as matchesRouter } from './routers/matchesRouter.js'
+import { default as profilesRouter } from './routers/profilesRouter.js'
 
 const app: Application = express()
 

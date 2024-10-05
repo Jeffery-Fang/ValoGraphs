@@ -12,7 +12,7 @@ import {
     calculateAverageStats,
     countMatchsPerDay,
     retrieveProfileData,
-} from '../../utils/common_functions'
+} from '../../utils/commonFunctions'
 
 const gameModes: string[] = ['unrated', 'competitive', 'team deathmatch']
 

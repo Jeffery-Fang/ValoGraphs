@@ -1,12 +1,12 @@
 import express, { Router } from 'express'
-import profilesHandler from '../route_handlers/profiles_handler.js'
+import playersHandler from '../route-handlers/playersHandler.js'
 
 const router: Router = express.Router()
 
 /**
  * Route that retrieves match stats related to a specific player identified by their player name
- * and player tag, these stats are limited to ones stored on the henrikDev API server
+ * and player tag
  */
-router.get('/:name', profilesHandler)
+router.get('/:name', playersHandler)
 
 export default router

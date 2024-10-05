@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Header from '../../components/Header'
 import PlayerStack from '../../components/PlayerStack'
 import GraphContainer from '../../components/GraphContainer'
-import { retrievePlayerData, handleProfileSearch } from '../../utils/common_functions'
+import { retrievePlayerData, handleProfileSearch } from '../../utils/commonFunctions'
 
 const gameModes: string[] = ['unrated', 'competitive', 'team deathmatch']
 const regions: string[] = ['NA', 'EU', 'LATAM', 'BR', 'AP', 'KR']

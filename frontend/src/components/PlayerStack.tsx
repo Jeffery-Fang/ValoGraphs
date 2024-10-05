@@ -54,6 +54,9 @@ export default function PlayerStack({ playerMap, handleAdd, handleToggle, handle
                         className="bg-transparent"
                         spellCheck="false"
                         autoComplete="off"
+                        placeholder={
+                            Object.keys(playerMap).length > 0 ? 'player name#tag' : 'player name#tag ex. SEN TenZ#81619'
+                        }
                         style={{
                             width: '100%',
                             border: 'none',

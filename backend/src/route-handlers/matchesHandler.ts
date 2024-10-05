@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
-import { retrieveMatchData } from '../services/val_api_service.js'
-import { createManyMatchStat } from '../services/match_stat_service.js'
-import { getFromMatchId, saveManyMatchStat } from '../services/data_access_service.js'
+import { retrieveMatchData } from '../services/valApiService.js'
+import { createManyMatchStat } from '../services/matchStatService.js'
+import { getFromMatchId, saveManyMatchStat } from '../services/dataAccessService.js'
 import { MatchStat } from '../entities/MatchStat.js'
 
 export default async function matchesHandler(req: Request, res: Response): Promise<void> {

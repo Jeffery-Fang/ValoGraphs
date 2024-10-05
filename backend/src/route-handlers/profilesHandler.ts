@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import { retrieveProfileData } from '../services/val_api_service.js'
-import { createManyMatchStat } from '../services/match_stat_service.js'
+import { retrieveProfileData } from '../services/valApiService.js'
+import { createManyMatchStat } from '../services/matchStatService.js'
 import { MatchStat } from '../entities/MatchStat.js'
 
 export default async function profilesHandler(req: Request, res: Response): Promise<void> {

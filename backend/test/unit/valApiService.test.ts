@@ -1,6 +1,6 @@
 import 'dotenv/config'
-import { retrievePlayerData, retrieveProfileData, retrieveMatchData } from '../../src/services/val_api_service'
-import { mockPlayerApiResponse, mockProfileApiResponse, mockMatchApiResponses } from '../mock_data'
+import { retrievePlayerData, retrieveProfileData, retrieveMatchData } from '../../src/services/valApiService'
+import { mockPlayerApiResponse, mockProfileApiResponse, mockMatchApiResponses } from '../mockData'
 const mockFetch = jest.fn()
 global.fetch = mockFetch
 

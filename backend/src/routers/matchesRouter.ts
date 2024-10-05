@@ -1,5 +1,5 @@
 import express, { Router } from 'express'
-import matchesHandler from '../route_handlers/matches_handler.js'
+import matchesHandler from '../route-handlers/matchesHandler.js'
 
 const router: Router = express.Router()
 

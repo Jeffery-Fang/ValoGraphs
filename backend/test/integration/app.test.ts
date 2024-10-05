@@ -2,16 +2,16 @@ import 'dotenv/config'
 import http from 'http'
 import app from '../../src/app.js'
 import { default as request } from 'supertest'
-import { retrievePlayerData, retrieveProfileData, retrieveMatchData } from '../../src/services/val_api_service.js'
-import { createManyMatchStat } from '../../src/services/match_stat_service.js'
-import { saveManyMatchStat, getFromMatchId } from '../../src/services/data_access_service.js'
-import { mockMatchStat } from '../mock_data.js'
+import { retrievePlayerData, retrieveProfileData, retrieveMatchData } from '../../src/services/valApiService.js'
+import { createManyMatchStat } from '../../src/services/matchStatService.js'
+import { saveManyMatchStat, getFromMatchId } from '../../src/services/dataAccessService.js'
+import { mockMatchStat } from '../mockData.js'
 
 let server: http.Server
 
-jest.mock('../../src/services/val_api_service.js')
-jest.mock('../../src/services/match_stat_service.js')
-jest.mock('../../src/services/data_access_service.js')
+jest.mock('../../src/services/valApiService.js')
+jest.mock('../../src/services/matchStatService.js')
+jest.mock('../../src/services/dataAccessService.js')
 
 beforeAll((done): void => {
     server = app.listen(3000, (): void => {
